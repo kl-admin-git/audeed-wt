@@ -1,0 +1,43 @@
+#datatable-buttons_filter label
+{
+    float: right;
+}
+
+.contenedorBotonCrear
+{
+    text-align: end;
+}
+
+.contenedorBotonesCreacion
+{
+    text-align: end;
+}
+
+.editarIcon,.verImagenIcon,.eliminarIcon
+{
+    /* color: #67a8e4; */
+    color: #212529;
+    font-size: 20px!important;
+}
+
+.fotografia
+{
+    margin: 10px;   
+}
+
+.btn-dark
+{
+    cursor: pointer;
+}
+
+.contenedorBotonesAcciones
+{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.contenedorTablaUsuarios
+{
+    overflow: auto;
+}

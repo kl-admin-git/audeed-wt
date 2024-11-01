@@ -1,0 +1,42 @@
+[data-toggle="collapse"] .fa:before 
+{  
+    content: "\f0d7";
+}
+
+[data-toggle="collapse"].collapsed .fa:before 
+{
+    content: "\f0d8";
+}
+
+.ellipseText
+{
+  white-space: nowrap;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.font-11
+{
+    font-size: 11px!important;
+}
+
+.contenedorTarjetaListasEjecutadas label 
+{
+    margin-bottom: 3px;
+}
+
+.claseIconoOjo
+{
+    font-size: 30px!important;
+    margin-top: 4px;
+}
+
+.menuFlotante
+{
+    position: absolute!important;
+    top: 2%;
+    left: 88%;
+}
+
+.btn:focus {box-shadow:0 0 0 0.0rem rgba(0,123,255,.25)!important;}

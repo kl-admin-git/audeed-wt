@@ -1,0 +1,39 @@
+.buttonsModelo
+{
+    width: 100%;
+}
+
+.page-content-wrapper {
+    padding-top: 0px!important;
+    padding: 0;
+}
+
+.card-text
+{
+    font-size: 15px;
+}
+
+[data-toggle="collapse"] .fa:before 
+{  
+    content: "\f0d7";
+}
+
+[data-toggle="collapse"].collapsed .fa:before 
+{
+    content: "\f0d8";
+}
+
+.contenedorBuscador--espacio{
+    display: flex;
+    justify-content: space-between;
+}
+
+.contenedor-ul{
+    height: 211px;
+    overflow: overlay;
+    margin-bottom: 15px;
+}
+
+.list-group-item :not(:last-child){
+    margin-right: 11px;
+}

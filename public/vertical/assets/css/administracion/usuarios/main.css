@@ -1,0 +1,114 @@
+#datatable-buttons_filter label
+{
+    float: right;
+}
+
+.contenedorBotonCrear
+{
+    text-align: end;
+}
+
+.contenedorBotonesCreacion
+{
+    text-align: end;
+}
+
+.contenedorPrincipal
+{
+  width: 50%;
+}
+
+.editarIcon,.verImagenIcon,.eliminarIcon
+{
+    /* color: #67a8e4; */
+    color: #212529;
+    font-size: 20px!important;
+}
+
+.fotografia
+{
+    margin: 10px;   
+}
+
+.btn-dark
+{
+    cursor: pointer;
+}
+
+.contenedorBotonesAcciones
+{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.contenedorTablaUsuarios
+{
+    overflow: auto;
+}
+
+.contenedorBuscador
+{
+    display: flex;
+    justify-content: space-between;
+}
+
+[data-toggle="collapse"] .fa:before 
+{  
+    content: "\f0d7";
+}
+
+[data-toggle="collapse"].collapsed .fa:before 
+{
+    content: "\f0d8";
+}
+
+.page-content-wrapper {
+    padding-top: 0px!important;
+    padding: 0;
+}
+
+.texto-personalizado
+{
+  font-size: 15px;
+}
+
+.contenedorIconosAcciones
+{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.contenedorIconosAcciones li
+{
+  margin: 5px;
+}
+
+.ellipseText
+{
+  white-space: nowrap;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contenedorSubtitulos p
+{
+    margin-bottom: 0px;
+}
+
+.contenedorPassword
+{
+  display: flex;
+}
+
+.contenedorPassword span
+{
+  margin-right: 20px;
+}
+
+.contenedorPassword .textopassword 
+{
+  margin-left: 5px;
+}

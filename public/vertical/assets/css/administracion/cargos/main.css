@@ -1,0 +1,36 @@
+[data-toggle="collapse"] .fa:before 
+{  
+    content: "\f0d7";
+}
+
+[data-toggle="collapse"].collapsed .fa:before 
+{
+    content: "\f0d8";
+}
+
+.contenedorTablaCargos
+{
+    overflow: auto;
+}
+
+#tablaCargos tbody 
+{
+    text-align: center;
+}
+
+table thead 
+{
+  background: none !important;
+  color: unset !important;
+}
+
+#tablaCargos td, #tablaCargos th 
+{
+    border-color: #dee2e6!important;
+}
+
+.contenedorBuscador
+{
+    display: flex;
+    justify-content: space-between;
+}

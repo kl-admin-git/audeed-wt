@@ -1,0 +1,34 @@
+
+.contenedorBotonCrear
+{
+    text-align: end;
+}
+
+.contenedorBotonesAcciones
+{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.contenedorTablaClienteEmpresas
+{
+    overflow: auto;
+}
+
+.contenedorBotonesCreacion
+{
+    text-align: end;
+}
+
+.editarIcon,.verImagenIcon,.eliminarIcon,.directorioIcon
+{
+    /* color: #67a8e4; */
+    color: #212529;
+    font-size: 20px!important;
+}
+
+.contenedorTablaClienteEmpresas
+{
+    overflow: auto;
+}

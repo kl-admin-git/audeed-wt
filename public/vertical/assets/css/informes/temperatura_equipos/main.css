@@ -1,0 +1,48 @@
+table thead 
+{
+  background: none !important;
+  color: unset !important;
+}
+
+.table td, .table th 
+{
+    border-color: #dee2e6!important;
+    text-align: center;
+}
+
+.contenedorTablaEjecutadasInformes
+{
+    overflow: auto;
+}
+
+[data-toggle="collapse"] .fa:before 
+{  
+    content: "\f0d7";
+}
+
+[data-toggle="collapse"].collapsed .fa:before 
+{
+    content: "\f0d8";
+}
+
+.contenedorBuscador--espacio{
+    display: flex;
+    justify-content: space-between;
+}
+
+.contenedorBuscador--espacio :nth-child(2){
+    font-size: 2.5rem;
+    color: #4FB648;
+}
+
+.dev-overflow-100
+{
+    overflow: auto;
+}
+
+.has_obs_general
+{
+    color: #4FB648;
+    font-weight: bold;
+    cursor: pointer;
+}

@@ -1,0 +1,39 @@
+.iconCard
+{
+    font-size: 30px;
+    align-items: center;
+    display: flex;
+    margin: 20px;
+}
+
+.trashIcon
+{
+    font-size: 30px !important;
+    align-items: center;
+    display: flex;
+    margin: 20px;
+    cursor: pointer;
+    color: #ea553d;
+}
+
+.tarjetaSeleccionada
+{
+    background: linear-gradient(to bottom right, #0B0742, #120C6E) !important;
+    background: -prefix-linear-gradient(left top, #0B0742, #120C6E) !important;
+    border-radius: 16px !important;
+    color: white !important;
+}
+
+.tarjetaSeleccionada .trashIcon
+{
+    color: white !important;
+}
+
+#accordion .contenedorTarjeta
+{
+    background: linear-gradient(to bottom right, #FFFFFF, #E7E7E7);
+    background: -prefix-linear-gradient(left top, #FFFFFF, #E7E7E7);
+    border-radius: 16px;
+    color: #1C2E35;
+    cursor: pointer;
+}

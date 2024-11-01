@@ -1,0 +1,16 @@
+
+table thead 
+{
+  background: none !important;
+  color: unset !important;
+}
+
+.table td, .table th 
+{
+    border-color: #dee2e6!important;
+}
+
+#tablaPagosRecurrentes tbody tr
+{
+    text-align: center;
+}

@@ -1,0 +1,24 @@
+.contenedorVideoTour{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.separacion-color{
+    border-color: #44505c;
+}
+
+.contenedorBotones{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.shepherd-button-primary{
+    /* background-color: #67a8e4 !important; */
+    /* border: 1px solid #67a8e4 !important; */
+    background: #67a8e4 !important;
+}
+
+#modal-tour-video{
+    z-index: 999999;
+}

@@ -1,0 +1,217 @@
+.informacionPersonalEncabezado
+{
+    background-color: #44505c!important;
+}
+
+.informacionPersonalEncabezado h6
+{
+    color: white!important;
+}
+
+.subtituloEncabezado
+{
+    background-color: transparent!important;
+    color: #44505c;
+    font-weight: bold;
+}
+
+.tarjetaGeneral
+{
+    border-radius: 20px!important;
+    min-height: 150px!important;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.tarjetaGeneral .card-title
+{
+    font-size: 12px;
+}
+
+.tarjetaGeneral .card-text
+{
+    font-size: 20px;
+}
+
+.contenedoResultado .card-title
+{
+    font-size: 28px!important;
+}
+
+.subtituloEncabezado h6
+{
+    color: #44505c!important;
+}
+
+.contenedorTextosEncabezado
+{
+    padding-left: 2%;
+    padding-right: 2%;
+    background: #f0f0f0;
+}
+
+.contenedorGeneralInformacion .form-group
+{
+    background: white;
+    
+}
+
+.datosLista
+{
+    margin-bottom: 60px;
+}
+
+.segundaSeccion
+{
+    border-top: 40px solid #FFF;
+}
+
+.segundaSeccion .subtituloEncabezado
+{
+    color: #44505c;
+    font-weight: bold;
+}
+
+.contenedoResultado
+{
+    justify-content: center;
+    align-items: center;
+}
+
+.contenedoResultado
+{
+    border-left: 1px solid rgba(0,0,0,.125);
+}
+
+.terceraSeccion
+{
+    border-top: 40px solid #FFF;
+}
+
+.terceraSeccion .subtituloEncabezado
+{
+    color: #44505c;
+    font-weight: bold;
+}
+
+.alineacionTexto
+{
+    display: flex;
+    align-items: center;
+}
+
+.categoriaItem
+{
+    background-color: #44505c!important;
+}
+
+.categoriaItem a,.categoriaItem a:hover
+{
+    color: white;
+}
+
+.contenedorRespuesta
+{
+    padding: 20px;
+    border: 1px solid #d6d6d6;
+    border-radius: 7px;
+}
+
+.contenedorRespuesta .ion-checkmark
+{
+    color: #4FB648!important;
+}
+
+.plan-accion,.grupoBorder
+{
+    border-radius: 7px !important;
+}
+
+.respuestaGeneral
+{
+    justify-content: center;
+    text-align: center;
+}
+
+.imagenesReportes
+{
+    width: 100%;
+}
+
+.contenedoPlanAccion {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.preguntaEstilo
+{
+    border-bottom: 1px solid #dbdbdb;
+}
+
+.cuartaSeccion .subtituloEncabezado
+{
+    color: #44505c;
+    font-weight: bold;
+}
+
+.quintaSeccion .subtituloEncabezado
+{
+    color: #44505c;
+    font-weight: bold;
+}
+
+.text-bg-white
+{
+    background: white;   
+    min-height: 100px;
+}
+.contenedorAtras--espacio{
+    display: flex;
+    justify-content: space-between;
+}
+.acciones-descargar :nth-child(1){
+    font-size: 2.5rem;
+    color: #4FB648;
+}
+.acciones-descargar :nth-child(2){
+    font-size: 2.5rem;
+    color: red;
+}
+
+
+.imagenesReportes
+{
+    cursor: pointer;
+}
+
+.contenedorImagenAmplia
+{
+    display: flex;
+    justify-content: center;
+}
+
+.imagenAmpliaDetalle
+{
+    width: 80%;
+}
+
+.adjuntosAuditoria{
+    text-align: center;
+    display: block;
+    font-size: 21px !important;
+    margin-top: 0px;
+}
+
+.linkDescargar{
+    text-align: center;
+    display: block;
+    font-size: 20px !important;
+    text-decoration: none;
+    
+}
+
+.linkDescargar span{
+    color: #4892e2;
+}

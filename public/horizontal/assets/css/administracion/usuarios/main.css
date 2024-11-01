@@ -1,0 +1,36 @@
+#datatable-buttons_filter label
+{
+    float: right;
+}
+
+.contenedorBotonCrear
+{
+    text-align: end;
+}
+
+.requerido
+{
+    color: red;
+    font-weight: 700;
+}
+
+.contenedorBotonesCreacion
+{
+    text-align: end;
+}
+
+.mdi 
+{
+    cursor: pointer;
+}
+
+.editarIcon,.verImagenIcon,.eliminarIcon
+{
+    color: #67a8e4;
+    font-size: 20px!important;
+}
+
+.fotografia
+{
+    margin: 10px;   
+}

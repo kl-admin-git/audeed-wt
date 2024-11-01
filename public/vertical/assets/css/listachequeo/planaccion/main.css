@@ -1,0 +1,67 @@
+.contenedorBotonesAcciones
+{
+    text-align: center;
+}
+
+table thead 
+{
+  background: none !important;
+  color: unset !important;
+}
+
+.table td, .table th 
+{
+    border-color: #dee2e6!important;
+}
+
+.asignarBoton{
+    cursor: pointer;
+    color: #52b4ff;
+    font-weight: 550;
+}
+
+.textoNoTitulo
+{
+    font-weight: 100;
+}
+
+.selectorColores
+{
+    padding: 10px!important;
+    transition: transform .2s!important;
+}
+
+.scaleAnimate
+{
+    transform: scale(1.5);
+    border: 1px solid #00ff4e!important;
+    box-shadow: 0 0 0 0.0rem rgba(222,170,12,.5)!important;
+}
+
+.scaleAnimate:hover,.scaleAnimate:active,.scaleAnimate:focus
+{
+    transform: scale(1.5);
+    border: 1px solid #00ff4e!important;
+    box-shadow: 0 0 0 0.0rem rgba(222,170,12,.5)!important;
+}
+
+[data-toggle="collapse"] .fa:before 
+{  
+    content: "\f0d7";
+}
+
+[data-toggle="collapse"].collapsed .fa:before 
+{
+    content: "\f0d8";
+}
+
+.contenedorTablaPerfiles, .contenedorTablaCorrectivos
+{
+    overflow: auto;
+}
+
+.contenedorBuscador
+{
+    display: flex;
+    justify-content: space-between;
+}

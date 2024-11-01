@@ -1,0 +1,71 @@
+.card-header{
+    background-color: var(--colorPrimario) !important;
+    color: #FCFCFC;
+}
+
+.btn:focus, .btn:active, button:focus, button:active {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  
+  #image-gallery .modal-footer{
+    display: block;
+  }
+  
+  .thumb{
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+
+.font-50
+{
+  font-size: 50px!important;
+}
+
+.text-icon-audeed
+{
+  color: var(--colorPrimario);
+}
+
+.tituloSeguimiento
+{
+  background: transparent;
+  border: none;
+  cursor: auto;
+}
+
+.card-audeed-seguimiento
+{
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 14px;
+    border-bottom: 1px solid #1d1e3a24;
+    border-radius: 0px;
+}
+
+.cuerpo-modal-seguimiento
+{
+  overflow: auto;
+  max-height: 570px;
+}
+
+.text-audeed-crop
+{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.componenteAdjunto
+{
+  cursor: pointer;
+}
+
+.textAreaNoEditable
+{
+  border: 1px solid #e6e6e6;
+  text-align: start;
+  min-height: 100%;
+  padding: 8px;
+  border-radius: 10px;
+}

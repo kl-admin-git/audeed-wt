@@ -1,0 +1,544 @@
+#tablaListaEncabezado {
+    background-color: white;
+    color: black;
+}
+
+#tablaListaEncabezado td {
+    border-top: solid 5px #fff;
+}
+
+#tablaListaEncabezado td:first-child {
+    background-color: #F5F5F5;
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 10px solid #fff;
+}
+
+#tablaListaEncabezado td:nth-child(3) {
+    background-color: #F5F5F5;
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 10px solid #fff;
+}
+
+#tablaListaEncabezado td:nth-child(2),
+#tablaListaEncabezado td:nth-child(4) {
+    padding: 10px;
+}
+
+#tablaListaEncabezado tbody tr {
+    border-bottom: 11px solid #fff !important;
+}
+
+.contenedorTextoCollapse {
+    cursor: pointer;
+    -webkit-user-select: none;
+    /* Safari */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* IE10+/Edge */
+    user-select: none;
+    /* Standard */
+}
+
+.badge-custom-botones {
+    cursor: pointer !important;
+    /* width: 170px!important; */
+    width: 100% !important;
+    font-weight: normal !important;
+}
+
+.contenedorOpciones {
+    display: flex;
+    justify-content: space-between;
+}
+
+.contenedorBotonesAcciones {
+    display: grid;
+    /* justify-content: center; */
+    font-size: 16px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.contenedorBotonesAcciones span {
+    margin-top: 5px;
+}
+
+.contenedorOpciones label {
+    display: flex;
+    align-items: center;
+    color: white;
+    letter-spacing: 2px;
+    cursor: pointer;
+}
+
+.contenedorTextoCollapse {
+    background-color: #1C2E35 !important;
+    padding: 10px !important;
+    padding: 5px !important;
+}
+
+.badge-custom-botones:hover {
+    opacity: 0.96;
+}
+
+.contenedorPreguntas {
+    display: flex;
+    padding-right: 0px !important;
+    padding-left: 0px !important;
+    /* justify-content: space-between; */
+}
+
+.contenedorPregunta {
+    min-height: 90px;
+    background: #f8f8f8;
+    padding: 10px;
+}
+
+.contenedorPregunta label {
+    font-weight: normal !important;
+}
+
+.card-header:first-child {
+    border-radius: calc(1.5rem - 0px) calc(.25rem - 1px) 0 0 !important;
+    /* padding-left: 35px!important; */
+}
+
+.contenedorOpcionesRespuesta {
+    display: flex;
+    border-top: solid 0px #fff;
+    align-items: center;
+    padding-top: 7px;
+    font-size: 14px !important;
+
+}
+
+.contenidoCategoria {
+    margin-left: 70px;
+}
+
+.contenedorPorcentajePregunta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1C2E35;
+    color: white;
+}
+
+.contenedoreTipoRespuestaLabels {
+    /* display: grid; */
+    background: #f8f8f8;
+    text-align: center;
+}
+
+.contenedorOpcionesDeRespuesta {
+    /* display: grid; */
+    background: #f8f8f8;
+    text-align: center;
+    border-left: solid 8px #fff;
+    min-height: 68px
+}
+
+.contenedorBotonesIconosOpcRespuesta {
+    display: flex;
+    justify-content: space-around;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.copiarLink {
+    color: green !important;
+}
+
+.contenedorTresPreguntas {
+    padding: 0px;
+    background-color: #1C2E35;
+}
+
+.iconosOpc {
+    display: grid;
+    font-size: 20px !important;
+}
+
+.contenedorTodaLaCategoria {
+    margin-top: 12px;
+}
+
+.wizard>.steps .disabled a,
+.wizard>.steps .disabled a:active,
+.wizard>.steps .disabled a:hover,
+.wizard>.steps .done a,
+.wizard>.steps .done a:active,
+.wizard>.steps .done a:hover {
+    font-size: 14px;
+}
+
+.wizard>.steps .current a,
+.wizard>.steps .current a:active,
+.wizard>.steps .current a:hover {
+    font-size: 14px;
+}
+
+.iconosRespuestasSteps {
+    font-size: 34px !important;
+
+}
+
+.cuerpoRespuestaStep {
+    background-color: whitesmoke;
+    padding: 5px !important;
+    justify-content: center;
+    text-align: center;
+    border-radius: 6px;
+    font-size: 12px;
+    -webkit-box-shadow: 0px 4px 51px -18px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 4px 51px -18px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.75);
+    cursor: pointer;
+    min-height: 90px;
+    align-items: end;
+    display: grid;
+    line-height: 11px;
+}
+
+.seleccionadoRespuestaStep {
+    background-color: #3eb481;
+    color: white;
+}
+
+.tarjetaIcons {
+    cursor: pointer;
+}
+
+.conenedorTipoRespuestaStep {
+    justify-content: center;
+}
+
+.font-13 {
+    font-size: 13px !important;
+}
+
+.contenedorOpcRespuestaStepFinal {
+    justify-content: center;
+}
+
+.contenedorAtras {
+    justify-content: flex-end;
+    display: flex;
+}
+
+.tituloTabla {
+    font-weight: normal !important;
+    font-size: 14px;
+}
+
+.startRange {
+    color: #3eb481;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Old versions of Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently
+                                    supported by Chrome, Edge, Opera and Firefox */
+}
+
+.set-size {
+    font-size: 3em;
+}
+
+.charts-container:after {
+    clear: both;
+    content: "";
+    display: table;
+}
+
+.pie-wrapper {
+    height: 1em;
+    width: 1em;
+    float: left;
+    margin: 11px;
+    position: relative;
+}
+
+.pie-wrapper:nth-child(3n + 1) {
+    clear: both;
+}
+
+.pie-wrapper .pie {
+    height: 100%;
+    width: 100%;
+    clip: rect(0, 1em, 1em, 0.5em);
+    left: 0;
+    position: absolute;
+    top: 0;
+}
+
+.pie-wrapper .pie .half-circle {
+    height: 100%;
+    width: 100%;
+    border: 0.1em solid #ea553d;
+    border-radius: 50%;
+    clip: rect(0, 0.5em, 1em, 0);
+    left: 0;
+    position: absolute;
+    top: 0;
+}
+
+.pie-wrapper .label {
+    background: #34495e;
+    border-radius: 50%;
+    bottom: 0.4em;
+    color: #ecf0f1;
+    cursor: default;
+    display: block;
+    font-size: 0.25em;
+    left: 0.4em;
+    line-height: 2.8em;
+    position: absolute;
+    right: 0.4em;
+    text-align: center;
+    top: 0.4em;
+}
+
+.pie-wrapper .label .smaller {
+    color: #bdc3c7;
+    font-size: .8em;
+    padding-bottom: 20px;
+    vertical-align: super;
+}
+
+.pie-wrapper .shadow {
+    height: 100%;
+    width: 100%;
+    border: 0.1em solid #bdc3c7;
+    border-radius: 50%;
+}
+
+.pie-wrapper.style-2 .label {
+    background: none;
+    color: #7f8c8d;
+}
+
+.pie-wrapper.style-2 .label .smaller {
+    color: #bdc3c7;
+}
+
+.pie-wrapper.progress-90 .pie {
+    clip: rect(auto, auto, auto, auto);
+}
+
+.pie-wrapper.progress-100 .pie {
+    clip: rect(auto, auto, auto, auto);
+}
+
+
+.pie-wrapper.progress-20 .pie .half-circle {
+    border-color: #ea553d;
+}
+
+.pie-wrapper.progress-30 .pie .half-circle {
+    border-color: #ea553d;
+}
+
+.pie-wrapper.progress-40 .pie .half-circle {
+    border-color: #ea553d;
+}
+
+.pie-wrapper.progress-50 .pie .half-circle {
+    border-color: #ffbb44;
+}
+
+.pie-wrapper.progress-60 .pie .half-circle {
+    border-color: #ffbb44;
+}
+
+.pie-wrapper.progress-70 .pie .half-circle {
+    border-color: #ffbb44;
+}
+
+.pie-wrapper.progress-80 .pie .half-circle {
+    border-color: #ffbb44;
+}
+
+.pie-wrapper.progress-90 .pie .half-circle {
+    border-color: #50c18e;
+}
+
+.pie-wrapper.progress-100 .pie .half-circle {
+    border-color: #50c18e;
+}
+
+.supero .pie .half-circle {
+    border-color: #ff0000 !important;
+}
+/** Este se encarga de llenar o vaciar la barra de progreso del PieBar **/
+/** 5% **/
+.pie-wrapper.progress-5 .pie .left-side {
+    -webkit-transform: rotate(20deg);
+    transform: rotate(18deg);
+}
+.pie-wrapper.progress-5 .pie .right-side {
+    display: none;
+}
+
+/** 10% **/
+.pie-wrapper.progress-10 .pie .left-side {
+    -webkit-transform: rotate(20deg);
+    transform: rotate(36deg);
+}
+.pie-wrapper.progress-10 .pie .right-side {
+    display: none;
+}
+
+/** 20% **/
+.pie-wrapper.progress-20 .pie .left-side {
+    -webkit-transform: rotate(20deg);
+    transform: rotate(72deg);
+}
+
+.pie-wrapper.progress-20 .pie .right-side {
+    display: none;
+}
+
+/** 30% **/
+.pie-wrapper.progress-30 .pie .left-side {
+    -webkit-transform: rotate(20deg);
+    transform: rotate(100deg);
+}
+
+.pie-wrapper.progress-30 .pie .right-side {
+    display: none;
+}
+
+/** 40% **/
+.pie-wrapper.progress-40 .pie .left-side {
+    -webkit-transform: rotate(20deg);
+    transform: rotate(144deg);
+}
+.pie-wrapper.progress-40 .pie .right-side {
+    display: none;
+}
+
+/** 50% **/
+.pie-wrapper.progress-50 .pie .left-side {
+    -webkit-transform: rotate(20deg);
+    transform: rotate(180deg);
+}
+
+.pie-wrapper.progress-50 .pie .right-side {
+    display: none;
+}
+
+/** 60% **/
+.pie-wrapper.progress-60 .pie .left-side {
+    -webkit-transform: rotate(216deg);
+    transform: rotate(216deg);
+}
+.pie-wrapper.progress-60 .pie .right-side {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+/** 70% **/
+.pie-wrapper.progress-70 .pie .left-side {
+    -webkit-transform: rotate(252deg);
+    transform: rotate(252deg);
+}
+.pie-wrapper.progress-70 .pie .right-side {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+/** 80% **/
+.pie-wrapper.progress-80 .pie .left-side {
+    -webkit-transform: rotate(312deg);
+    transform: rotate(312deg);
+}
+.pie-wrapper.progress-80 .pie .right-side {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+/** 90% **/
+.pie-wrapper.progress-90 .pie .left-side {
+    -webkit-transform: rotate(324deg);
+    transform: rotate(324deg);
+}
+.pie-wrapper.progress-90 .pie .right-side {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+/** 100% **/
+.pie-wrapper.progress-100 .pie .left-side {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+}
+.pie-wrapper.progress-100 .pie .right-side {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.table tr{
+    text-align: center;
+}
+
+#tablaListaEncabezado tr 
+{
+    text-align: initial;
+}
+
+.cuerpoStepByStepPopUpPM
+{
+    overflow: auto;
+    max-height: 500px;
+};
+
+.borrarRespuestaConf
+{
+    font-size: 23px!important;
+    color: red!important;
+}
+
+.agregarMasPreguntas
+{
+    cursor: pointer;
+}
+@media only screen and (max-width: 600px) {
+    .contenedorOpciones {
+        flex-wrap: wrap;
+    }
+
+    .contenidoCategoria {
+        margin-left: 10px;
+    }
+
+    .contenedorPregunta label {
+        font-size: 11px !important;
+    }
+
+    .contenedorOpcionesRespuesta span {
+        font-size: 13px;
+    }
+
+    .contenedoreTipoRespuestaLabels,
+    .contenedorOpcionesDeRespuesta {
+        padding: 30px !important;
+    }
+
+    .contenedorBotonesIconosOpcRespuesta {
+        flex-wrap: wrap;
+    }
+}

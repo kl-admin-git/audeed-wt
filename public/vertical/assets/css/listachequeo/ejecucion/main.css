@@ -1,0 +1,324 @@
+:root 
+{
+    --color-principal-ejecucion: #1C2E35;
+}
+
+table thead 
+{
+  background: none !important;
+  color: unset !important;
+  text-align: unset !important;
+}
+
+.categoriaContenedor
+{
+    background: var(--color-principal-ejecucion);
+    color: white;
+    cursor: pointer;
+    user-select: none;
+    border-radius: calc(1.2rem - 0px) calc(.25rem - 1px) 0 0!important;
+    display: flex;
+    justify-content: space-between;
+}
+
+.respuesta
+{
+    color: var(--color-principal-ejecucion);
+    padding: 13px;
+    padding-left: 30px;
+    padding-right: 30px;
+    text-align: center;
+    border-radius: 3px;
+    background: #f6f6f6;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.respuestaSeleccion
+{
+    color: #f6f6f6;
+    background: var(--color-principal-ejecucion);
+}
+
+.respuestaOpc
+{
+    color: var(--color-principal-ejecucion);
+    padding: 8px;
+    text-align: center;
+    border-radius: 3px;
+    background: #f6f6f6;
+    cursor: pointer;
+    font-size: 14px;
+    width: 40px;
+    -webkit-box-shadow: 1px 5px 5px -5px rgba(0,0,0,0.75);
+    -moz-box-shadow: 1px 5px 5px -5px rgba(0,0,0,0.75);
+    box-shadow: 1px 5px 5px -5px rgba(0,0,0,0.75);
+}
+
+.respuestaOpcSeleccion
+{
+    color: #f6f6f6;
+    background: var(--color-principal-ejecucion);
+}
+
+.contenedorRespuestas
+{
+    justify-content: center;
+}
+
+.contenedorEncabezado
+{
+    margin-bottom: 70px;
+}
+
+.textarea
+{
+    resize: none;
+}
+
+.contenedorBotonesPopUp
+{
+    justify-content: flex-end;
+    display: flex;
+}
+
+/* .contenedorPregunta
+{
+    border-bottom: 1px solid #dadada;
+} */
+
+/* POP UP CAMARA */
+
+.contenedorImgs {
+    width: 100%;
+  
+    display: flex;
+    overflow-x: auto;
+    margin-top: 19px;
+    /* -webkit-box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.75); */
+  }
+  
+  .contenedorImgs img {
+    width: 30%;
+    height: 125px;
+    margin-left: 12px;
+    border-radius: 5px;
+  }
+  /* canvas, video{
+      height: 100%;
+      width: 100%;
+      
+  } */
+  .camera-body {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .camara-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .camara-footer > .row {
+    margin-top: 23px;
+    width: 100% !important;
+  }
+  
+  .contenedor-img-completada {
+    width: 100%;
+    height: 420px;
+    display: flex;
+    justify-content: space-between;
+    overflow-x: auto;
+  }
+  .contenedor-img-completada img {
+    position: relative;
+    width: 100%;
+    height: auto;
+    margin-left: 12px;
+  }
+
+/* FIN POP UP CAMARA  */
+
+.cambiar-imagen
+{
+    transition: transform .2s;
+}
+
+.scaleAnimate
+{
+    transform: scale(1);
+    border: 4px solid #037fff;
+}
+
+.scale
+{
+    transform: scale(0.8); 
+}
+
+/** ESTILOS PARA LA CARGA DE ARCHIVOS ADJUNTOS **/
+.et_pb_contact_form_label {
+	display: block;
+	color: black;
+	font-weight: bold;
+  letter-spacing: 1.2px;
+	font-size: 18px;
+	padding-bottom: 5px;
+}
+input[id="et_pb_contact_brand_file_request_0"] {
+	display: none;
+}
+label[for="et_pb_contact_brand_file_request_0"] {
+	background: #fff;
+	height: 145px;
+	background-image: url('https://image.flaticon.com/icons/svg/126/126477.svg');
+	background-repeat: no-repeat;
+	background-position: top 18px center;
+	position: absolute;
+  background-size: 7%;
+	color: transparent;
+  margin: auto;
+  width: 95%;
+  min-width: 200px;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+	border: 1px solid #a2a1a7;
+	box-sizing: border-box;
+}
+label[for="et_pb_contact_brand_file_request_0"]:before {
+	content: "Arrastra y suelta archivos aquí";
+	display: block;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	font-size: 14px;
+	color: #202020;
+	font-weight: 400;
+	left:0;
+	right:0;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+label[for="et_pb_contact_brand_file_request_0"]:after {
+	display: block;
+	content: 'Browse';
+	background: #16a317;
+	width: 86px;
+	height: 27px;
+  line-height: 27px;
+	position: absolute;
+	bottom: 19px;
+	font-size: 14px;
+	color: white;
+	font-weight: 500;
+	left:0;
+	right:0;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+label[for="et_pb_contact_brand_request_0"]:after {
+	content: " (Provide link or Upload files if you already have guidelines)";
+	font-size: 12px;
+	letter-spacing: -0.31px;
+	color: #7a7a7a;
+	font-weight: normal;
+}
+label[for="et_pb_contact_design_request_0"]:after {
+	content: " (Provide link or Upload design files)";
+	font-size: 12px;
+	letter-spacing: -0.31px;
+	color: #7a7a7a;
+	font-weight: normal;
+}
+label[for="et_pb_contact_brand_file_request_0"].changed, label[for="et_pb_contact_brand_file_request_0"]:hover {
+  background-color: #e3f2fd;
+}
+label[for="et_pb_contact_brand_file_request_0"] {
+  cursor: pointer;
+  transition: 400ms ease;
+}
+.file_names {
+	display: block;
+	position: relative;
+	color: black;
+	left: 0;
+	font-size: 11px;
+  font-weight: 300;
+  margin: 2px 1px 8px 1px;
+}
+
+.modal-archivos-adjuntos{
+  min-height: 200px;
+}
+
+.iconFile{
+  margin-right: 5px;
+  color: #2c6d28;
+  height: 20px;
+  font-size: 15px !important;
+}
+
+button.save {
+  padding: 0;
+  background-color: transparent;
+  border: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.modal-header .save {
+  padding: 1rem 1rem;
+  margin: -1rem -1rem -1rem 13rem;
+}
+
+.save{
+  float: right;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: .5;
+}
+
+.save:hover{
+  opacity: 1;
+}
+
+.guardar{
+  margin-top: 5px;
+}
+
+.modal-header .close {
+  padding: 1rem 1rem;
+  margin: -1rem -1rem auto !important;
+}
+
+.modal-footer{
+  display: block;
+}
+
+.btnEliminar{
+  color: rgb(153, 11, 11);
+  margin-left: 5px;
+  font-size: 13px !important;
+}
+
+.textAreaRespuestaAbierta
+{
+    background-color: transparent;
+    padding: 0px;
+}
+
+.dev-obs-general
+{
+  resize: none;
+}

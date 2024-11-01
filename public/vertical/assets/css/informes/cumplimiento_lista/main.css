@@ -1,0 +1,69 @@
+
+table thead 
+{
+  background: none !important;
+  color: unset !important;
+  text-align: unset !important;
+}
+
+.card-block > .porcentajeTexto{
+    line-height: 43px;
+    text-align: center;
+    font-size: 60px;
+    margin: 20%;
+}
+
+.listaInforme{
+    display: inline;
+    text-align: left;
+    list-style: none;
+    font-size: 13px;
+}
+
+.subtituloEmpresas{
+    font-size: 15px;
+    color: #ffffff;
+    background-color: #00bb7ef5;
+    padding: 8px;
+    margin-left: 5px;
+    border-radius: 3px;
+}
+
+.listaInforme > li{
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+}
+
+.porce{
+    background-color: #44505c;
+    border-radius: 6px;
+    padding: 5px;
+    /* margin-left: 8px; */
+    font-size: 13px;
+    color: #fff;
+    font-style: revert;
+    display: inline;
+    /* text-align: right; */
+    float: right;
+}
+
+.tablaReincidencias thead > tr
+{
+  background: rgb(51, 51, 51) !important;
+  color: white !important;
+  text-align: center;
+}
+
+.tablaPorcentaje > tbody > tr > td:first-child
+{
+    background-color: #e2e2e24d!important;
+}
+
+.tablaPorcentaje thead > tr
+{
+  background: rgb(51, 51, 51) !important;
+  color: white !important;
+  text-align: center;
+}

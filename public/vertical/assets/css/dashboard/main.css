@@ -1,0 +1,42 @@
+
+table thead 
+{
+  background: none !important;
+  color: unset !important;
+  text-align: unset !important;
+}
+
+.tablaGeneral thead 
+{
+  background: rgb(51, 51, 51) !important;
+  color: white !important;
+}
+
+.contenedorPreguntas
+{
+    display: flex;
+    overflow-x: auto;
+}
+
+.carousel-control-next
+{
+    width: 3%!important;
+    background: #44505c;
+}
+
+.contenedorTablaColaboradores
+{
+    overflow: auto;
+    max-height: 380px;
+}
+
+.contenedorTablaPlanAccion
+{
+    overflow: auto;
+    max-height: 380px;
+}
+
+.card
+{
+    min-height: 365px;
+}
