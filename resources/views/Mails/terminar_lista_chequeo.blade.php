@@ -18,7 +18,7 @@
                                     <table class="main" width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; border-radius: 3px; background-color: #fff; margin: 0; border: 1px solid #e9e9e9;" bgcolor="#fff">
                                         <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;text-align:center; box-sizing: border-box; font-size: 14px; margin: 0;">
                                             <td class="alert alert-warning" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; color: #fff; font-weight: 500; text-align:center;  border-radius: 3px 3px 0 0; background-color: #FFF; margin: 0; padding: 20px;" align="center" bgcolor="#71b6f9" valign="top">
-                                                <img src="{{ URL::asset('/vertical/assets/images/logo_new_2023.png') }}" height="70">    
+                                                <img src="{{ URL::asset('/vertical/assets/images/logo_horizontal_black.svg') }}" height="70">
                                             </td>
                                         </tr>
                                         <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
@@ -26,7 +26,7 @@
                                                 <table width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                                     <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                                         <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-                                                            <h3 style="color:#26ae9c">Lista de chequeo terminada</h3>                                                            
+                                                            <h3 style="color:#26ae9c">Lista de chequeo terminada</h3>
                                                         </td>
                                                     </tr>
                                                     <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
@@ -56,7 +56,7 @@
 
                                                     <tr style="text-align:center;font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                                         <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-                                                            <p><b>Audiid</b></p>
+                                                            <p><b>Audiid West</b></p>
                                                         </td>
                                                     </tr>
 

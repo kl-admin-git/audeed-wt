@@ -179,7 +179,7 @@ $(document).ready(function () {
 
                     case 2: // VALIDACION TERCERO STEP
                         let idRespuestaPonPredeterminada = $('.textoEncabezadoConfiguracionRespuesta').attr('idRespuestaPonPredeterminada');
-                    
+
                         let hijosContenedor = $('.contenedorPersonalizacionTipoRespuesta').find('.form-group');
 
                         // CARGA CONTESTAR
@@ -199,7 +199,7 @@ $(document).ready(function () {
                             let repetidosBool = false;
                             let valorPorcentajesTotal = 0;
 
-                            $.each(hijosContenedorMultiple, function (indexInArray, itemHijo) 
+                            $.each(hijosContenedorMultiple, function (indexInArray, itemHijo)
                             {
                                 let valorPersonalizado = $(itemHijo).find('.valorPersonalizado').val();
                                 let valorPersonalizadoPonderado = $(itemHijo).find('.valorPersonalizadoPonderado').val();
@@ -211,7 +211,7 @@ $(document).ready(function () {
                                     vaciosPonderado = true;
                                 else
                                     valorPorcentajesTotal = parseFloat(valorPorcentajesTotal) + parseFloat(valorPersonalizadoPonderado);
-                                
+
                                 let repetidos = steps.stepsEnviar.stepTres.personalizadas.filter(ob => ob.valorPersonalizado.toUpperCase() == valorPersonalizado.toUpperCase());
 
                                 if(repetidos.length != 0)
@@ -230,7 +230,7 @@ $(document).ready(function () {
                                         .attr("value", valorPersonalizado)
                                         .text(valorPersonalizado));
                             });
-                            
+
                             if(vaciosTexto)
                             {
                                 toastr.warning("No debe haber campos vacíos en los campos de valores personalizados");
@@ -281,7 +281,7 @@ $(document).ready(function () {
                         steps.stepsEnviar.stepUno.permiteNoAplica = $('#checkBoxPermitirNA').is(':checked');
 
                         $(".contestarPopUpStep").select2({ dropdownParent: $('#crearPreguntaPopUp') });
-                        if (edicionIdPlanAccion != 0) 
+                        if (edicionIdPlanAccion != 0)
                         {
                             if(idRespuestaPonPredeterminada == 4) // SI ES MULTIPLE
                                 $(".contestarPopUpStep").val(edicionValorPlanAccion).change();
@@ -381,8 +381,8 @@ $(document).ready(function () {
                     // console.log(dataPlanAccionManual)
                     let checks = $('.tbody-detalle-pm').find(".checkHabilitar");
                     let cantidadChecks = 0;
-                    $.each(checks, function (indexInArray, check) 
-                    { 
+                    $.each(checks, function (indexInArray, check)
+                    {
                       let isChecked = $(check).is(':checked');
                       if(isChecked)
                         cantidadChecks = 1;
@@ -548,7 +548,7 @@ function TraerCategoriasYPreguntas() {
                             totalPonderadoCategoria += parseFloat(pregunta.ponderado) //Sumo el ponderado de cada pregunta de acuerdo a cada categoria
                             totalPonderadoPreguntas += parseFloat(pregunta.ponderado)
                         });
-                   
+
                         categorias += ComponenteCategoriaYCuerpo(preguntas,itemCategoria.CATEGORIA_ID,itemCategoria.PONDERADO,itemCategoria.NOMBRE_CATEGORIA,itemCategoria.ORDEN_LISTA,itemCategoria.IDETIQUETA,itemCategoria.ETIQUETANOMBRE, totalPonderadoCategoria,itemCategoria.SUMA_PONDERADO );
                     });
 
@@ -892,7 +892,7 @@ function ComponenteIconos(nombreCategoriaTipoRespuesta, tipoRespuestas) {
             <p class="card-title font-10 mt-0 ">${tipoRespuesta.NOMBRE_TIPO_RESPUESTA}</p>`;
         }
 
-        stringRespuestas += `<div class="col-lg-3">
+        stringRespuestas += `<div class="col-lg-3 mt-2  ">
                                 <div class=" cuerpoRespuestaStep" style="align-items: center;" idTipoRespuesta="${tipoRespuesta.ID_TIPO_RESPUESTA}" onclick="OnClickTipoRespuesta(this);">
                                     ${tipoRespuestaVariable}
                                 </div>
@@ -930,8 +930,8 @@ function ComponentePersonalizacion(respuestas,tipoRespuesta = 0) {
     {
         let stringRespuestas = "";
         let contador = 0;
-        $.each(respuestas, function (indexInArray, rta) 
-        { 
+        $.each(respuestas, function (indexInArray, rta)
+        {
             if(contador == 0)
             {
                 stringRespuestas += ComponenteRespuestaMultiple(rta,1,true); //IRREMOVIBLE ITEM
@@ -939,7 +939,7 @@ function ComponentePersonalizacion(respuestas,tipoRespuesta = 0) {
             }
             else
                 stringRespuestas += ComponenteRespuestaMultiple(rta,2,true); //NORMAL ITEM
-        });               
+        });
 
         string += `<div class="form-group">
                         <div class="cuerpoConfiguracionRespuesas">
@@ -953,21 +953,21 @@ function ComponentePersonalizacion(respuestas,tipoRespuesta = 0) {
     }
     else
     {
-        $.each(respuestas, function (indexInArray, rta) 
+        $.each(respuestas, function (indexInArray, rta)
         {
             string += ValidarTipoDeString(rta);
         });
     }
-   
+
 
     return string;
 
 }
 
-const ValidarTipoDeString = (rta) => 
+const ValidarTipoDeString = (rta) =>
 {
     let string = '';
-    switch (rta.tipo_respuesta_id) 
+    switch (rta.tipo_respuesta_id)
     {
         case 3: //RESPUESTA LIBRE
             string = `<div class="form-group row">
@@ -979,6 +979,8 @@ const ValidarTipoDeString = (rta) =>
         break;
 
         case 5: //CAMPO NÚMERICO
+        case 6: //CAMPO TIEMPO
+        case 7: //CAMPO FECHA
             string = `<div class="form-group row">
                             <label class="col-lg-5 col-form-label" idRespuesPredeterminda="${rta.id}" style="text-align:end;">${rta.valor_original.toUpperCase()}</label>
                             <div class="col-lg-3">
@@ -1060,15 +1062,15 @@ const ComponenteRespuestaMultiple = (rta, opDefault=1,editando=false) =>
     return string;
 }
 
-function OnInputNumberLimit(control) 
-{ 
+function OnInputNumberLimit(control)
+{
     control.value = control.value.replace(/[^0-9.]/g,'');
 
     if (control.value < 0) control.value = 0;
     if (control.value > 100) control.value = 100;
 }
 
-function OnClickAgregarRespuesta(control) 
+function OnClickAgregarRespuesta(control)
 {
     if($('.cuerpoConfiguracionRespuesas').children().length >= 5)
     {
@@ -1079,7 +1081,7 @@ function OnClickAgregarRespuesta(control)
     $('.cuerpoConfiguracionRespuesas').append(ComponenteRespuestaMultiple("",2,false));
 }
 
-function OnClickEliminarRespuestaConfiguracion(control) 
+function OnClickEliminarRespuestaConfiguracion(control)
 {
     $(control).parent().parent().remove();
 }
@@ -1436,7 +1438,7 @@ function OnClickTipoRespuestaStepCuatro(control) {
         if (idOpcRespuesta == 4) // ID DE PLAN DE ACCIÓN
         {
             $('.contenidoPlanDeAccion').collapse('hide');
-            //Valido los tipos de accion y su estado 
+            //Valido los tipos de accion y su estado
             if ($('.planAccionAutomatico').hasClass('show')) {
                 $('.planAccionManual').collapse('hide')
             } else if ($('.planAccionManual').hasClass('show')) {
@@ -1471,7 +1473,7 @@ function OnClickTipoRespuestaStepCuatro(control) {
                         $('.planAccionManual').collapse('hide')
                         $('.contenidoPlanDeAccion').collapse('show')
                         $('.planAccionAutomatico').collapse('show')
-                        console.log('Automatico')    
+                        console.log('Automatico')
                     }
                     else
                     {
@@ -1479,7 +1481,7 @@ function OnClickTipoRespuestaStepCuatro(control) {
                         toastr.info('Con el tipo de respuesta seleccionada, esta opción no aplica');
                         return;
                     }
-                    
+
                 } else if (result.dismiss == "cancel") {
                     //MUestro el contenido para plan de accion MANUAL
                     $('.planAccionAutomatico').collapse('hide')
@@ -1616,12 +1618,12 @@ function OnClickEditaPregunta(control) {
                         let controlLocal = $('.contenedorOpcionesRta').find('div[idopcionrespuesta="' + itemGeneral.id + '"]');
                         let tipo_pa = itemGeneral.TIPO_PLAN_ACCION //tipo de plan de accion (1) Automatico (2) Manual
                         pintarOpcionesRespuestas(controlLocal, tipo_pa)
-                        if (itemGeneral.id == 4 && tipo_pa == 1) // PLAN DE ACCIÓN 
+                        if (itemGeneral.id == 4 && tipo_pa == 1) // PLAN DE ACCIÓN
                         {
                             $('#planDeAccionArea').val(itemGeneral.PLAN_ACCION);
                             edicionIdPlanAccion = itemGeneral.RESPUESTA_ID;
                             edicionValorPlanAccion = itemGeneral.RESPUESTA_VALOR;
-                            
+
                         }else if(itemGeneral.id == 4 && tipo_pa == 2){
                             //PLAN ACCION MANUAL (PINTAR)
                             limpiarPlanAccionManualTabla()
@@ -1637,12 +1639,12 @@ function OnClickEditaPregunta(control) {
                                                 $(el).trigger('click')
                                                 //$(el).prop('disabled', false)
                                             }
-                                                
+
                                         }else{
                                             // $(el).prop('checked', true)
                                             $(el).trigger('click')
                                         }
-                                        
+
                                     }
                                 })
                             })
@@ -1739,7 +1741,7 @@ function pintarPieBar(ponderado, nombreCategoria,porcentajeCategoria,SumaPondera
 
     // if(tiposPonderado == 1)
     //     calculo = '100';
- 
+
     return classCss;
 }
 
@@ -1825,7 +1827,7 @@ function ComponentePregunta(idPregunta, pregunta, ponderado, nombreTipoRespuesta
                                         <div class="col-lg-8 contenedorOpcionesDeRespuesta">
                                             <span style="font-weight: bold" class="row  justify-content-center">Opciones de respuesta</span>
                                             <div class="contenedorBotonesIconosOpcRespuesta">
-                                                ${stringOpcion}  
+                                                ${stringOpcion}
                                             </div>
 
                                         </div>
@@ -1861,8 +1863,8 @@ function OnClickTerminarListaDeChequeo() {
     let control = '';
     let controlSinPreguntas = '';
     // let posicionDos = $(item).parents().eq(6).position();
-    $.each($('.ContenedorCategoriaYPreguntas').children(), function (indexCategoria, itemCategoria) 
-    { 
+    $.each($('.ContenedorCategoriaYPreguntas').children(), function (indexCategoria, itemCategoria)
+    {
          if(encontroInconsistencias == 0)
          {
             if($(itemCategoria).find('.supero').length != 0)
@@ -1880,9 +1882,9 @@ function OnClickTerminarListaDeChequeo() {
                 inconsistenciasSinPreguntas = 1;
             }
          }
-         
+
     });
-    
+
     if(encontroInconsistencias != 0)
     {
             Swal.fire(
@@ -1902,7 +1904,7 @@ function OnClickTerminarListaDeChequeo() {
             );
             return;
     }
-    
+
     // if((totalPonderadoPreguntas/cantCategorias).toFixed(1) != 100){
     //     Swal.fire(
     //         'Error',
@@ -1911,7 +1913,7 @@ function OnClickTerminarListaDeChequeo() {
     //     );
     //     return 0
     // }
- 
+
 
     $.ajax({
         type: 'POST',
@@ -2259,7 +2261,7 @@ $(document).on('change', '.checkBoxPlanAccion', function () {
         }
         return 0
     }
-       
+
     let exist = existValor(valor, dataPlanAccionManual) //Me devuleve el indice del elemento en caso que exista
     if (this.checked) {
 
@@ -2278,7 +2280,7 @@ $(document).on('change', '.checkBoxPlanAccion', function () {
         if(exist != -1){
             dataPlanAccionManual.splice(exist,1)
         }
-            
+
         //Funcion para DESACTIVAR los checkbox Requeridos que correspondan a la misma fila
         $.each(checkbox, function (index, el) {
             let valorRequerido = $(el).val()
@@ -2286,7 +2288,7 @@ $(document).on('change', '.checkBoxPlanAccion', function () {
                 $(el).prop('disabled', true)
                 $(el).prop('checked', false)
             }
-                
+
         })
     }
 });

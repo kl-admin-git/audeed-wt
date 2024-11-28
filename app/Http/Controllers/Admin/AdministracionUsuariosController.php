@@ -24,7 +24,7 @@ class AdministracionUsuariosController extends Controller
         $this->cargo = $cargo;
         $this->establecimiento = $establecimiento;
         $this->empresa = $empresa;
-        
+
         $this->middleware('auth');
         $this->middleware('isActive');
     }
@@ -62,7 +62,7 @@ class AdministracionUsuariosController extends Controller
         )
         ->leftJoin('cargo AS c','c.id','usuario.cargo_id')
         ->leftJoin('establecimiento AS e','e.id','usuario.establecimiento_id');
-        
+
         $empresas = $this->empresa->select(
             'empresa.id',
             'empresa.identificacion',
@@ -132,12 +132,12 @@ class AdministracionUsuariosController extends Controller
                     ])
                     ->get();
                 }
-                
+
 
                 if(is_null($esResponsableEmpresa) && is_null($esResponsableEstablecimiento))
                 {
                     $empresas = [];
-                    
+
                     $establecimientos = $establecimientos
                     ->Join('usuario AS u','u.establecimiento_id','=','establecimiento.id')
                     ->where([
@@ -151,10 +151,10 @@ class AdministracionUsuariosController extends Controller
                     ])
                     ->get();
                 }
-                    
+
 
                 break;
-            
+
             default:
 
                 break;
@@ -196,11 +196,11 @@ class AdministracionUsuariosController extends Controller
         }
 
         $logoImagen = $request->file('file');
-        
+
         if(!is_null($logoImagen))
         {
             $nombreImagen = $objetoRecibido->identificacion . Str::random(10) . '.' . 'png';
-            $imagenNuevoTamano = \Image::make($logoImagen->getRealPath());              
+            $imagenNuevoTamano = \Image::make($logoImagen->getRealPath());
             $imagenNuevoTamano->resize(128, 128);
             $imagenNuevoTamano->save(public_path($this->urlImagenesAvatar.$nombreImagen));
         }
@@ -219,7 +219,7 @@ class AdministracionUsuariosController extends Controller
         if(!is_null($correo))
         {
             if ($this->usuario
-            ->where([['correo', '=', $correo],['cuenta_principal_id', '=', auth()->user()->cuenta_principal_id]])->exists()) 
+            ->where([['correo', '=', $correo],['cuenta_principal_id', '=', auth()->user()->cuenta_principal_id]])->exists())
             {
                 return $this->FinalizarRetorno(
                     406,
@@ -227,10 +227,10 @@ class AdministracionUsuariosController extends Controller
                 );
             }
         }
-        
+
         if(!is_null($identificacion))
         {
-            if ($this->usuario->where([['identificacion', '=', $identificacion],['cuenta_principal_id', '=', auth()->user()->cuenta_principal_id]])->exists()) 
+            if ($this->usuario->where([['identificacion', '=', $identificacion],['cuenta_principal_id', '=', auth()->user()->cuenta_principal_id]])->exists())
             {
                 return $this->FinalizarRetorno(
                     406,
@@ -238,14 +238,14 @@ class AdministracionUsuariosController extends Controller
                 );
             }
         }
-        
+
 
         $arrayInsertar = [
-            'nombre_completo' => $nombres, 
+            'nombre_completo' => $nombres,
             'identificacion' => $identificacion,
             'correo' => $correo,
             'telefono' => $telefono,
-            'cargo_id' => $idCargo, 
+            'cargo_id' => $idCargo,
             'perfil_id' => $perfilId,
             'establecimiento_id' => $establecimientoId,
             // 'usuario' => $usuarioName,
@@ -276,7 +276,7 @@ class AdministracionUsuariosController extends Controller
         $filtros = json_decode($request->get('arrayFiltros'));
 
         $usuarios = $this->FuncionTraerUsuariosPorPaginacion($idCuentaPrincipal,$paginacion,$filtros);
-        
+
         return $this->FinalizarRetorno(
             202,
             $this->MensajeRetorno('Datos',202),
@@ -294,16 +294,16 @@ class AdministracionUsuariosController extends Controller
             return $this->FinalizarRetorno(
                 203,
                 $this->MensajeRetorno('El usuario ',203)
-            );  
+            );
         }
         else
         {
             return $this->FinalizarRetorno(
                 406,
                 $this->MensajeRetorno('',406,'El usuario no pudo eliminarse')
-            ); 
+            );
         }
-        
+
     }
 
     public function ConsultaEditarUsuario(Request $request)
@@ -332,7 +332,7 @@ class AdministracionUsuariosController extends Controller
         ->Join('perfil AS pe','pe.id','=','usuario.perfil_id')
         ->leftJoin('empresa AS em','em.id','=','e.empresa_id')
         ->where('usuario.id','=',$idUsuario)->first();
-        
+
         return $this->FinalizarRetorno(
             202,
             $this->MensajeRetorno('Datos',202),
@@ -344,11 +344,11 @@ class AdministracionUsuariosController extends Controller
     {
         $objetoRecibido = json_decode($request->get('objetoEnviar'));
         $logoImagen = $request->file('file');
-        
+
         if(!is_null($logoImagen))
         {
             $nombreImagen = $objetoRecibido->identificacion . Str::random(10) . '.' . 'png';
-            $imagenNuevoTamano = \Image::make($logoImagen->getRealPath());              
+            $imagenNuevoTamano = \Image::make($logoImagen->getRealPath());
             $imagenNuevoTamano->resize(128, 128);
             $imagenNuevoTamano->save(public_path($this->urlImagenesAvatar.$nombreImagen));
         }
@@ -371,7 +371,7 @@ class AdministracionUsuariosController extends Controller
                 ['identificacion', '=', $identificacion],
                 ['id', '!=', $idUsuario],
                 ['cuenta_principal_id', '==', auth()->user()->cuenta_principal_id]
-            ])->exists()) 
+            ])->exists())
             {
                 return $this->FinalizarRetorno(
                     406,
@@ -379,7 +379,7 @@ class AdministracionUsuariosController extends Controller
                 );
             }
         }
-        
+
 
         if(!is_null($correo))
         {
@@ -387,7 +387,7 @@ class AdministracionUsuariosController extends Controller
                 ['correo', '=', $correo],
                 ['id', '!=', $idUsuario],
                 ['cuenta_principal_id', '!=', auth()->user()->cuenta_principal_id]
-            ])->exists()) 
+            ])->exists())
             {
                 return $this->FinalizarRetorno(
                     406,
@@ -395,14 +395,14 @@ class AdministracionUsuariosController extends Controller
                 );
             }
         }
-        
-        
+
+
         $arrayUpdate = [
-            'nombre_completo' => $nombres, 
+            'nombre_completo' => $nombres,
             'identificacion' => $identificacion,
             'correo' => $correo,
             'telefono' => $telefono,
-            'cargo_id' => $idCargo, 
+            'cargo_id' => $idCargo,
             'perfil_id' => $perfilId,
             'establecimiento_id' => $establecimientoId,
             // 'usuario' => $usuarioName,
@@ -413,7 +413,7 @@ class AdministracionUsuariosController extends Controller
         {
             $arrayUpdate['url_imagen'] = $nombreImagen;
             $usuarioActualizado = $this->FuncionTraerUsuarioPorId($idUsuario);
-            if(\File::exists($this->urlImagenesAvatar.$usuarioActualizado->url_imagen)) 
+            if(\File::exists($this->urlImagenesAvatar.$usuarioActualizado->url_imagen))
                 \File::delete($this->urlImagenesAvatar.$usuarioActualizado->url_imagen);
         }
 
@@ -422,8 +422,8 @@ class AdministracionUsuariosController extends Controller
             $arrayUpdate['password'] = bcrypt($password);
             $arrayUpdate['password_visible'] = $password_visible;
         }
-            
-        
+
+
         $respuestaUpdate = $this->usuario->where('id','=',$idUsuario)
         ->update($arrayUpdate);
 
@@ -448,7 +448,7 @@ class AdministracionUsuariosController extends Controller
             $estadoCambiado = 1;
         else if($estadoActual == 1)
             $estadoCambiado = 0;
-        
+
         $respuestaUpdate = $this->usuario->where('id','=',$idUsuario)
         ->update(
         [
@@ -479,7 +479,7 @@ class AdministracionUsuariosController extends Controller
             $usuarios
         );
     }
-    
+
     public function FuncionTraerUsuarioPorId($idUsuario)
     {
         $usuario = $this->usuario->select(
@@ -494,7 +494,7 @@ class AdministracionUsuariosController extends Controller
             \DB::raw('IF(e.nombre IS NULL,"Sin establecimiento",e.nombre) AS ESTABLECIMIENTO'),
             'usuario.estado',
             \DB::raw('IF(c.nombre IS NULL,"Sin ciudad",CONCAT(c.nombre,", ",p.nombre)) AS CIUDAD'),
-            \DB::raw('IF(usuario.url_imagen IS NULL,"/vertical/assets/images/users/circle_logo_audiid.png",CONCAT("/imagenes/usuarios/",usuario.url_imagen)) AS FOTO'),
+            \DB::raw('IF(usuario.url_imagen IS NULL,"/vertical/assets/images/logo_horizontal_black.svg",CONCAT("/imagenes/usuarios/",usuario.url_imagen)) AS FOTO'),
             'usuario.usuario AS USUARIO',
             'usuario.password_visible AS PASSWORD',
             \DB::raw('IF((SELECT COUNT(*) FROM empresa ems WHERE ems.usuario_id=usuario.id) != 0,(SELECT ems.nombre FROM empresa ems WHERE ems.usuario_id=usuario.id),"") AS ES_RESPONSABLE_EMPRESA'),
@@ -508,20 +508,20 @@ class AdministracionUsuariosController extends Controller
         ->Join('perfil AS pe','pe.id','=','usuario.perfil_id')
         ->leftJoin('empresa AS em','em.id','=','e.empresa_id')
         ->where('usuario.id','=',$idUsuario)->first();
-        
+
         return $usuario;
     }
 
     public function FuncionTraerUsuariosPorPaginacion($idCuentaPrincipal,$paginacion=1,$filtros=[])
     {
         $resultadoLimit = $this->CalculoPaginacion($paginacion);
-    
+
         $desde = $resultadoLimit['desde'];
         $hasta = $resultadoLimit['hasta'];
         $cantidadRegistros = 9;
         $filtro_array = [];
 
-        foreach ($filtros as $key => $filtro) 
+        foreach ($filtros as $key => $filtro)
         {
 
             switch ($key) {
@@ -546,10 +546,10 @@ class AdministracionUsuariosController extends Controller
                     break;
 
                 default:
-                    
+
                     break;
             }
-            
+
         }
 
         $usuarios = $this->usuario->select(
@@ -564,7 +564,7 @@ class AdministracionUsuariosController extends Controller
             \DB::raw('IF(e.nombre IS NULL,"Sin establecimiento",e.nombre) AS ESTABLECIMIENTO'),
             'usuario.estado',
             \DB::raw('IF(c.nombre IS NULL,"Sin ciudad",CONCAT(c.nombre,", ",p.nombre)) AS CIUDAD'),
-            \DB::raw('IF(usuario.url_imagen IS NULL,"/vertical/assets/images/users/circle_logo_audiid.png",CONCAT("/imagenes/usuarios/",usuario.url_imagen)) AS FOTO'),
+            \DB::raw('IF(usuario.url_imagen IS NULL,"/vertical/assets/images/logo_horizontal_black.svg",CONCAT("/imagenes/usuarios/",usuario.url_imagen)) AS FOTO'),
             \DB::raw('IF(usuario.usuario IS NULL,"Sin usuario",usuario.usuario) AS USUARIO'),
             'usuario.password_visible AS PASSWORD',
             \DB::raw('IF((SELECT COUNT(*) FROM empresa ems WHERE ems.usuario_id=usuario.id) != 0,(SELECT ems.nombre FROM empresa ems WHERE ems.usuario_id=usuario.id),"") AS ES_RESPONSABLE_EMPRESA'),
@@ -605,7 +605,7 @@ class AdministracionUsuariosController extends Controller
                         ['usuario.perfil_id','!=', 1]
                     ]);
                 }
-                
+
 
                 if(is_null($esResponsableEmpresa) && is_null($esResponsableEstablecimiento))
                 {
@@ -613,10 +613,10 @@ class AdministracionUsuariosController extends Controller
                         ['usuario.id','=',auth()->user()->id]
                     ]);
                 }
-                    
+
 
                 break;
-            
+
             default:
 
                 break;
@@ -626,14 +626,14 @@ class AdministracionUsuariosController extends Controller
         {
             $usuarios = $usuarios->where(function($query) use ($filtro_array)
             {
-                foreach ($filtro_array as $keys => $oW) 
+                foreach ($filtro_array as $keys => $oW)
                 {
                     $query->where($oW[0], '=', $oW[2]);
                 }
 
                 return $query;
             });
-            
+
         }
 
         $usuarios = $usuarios->skip($desde)->take($hasta)->get();
@@ -708,7 +708,7 @@ class AdministracionUsuariosController extends Controller
         }
         else
             return false;
-        
+
     }
 
     public function FuncionValidarSiEstaAlDia()
@@ -739,6 +739,6 @@ class AdministracionUsuariosController extends Controller
         }
         else
             return false;
-        
+
     }
 }

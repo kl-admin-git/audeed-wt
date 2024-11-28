@@ -62,7 +62,7 @@ class AdministracionEmpresasController extends Controller
         $usuariosPopUp = $this->usuario->select('usuario.id','usuario.nombre_completo')
         ->where([
             ['usuario.estado','=', 1],
-            ['usuario.cuenta_principal_id','=', auth()->user()->cuenta_principal_id]            
+            ['usuario.cuenta_principal_id','=', auth()->user()->cuenta_principal_id]
         ])
         ->orderBy('usuario.nombre_completo','ASC')
         ->get();
@@ -77,7 +77,7 @@ class AdministracionEmpresasController extends Controller
 
                 $usuariosResponsables = $usuariosResponsables->where([
                     ['usuario.estado','=', 1],
-                    ['usuario.cuenta_principal_id','=',auth()->user()->cuenta_principal_id]          
+                    ['usuario.cuenta_principal_id','=',auth()->user()->cuenta_principal_id]
                 ])->get();
                 break;
 
@@ -94,10 +94,10 @@ class AdministracionEmpresasController extends Controller
 
                     $usuariosResponsables = $usuariosResponsables->where([
                         ['usuario.estado','=', 1],
-                        ['em.id','=',  $esResponsableEmpresa->id]            
+                        ['em.id','=',  $esResponsableEmpresa->id]
                     ])->get();
                 }
-                    
+
 
                 //VERIFICAR SI ES RESPONSABLE DE ESTABLECIMIENTO
                 $esResponsableEstablecimiento = $this->FuncionParaSaberSiEsResponsableEstablecimiento(auth()->user()->id);
@@ -109,12 +109,12 @@ class AdministracionEmpresasController extends Controller
                     return redirect('/dashboard');
 
                 break;
-            
+
             default:
 
                 break;
         };
-        
+
         return view('Admin.administracion_empresas',
             compact(
                 'paises',
@@ -195,11 +195,11 @@ class AdministracionEmpresasController extends Controller
         if(!is_null($logoImagen))
         {
             $nombreImagen = $objetoRecibido->nit . Str::random(10) . '.' . 'png';
-            $imagenNuevoTamano = \Image::make($logoImagen->getRealPath());              
+            $imagenNuevoTamano = \Image::make($logoImagen->getRealPath());
             $imagenNuevoTamano->resize(128, 128);
             $imagenNuevoTamano->save(public_path($this->urlImagenesLogo.$nombreImagen));
         }
-            
+
         $nombreEmpresa = $objetoRecibido->nombreEmpresa;
         $nit = ($objetoRecibido->nit == '' ? NULL : $objetoRecibido->nit);
         $correo = ($objetoRecibido->correo == '' ? NULL : $objetoRecibido->correo);
@@ -216,7 +216,7 @@ class AdministracionEmpresasController extends Controller
             if ($this->empresa->where([
                 ['identificacion', '=', $nit],
                 ['cuenta_principal_id', '=', auth()->user()->cuenta_principal_id]
-            ])->exists()) 
+            ])->exists())
             {
                 return $this->FinalizarRetorno(
                     406,
@@ -226,11 +226,11 @@ class AdministracionEmpresasController extends Controller
         }
 
         $arrayInsertar = [
-            'nombre' => $nombreEmpresa, 
+            'nombre' => $nombreEmpresa,
             'identificacion' => $nit,
             'correo' => $correo,
             'telefono' => $telefono,
-            'direccion' => $direccion, 
+            'direccion' => $direccion,
             'ciudad_id' => $idCiudad,
             'sector_id' => $idSector,
             'usuario_id' => $idResponsable,
@@ -285,11 +285,11 @@ class AdministracionEmpresasController extends Controller
         if(!is_null($logoImagen))
         {
             $nombreImagen = $objetoRecibido->nit . Str::random(10) . '.' . 'png';
-            $imagenNuevoTamano = \Image::make($logoImagen->getRealPath());              
+            $imagenNuevoTamano = \Image::make($logoImagen->getRealPath());
             $imagenNuevoTamano->resize(128, 128);
             $imagenNuevoTamano->save(public_path($this->urlImagenesLogo.$nombreImagen));
         }
-            
+
         $nombreEmpresa = $objetoRecibido->nombreEmpresa;
         $nit = ($objetoRecibido->nit == '' ? NULL : $objetoRecibido->nit);
         $correo = ($objetoRecibido->correo == '' ? NULL : $objetoRecibido->correo);
@@ -308,7 +308,7 @@ class AdministracionEmpresasController extends Controller
                 ['identificacion', '=', $nit],
                 ['id', '!=', $idEmpresa],
                 ['cuenta_principal_id', '=', auth()->user()->cuenta_principal_id]
-            ])->exists()) 
+            ])->exists())
             {
                 return $this->FinalizarRetorno(
                     406,
@@ -318,11 +318,11 @@ class AdministracionEmpresasController extends Controller
         }
 
         $arrayActualizar = [
-            'nombre' => $nombreEmpresa, 
+            'nombre' => $nombreEmpresa,
             'identificacion' => $nit,
             'correo' => $correo,
             'telefono' => $telefono,
-            'direccion' => $direccion, 
+            'direccion' => $direccion,
             'ciudad_id' => $idCiudad,
             'sector_id' => $idSector,
             'usuario_id' => $idResponsable,
@@ -333,7 +333,7 @@ class AdministracionEmpresasController extends Controller
         {
             $arrayActualizar['url_imagen'] = $nombreImagen;
             $empresaAcutalizada = $this->FuncionTraerEmpresaPorId($idEmpresa);
-            if(\File::exists($this->urlImagenesLogo.$empresaAcutalizada->url_imagen)) 
+            if(\File::exists($this->urlImagenesLogo.$empresaAcutalizada->url_imagen))
                 \File::delete($this->urlImagenesLogo.$empresaAcutalizada->url_imagen);
         }
 
@@ -342,7 +342,7 @@ class AdministracionEmpresasController extends Controller
             if($this->empresa->where('usuario_id','=',$idResponsable)->exists())
                 $this->empresa->where('usuario_id','=',$idResponsable)->update(['usuario_id' => NULL]);
         }
-        
+
         $respuestaUpdate = $this->empresa->where('id','=',$idEmpresa)
         ->update($arrayActualizar);
 
@@ -368,7 +368,7 @@ class AdministracionEmpresasController extends Controller
             $estadoCambiado = 1;
         else if($estadoActual == 1)
             $estadoCambiado = 0;
-        
+
         $respuestaUpdate = $this->empresa->where('id','=',$idEmpresa)
         ->update(
         [
@@ -384,7 +384,7 @@ class AdministracionEmpresasController extends Controller
             );
         }
     }
-    
+
     public function ConsultaEmpresas(Request $request)
     {
         $idCuentaPrincipal = $request->get('idCuentaPrincipal');
@@ -410,16 +410,16 @@ class AdministracionEmpresasController extends Controller
             return $this->FinalizarRetorno(
                 203,
                 $this->MensajeRetorno('La empresa ',203)
-            );  
+            );
         }
         else
         {
             return $this->FinalizarRetorno(
                 406,
                 $this->MensajeRetorno('',406,'La empresa no pudo eliminarse')
-            ); 
+            );
         }
-        
+
     }
 
     public function ConsultaEditarEmpresa(Request $request)
@@ -444,7 +444,7 @@ class AdministracionEmpresasController extends Controller
         ->Join('sector AS s','s.id','=','empresa.sector_id')
         ->leftJoin('usuario AS u','u.id','=','empresa.usuario_id')
         ->where('empresa.id','=',$idEmpresa)->first();
-        
+
         return $this->FinalizarRetorno(
             202,
             $this->MensajeRetorno('Datos',202),
@@ -463,7 +463,7 @@ class AdministracionEmpresasController extends Controller
             'empresa.estado',
             'empresa.url_imagen',
             \DB::raw('IF(empresa.telefono IS NULL,"Sin teléfono",empresa.telefono) AS TELEFONO'),
-            \DB::raw('IF(empresa.url_imagen IS NULL,"/vertical/assets/images/users/circle_logo_audiid.png",CONCAT("/imagenes/logos_empresariales/",empresa.url_imagen)) AS FOTO'),
+            \DB::raw('IF(empresa.url_imagen IS NULL,"/vertical/assets/images/logo_horizontal_black.svg",CONCAT("/imagenes/logos_empresariales/",empresa.url_imagen)) AS FOTO'),
             \DB::raw('IF(c.nombre IS NULL,"Sin ciudad",CONCAT(c.nombre,", ",p.nombre)) AS CIUDAD'),
             's.nombre AS SECTOR',
             \DB::raw('IF(u.nombre_completo IS NULL,"Sin responsable",u.nombre_completo) AS RESPONSABLE')
@@ -474,7 +474,7 @@ class AdministracionEmpresasController extends Controller
         ->Join('sector AS s','s.id','=','empresa.sector_id')
         ->leftJoin('usuario AS u','u.id','=','empresa.usuario_id')
         ->where('empresa.id','=',$idEmpresa)->first();
-        
+
         return $empresa;
     }
 
@@ -490,7 +490,7 @@ class AdministracionEmpresasController extends Controller
         //     });
 
         // })->download('xlsx');
-    
+
         return Excel::download(function ($excel)
         {
             $excel->sheet('Directorio', function ($sheet)
@@ -521,7 +521,7 @@ class AdministracionEmpresasController extends Controller
                         });
             });
         }, 'invoices.xlsx');
-            
+
     }
 
     public function TraerEmpresasPaginacion(Request $request)
@@ -542,13 +542,13 @@ class AdministracionEmpresasController extends Controller
     public function FuncionTraerEmpresasPorPaginacion($idCuentaPrincipal,$paginacion=1,$filtros=[])
     {
         $resultadoLimit = $this->CalculoPaginacion($paginacion);
-    
+
         $desde = $resultadoLimit['desde'];
         $hasta = $resultadoLimit['hasta'];
         $cantidadRegistros = 9;
         $filtro_array = [];
 
-        foreach ($filtros as $key => $filtro) 
+        foreach ($filtros as $key => $filtro)
         {
 
             switch ($key) {
@@ -578,10 +578,10 @@ class AdministracionEmpresasController extends Controller
                     break;
 
                 default:
-                    
+
                     break;
             }
-            
+
         }
 
         $empresas = $this->empresa->select(
@@ -591,7 +591,7 @@ class AdministracionEmpresasController extends Controller
             \DB::raw('IF(empresa.correo IS NULL,"Sin correo electrónico",empresa.correo) AS correo'),
             \DB::raw('IF(empresa.direccion IS NULL,"Sin dirección",empresa.direccion) AS direccion'),
             'empresa.estado',
-            \DB::raw('IF(empresa.url_imagen IS NULL,"/vertical/assets/images/users/circle_logo_audiid.png",CONCAT("/imagenes/logos_empresariales/",empresa.url_imagen)) AS FOTO'),
+            \DB::raw('IF(empresa.url_imagen IS NULL,"/vertical/assets/images/logo_horizontal_black.svg",CONCAT("/imagenes/logos_empresariales/",empresa.url_imagen)) AS FOTO'),
             \DB::raw('IF(empresa.telefono IS NULL,"Sin teléfono",empresa.telefono) AS TELEFONO'),
             \DB::raw('IF(c.nombre IS NULL,"Sin ciudad",CONCAT(c.nombre,", ",p.nombre)) AS CIUDAD'),
             's.nombre AS SECTOR',
@@ -616,7 +616,7 @@ class AdministracionEmpresasController extends Controller
                     $empresas = $empresas->where('empresa.id','=',$esResponsableEmpresa->id);
 
                 break;
-            
+
             default:
 
                 break;
@@ -627,7 +627,7 @@ class AdministracionEmpresasController extends Controller
             $empresas = $empresas->where(function($query) use ($filtro_array)
             {
                 // $contador = 0;
-                foreach ($filtro_array as $keys => $oW) 
+                foreach ($filtro_array as $keys => $oW)
                 {
                     // if( $contador == 0)
                     //     $query->where($oW[0], '=', $oW[2]);
@@ -642,7 +642,7 @@ class AdministracionEmpresasController extends Controller
 
                 return $query;
             });
-            
+
         }
 
         $empresas = $empresas->skip($desde)->take($hasta)->get();
@@ -716,7 +716,7 @@ class AdministracionEmpresasController extends Controller
         }
         else
             return false;
-        
+
     }
 
     public function FuncionValidarSiEstaAlDia()
@@ -747,8 +747,8 @@ class AdministracionEmpresasController extends Controller
         }
         else
             return false;
-        
+
     }
 
-    
+
 }

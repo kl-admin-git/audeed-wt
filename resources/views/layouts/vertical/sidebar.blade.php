@@ -19,14 +19,14 @@
         INNER JOIN plan_accion_automatico paa ON paa.plan_accion_id = pa.id
         WHERE us.cuenta_principal_id=:idCuentaPrincipal AND lce.estado = 2
         ORDER BY lcep.id DESC limit 3",['idCuentaPrincipal' => auth()->user()->cuenta_principal_id]);
-    
-    
+
+
     $usuarioCuentaPrincipal = \DB::table('cuenta_principal')->where('id', '=' ,auth()->user()->cuenta_principal_id)->first();
 
     $diasFaltantes = 0;
     $isFree=true;
     $mensaje = '';
-    switch ($usuarioCuentaPrincipal->plan_id) 
+    switch ($usuarioCuentaPrincipal->plan_id)
     {
         case 1: //GRATIS
             $isFree=true;
@@ -36,7 +36,7 @@
         case 3:
         case 4:
         $isFree=false;
-        $diasFaltantes = \DB::select("SELECT 
+        $diasFaltantes = \DB::select("SELECT
             DATEDIFF(pp.fecha_fin,NOW()) AS DIAS_FALTANTES
             FROM plan_pagos AS pp
             WHERE pp.cuenta_principal_id = :idCuentaPrincipal
@@ -51,13 +51,13 @@
             else
                 $mensaje = "Te quedan ".$diasFaltantes[0]->DIAS_FALTANTES." días para finalizar tu suscripción";
             break;
-        
+
         default:
             # code...
             break;
     }
 
-    $img = (is_null(auth()->user()->url_imagen) ? assets_version('/vertical/assets/images/users/circle_logo_audiid.png') : assets_version("/imagenes/usuarios/".auth()->user()->url_imagen));
+    $img = (is_null(auth()->user()->url_imagen) ? assets_version('/vertical/assets/images/logo_horizontal_black.svg') : assets_version("/imagenes/usuarios/".auth()->user()->url_imagen));
 
 @endphp
 <!-- Top Bar Start -->
@@ -76,7 +76,7 @@
 
     <ul class="list-inline float-right mb-0">
         @if ($perfil->id == 1)
-        
+
             <!-- notification-->
             <li class="list-inline-item dropdown notification-list" id="dashboard-tour-1">
                 <a class="nav-link dropdown-toggle arrow-none waves-effect" data-toggle="dropdown" href="#" role="button"
@@ -108,7 +108,7 @@
                 </div>
             </li>
         @endif
-        
+
         <!-- User-->
         <li class="list-inline-item dropdown notification-list">
             <a class="nav-link dropdown-toggle arrow-none waves-effect nav-user" data-toggle="dropdown" href="#" role="button"
@@ -126,7 +126,7 @@
         </li>
 
     </ul>
-    
+
     <!-- Page title -->
     <ul class="list-inline menu-left mb-0">
         <li class="list-inline-item">
@@ -135,11 +135,11 @@
             </button>
         </li>
         <li class="hide-phone list-inline-item app-search">
-            @yield('breadcrumb') 
+            @yield('breadcrumb')
         </li>
     </ul>
     <div class="clearfix"></div>
-    
+
     {{-- @if (!$isFree)
     <div class="tiempoLine" title="{{ $mensaje }}" data-toggle="tooltip" data-placement="top">
             <div class="progress">
@@ -149,7 +149,7 @@
             </div>
         </div>
     @endif --}}
-    
+
 
 </nav>
 </div>

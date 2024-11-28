@@ -1,4 +1,4 @@
-<link rel="shortcut icon" href="{{ URL::asset('horizontal/assets/images/favicon.png') }}">
+<link rel="shortcut icon" href="{{ URL::asset('horizontal/assets/images/favicon.ico') }}">
 @yield('css')
 <!-- Basic Css files -->
 <link href="{{ assets_version('/horizontal/assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">

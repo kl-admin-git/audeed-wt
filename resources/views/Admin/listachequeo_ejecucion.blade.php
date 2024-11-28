@@ -1,8 +1,8 @@
 @extends('template.baseVertical')
 
 @section('css')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link rel="stylesheet" href="{{ assets_version('/vertical/assets/css/listachequeo/ejecucion/main.css') }}">
-
 @endsection
 
 @section('breadcrumb')
@@ -26,7 +26,7 @@
                             <div class="form-group row m-b-15">
                                 <label>Encabezado de la lista de chequeo</label>
                             </div>
-                            
+
                             <div class="row">
                                 <div class="col-lg-3">
                                     <div class="form-group">
@@ -39,10 +39,10 @@
                                     <div class="form-group">
                                         <label>Evaluando a</label>
                                         <div class="col-md-0" style="display: flex;">
-                                            
+
                                             {{-- <input class="form-control py-2 border-left-0 border" type="text" value="" placeholder="" id=""> --}}
                                             <select disabled class="form-control select2 border-rigth-0 selectSearch evaluandoA">
-                                                
+
                                             </select>
                                             <span class="input-group-append">
                                                 <button class="btn btn-outline-secondary border-left-0 border" disabled type="button">
@@ -68,13 +68,13 @@
                                 </div>
 
                             </div>
-                                    
+
 
                         </div>
 
                         <div id="accordion" class="m-t-30 contenedorCategorias">
-                            
-                            
+
+
                         </div>
 
                         <div class="col-lg-12">
@@ -114,7 +114,7 @@
                     <label for="et_pb_contact_brand_file_request_0" class="et_pb_contact_form_label">Enter</label>
                     <input type="file" id="et_pb_contact_brand_file_request_0" class="file-upload" multiple accept=".doc,.pptx,.xlsx,.pdf,.docx,.xls,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*,video/*">
                 </div>
-                
+
           </div>
 
           <div class="modal-footer" style="display: block;">
@@ -141,7 +141,7 @@
                         </button>
                     </div>
                 </div>
-               
+
           </div>
         </div>
     </div>
@@ -244,6 +244,68 @@
 </div>
 {{-- MODAL NUMÉRICO - FIN --}}
 
+<!--  MODAL TIEMPO-->
+<div class="modal fade bs-example-modal-lg" id="popUpRespuestaTiempo" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="modal-title mt-0">Guarda respuesta</p>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12">
+                    <div class="m-b-20">
+                        <div class="card-body">
+                            <div class="">
+                                <input id="respuestaTiempoText" class="form-control" placeholder="00:00 - 23:59"/>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group m-b-0">
+                        <div class="contenedorBotonesPopUp">
+                            <button type="button" class="btn btn-primary waves-effect waves-light guardarRespuestaTiempo">Guardar respuesta</button>
+                            <button type="button" class="btn btn-secondary waves-effect m-l-10 cancelarPopUpRespuestaTiempo">Cancelar</button>
+                        </div>
+                    </div>
+                </div> <!-- end col -->
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+{{-- MODAL TIEMPO - FIN --}}
+
+<!--  MODAL FECHA-->
+<div class="modal fade bs-example-modal-lg" id="popUpRespuestaFecha" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="modal-title mt-0">Guarda respuesta</p>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12">
+                    <div class="m-b-20">
+                        <div class="card-body">
+                            <div class="">
+                                <input id="respuestaFechaText" class="form-control" placeholder="0000-00-00"/>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group m-b-0">
+                        <div class="contenedorBotonesPopUp">
+                            <button type="button" class="btn btn-primary waves-effect waves-light guardarRespuestaFecha">Guardar respuesta</button>
+                            <button type="button" class="btn btn-secondary waves-effect m-l-10 cancelarPopUpRespuestaFecha">Cancelar</button>
+                        </div>
+                    </div>
+                </div> <!-- end col -->
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+{{-- MODAL FECHA - FIN --}}
+
 {{-- MODAL CAMARA --}}
 <div class="modal fade bs-example-modal-lg" id="popUpCamara" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
@@ -272,8 +334,8 @@
                             <img src="https://yt3.ggpht.com/a/AGF-l790ZGzS4Qw4FWGGEp6MQHqbWjxxvVeJhF7_sA=s900-mo-c-c0xffffffff-rj-k-no" alt=""> --}}
                     </div>
                 </div>
-    
-               
+
+
           </div>
         </div>
     </div>
@@ -291,7 +353,7 @@
           </button>
         </div>
         <div class="modal-body form-plan-accion cuerpo-pa-m">
-        
+
 
         </div>
         <div class="modal-footer">
@@ -305,5 +367,6 @@
 @endsection
 
 @section('script')
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script type="text/javascript" src="{{ assets_version('/vertical/assets/js/listachequeo/ejecucion/main.js') }}"></script>
 @endsection

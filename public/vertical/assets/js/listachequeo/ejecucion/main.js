@@ -57,6 +57,18 @@ $(document).ready(function () {
         language: 'es'
     });
 
+    flatpickr("#respuestaTiempoText", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+        time_24hr: true,
+        minuteIncrement: 1
+    });
+
+    flatpickr("#respuestaFechaText", {
+        dateFormat: "Y-m-d",
+    });
+
     //Cargar archivos adjuntos
     cargarArchivosAdjuntos()
 
@@ -86,7 +98,7 @@ function IniciarVista() {
             console.log(data)
             switch (data.codigoRespuesta) {
                 case 202:
-                    //CARGAR DE PREGUNTAS 
+                    //CARGAR DE PREGUNTAS
                     let categorias = '';
                     $.each(data.datos.categoriasPreguntas, function (indexInArray, categoria) {
 
@@ -194,9 +206,9 @@ function ComponentePregunta(idPregunta, pregunta, respuestas, opcionesRespuesta,
         tipoRespuesta = respuestas[0].TIPO_RESPUESTA;
 
     console.log(respuestas);
-    $.each(respuestas, function (indexInArray, item) 
+    $.each(respuestas, function (indexInArray, item)
     {
-        switch (tipoRespuestaBk) 
+        switch (tipoRespuestaBk)
         {
             case 3: //RESPUESTA ABIERTA
                 if(item.id == 0) //N/A
@@ -206,7 +218,7 @@ function ComponentePregunta(idPregunta, pregunta, respuestas, opcionesRespuesta,
                         stringClase = 'respuestaSeleccion';
                     else
                         stringClase = '';
-            
+
                     stringRespuestas += `<div class="m-l-5 m-r-5">
                                             <div class="form-group">
                                                 <div class="respuesta bg-gray ${stringClase}" tipoRespuesta="0" onclick="OnClickRespuesta(this);" idRespuesta="${item.id}">
@@ -222,7 +234,7 @@ function ComponentePregunta(idPregunta, pregunta, respuestas, opcionesRespuesta,
                         stringClase = 'respuestaSeleccion';
                     else
                         stringClase = '';
-            
+
                     stringRespuestas += `<div class="m-l-5 m-r-5">
                                             <div class="form-group">
                                                 <div class="respuesta bg-gray ${stringClase}" tipoRespuesta="${tipoRespuestaBk}" respuestaAbierta="${item.rta_abierta}" onclick="OnClickRespuesta(this);" idRespuesta="${item.id}">
@@ -231,7 +243,7 @@ function ComponentePregunta(idPregunta, pregunta, respuestas, opcionesRespuesta,
                                             </div>
                                         </div>`;
                 }
-                break;
+            break;
 
             case 5: //RESPUESTA NÚMERICA
                 if(item.id == 0) //N/A
@@ -241,7 +253,7 @@ function ComponentePregunta(idPregunta, pregunta, respuestas, opcionesRespuesta,
                         stringClase = 'respuestaSeleccion';
                     else
                         stringClase = '';
-            
+
                     stringRespuestas += `<div class="m-l-5 m-r-5">
                                             <div class="form-group">
                                                 <div class="respuesta bg-gray ${stringClase}" tipoRespuesta="0" onclick="OnClickRespuesta(this);" idRespuesta="${item.id}">
@@ -257,7 +269,7 @@ function ComponentePregunta(idPregunta, pregunta, respuestas, opcionesRespuesta,
                         stringClase = 'respuestaSeleccion';
                     else
                         stringClase = '';
-            
+
                     stringRespuestas += `<div class="m-l-5 m-r-5">
                                             <div class="form-group">
                                                 <div class="respuesta bg-gray ${stringClase}" tipoRespuesta="${tipoRespuestaBk}" respuestaAbierta="${item.rta_abierta}" onclick="OnClickRespuesta(this);" idRespuesta="${item.id}">
@@ -266,15 +278,85 @@ function ComponentePregunta(idPregunta, pregunta, respuestas, opcionesRespuesta,
                                             </div>
                                         </div>`;
                 }
-                break;
-        
+            break;
+
+            case 6: //RESPUESTA IEMPO
+                if(item.id == 0) //N/A
+                {
+                    let stringClase = '';
+                    if (item.id == item.rta)
+                        stringClase = 'respuestaSeleccion';
+                    else
+                        stringClase = '';
+
+                    stringRespuestas += `<div class="m-l-5 m-r-5">
+                                            <div class="form-group">
+                                                <div class="respuesta bg-gray ${stringClase}" tipoRespuesta="0" onclick="OnClickRespuesta(this);" idRespuesta="${item.id}">
+                                                    ${item.valor_personalizado}
+                                                </div>
+                                            </div>
+                                        </div>`;
+                }
+                else
+                {
+                    let stringClase = '';
+                    if (item.id == item.rta)
+                        stringClase = 'respuestaSeleccion';
+                    else
+                        stringClase = '';
+
+                    stringRespuestas += `<div class="m-l-5 m-r-5">
+                                            <div class="form-group">
+                                                <div class="respuesta bg-gray ${stringClase}" tipoRespuesta="${tipoRespuestaBk}" respuestaAbierta="${item.rta_abierta}" onclick="OnClickRespuesta(this);" idRespuesta="${item.id}">
+                                                   Agregar tiempo
+                                                </div>
+                                            </div>
+                                        </div>`;
+                }
+            break;
+
+            case 7: //RESPUESTA FECHA
+                if(item.id == 0) //N/A
+                {
+                    let stringClase = '';
+                    if (item.id == item.rta)
+                        stringClase = 'respuestaSeleccion';
+                    else
+                        stringClase = '';
+
+                    stringRespuestas += `<div class="m-l-5 m-r-5">
+                                            <div class="form-group">
+                                                <div class="respuesta bg-gray ${stringClase}" tipoRespuesta="0" onclick="OnClickRespuesta(this);" idRespuesta="${item.id}">
+                                                    ${item.valor_personalizado}
+                                                </div>
+                                            </div>
+                                        </div>`;
+                }
+                else
+                {
+                    let stringClase = '';
+                    if (item.id == item.rta)
+                        stringClase = 'respuestaSeleccion';
+                    else
+                        stringClase = '';
+
+                    stringRespuestas += `<div class="m-l-5 m-r-5">
+                                            <div class="form-group">
+                                                <div class="respuesta bg-gray ${stringClase}" tipoRespuesta="${tipoRespuestaBk}" respuestaAbierta="${item.rta_abierta}" onclick="OnClickRespuesta(this);" idRespuesta="${item.id}">
+                                                   Agregar Fecha
+                                                </div>
+                                            </div>
+                                        </div>`;
+                }
+            break;
+
             default:
                 let stringClase = '';
                 if (item.id == item.rta)
                     stringClase = 'respuestaSeleccion';
                 else
                     stringClase = '';
-        
+
                 stringRespuestas += `<div class="m-l-5 m-r-5">
                                         <div class="form-group">
                                             <div class="respuesta bg-gray ${stringClase}" tipoRespuesta="${tipoRespuestaBk}" onclick="OnClickRespuesta(this);" idRespuesta="${item.id}">
@@ -284,7 +366,7 @@ function ComponentePregunta(idPregunta, pregunta, respuestas, opcionesRespuesta,
                                     </div>`;
                 break;
         }
-        
+
     });
 
     let stringRespuestasOpciones = '';
@@ -318,7 +400,7 @@ function ComponentePregunta(idPregunta, pregunta, respuestas, opcionesRespuesta,
             }
 
         }
-        
+
 
         stringRespuestasOpciones += `<div class="m-l-10">
                                             <div class="form-group">
@@ -367,7 +449,7 @@ function ComponentePregunta(idPregunta, pregunta, respuestas, opcionesRespuesta,
 
                 </div>
             </div>
-                
+
                 `;
 
     return string;
@@ -397,7 +479,7 @@ function ComponenteCategoriaCompleta(idCategoria, nombreCategoria, preguntas, po
                                 ${preguntas}
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>`;
 
@@ -416,7 +498,7 @@ function OnClickCategoria(control) {
 var objetoEnviarGlobal = null;
 var controlGlobal = null;
 function OnClickRespuesta(control) {
-    if($(control).hasClass('respuestaSeleccion') && ($(control).attr('tipoRespuesta') != 3 && $(control).attr('tipoRespuesta') != 5))
+    if($(control).hasClass('respuestaSeleccion') && ($(control).attr('tipoRespuesta') != 3 && $(control).attr('tipoRespuesta') != 5 && $(control).attr('tipoRespuesta') != 6 && $(control).attr('tipoRespuesta') != 7))
         return;
 
     let contenedorPregunta = $(control).parents().eq(4);
@@ -467,6 +549,30 @@ function OnClickRespuesta(control) {
 
         $('#popUpRespuestaNumerica').modal('show');
     }
+    else if(tipoRespuesta == 6) //RESPUESTA TIEMPO
+    {
+        objetoEnviarGlobal = objetoEnviar;
+        controlGlobal = control;
+
+        if(respuestaAbierta != 'null')
+            $('#respuestaTiempoText').val(respuestaAbierta);
+        else
+            $('#respuestaTiempoText').val('');
+
+        $('#popUpRespuestaTiempo').modal('show');
+    }
+    else if(tipoRespuesta == 7) //RESPUESTA TIEMPO
+    {
+        objetoEnviarGlobal = objetoEnviar;
+        controlGlobal = control;
+
+        if(respuestaAbierta != 'null')
+            $('#respuestaFechaText').val(respuestaAbierta);
+        else
+            $('#respuestaFechaText').val(new Date().toLocaleDateString("en-CA"));
+
+        $('#popUpRespuestaFecha').modal('show');
+    }
     else
     {
         $.ajax({
@@ -482,27 +588,27 @@ function OnClickRespuesta(control) {
                 // CargandoNoMostrar();
                 switch (data.codigoRespuesta) {
                     case 206:
-    
+
                         let padre = $(control).parents().eq(2);
                         let listaRespuestas = $(padre).find('.respuesta');
                         $.each(listaRespuestas, function (indexInArray, itemRespuesta) {
                             $(itemRespuesta).removeClass('respuestaSeleccion');
                             $(itemRespuesta).attr('respuestaAbierta','null');
                         });
-    
+
                         $(control).addClass('respuestaSeleccion');
                         toastr.success(data.mensaje);
                         break;
-    
+
                     case 406:
                         toastr.error(data.mensaje);
-    
+
                         break;
-    
+
                     default:
                         break;
                 }
-    
+
             },
             error: function (data) {
                 // CargandoNoMostrar()
@@ -510,10 +616,10 @@ function OnClickRespuesta(control) {
         });
     }
 
-    
+
 }
 
-function OnClickGuardarRespuestaAbierta() 
+function OnClickGuardarRespuestaAbierta()
 {
     if($('#respuestaAbiertaText').val() == '')
     {
@@ -521,7 +627,7 @@ function OnClickGuardarRespuestaAbierta()
         $('#respuestaAbiertaText').focus();
         return;
     }
-    
+
     objetoEnviarGlobal.respuestaAbierta =  $('#respuestaAbiertaText').val();
 
     $.ajax({
@@ -533,7 +639,7 @@ function OnClickGuardarRespuestaAbierta()
         beforeSend: function () {
             // CargandoMostrar();
         },
-        success: function (data) 
+        success: function (data)
         {
             // CargandoNoMostrar();
             switch (data.codigoRespuesta) {
@@ -623,8 +729,8 @@ function OnClickPlanAccionM(control){
                 {
 
                     let responsableOpciones = '<option value="0">Selecciona el responsable</option>';
-                    $.each(res.Responsables, function (indexInArray, responsable) 
-                    { 
+                    $.each(res.Responsables, function (indexInArray, responsable)
+                    {
                         responsableOpciones += `<option value="${responsable.id}">${responsable.nombre_completo} (${responsable.CARGO})</option>`;
                     });
 
@@ -639,8 +745,8 @@ function OnClickPlanAccionM(control){
                 else if(valor.opcion_id == 5) // SI ES ¿QUIEN LO HARÁ DEBE SER UN SELECT
                 {
                     let quienHaraOpciones = '<option value="0">Selecciona a quién</option>';
-                    $.each(res.Responsables, function (indexInArray, responsable) 
-                    { 
+                    $.each(res.Responsables, function (indexInArray, responsable)
+                    {
                         quienHaraOpciones += `<option value="${responsable.id}">${responsable.nombre_completo} (${responsable.CARGO})</option>`;
                     });
 
@@ -661,8 +767,8 @@ function OnClickPlanAccionM(control){
                     </div>
                 `
                 }
-                
-                
+
+
             })
             //SI EL BOTON SE ENCUENTRA ACTIVO ENTONCES CONSULTO LA DATA QUE SE ENCUENTRA ALMACENADA EN LA BD PARA LUEGO PINTARLA
             if($(control).hasClass('respuestaOpcSeleccion')){
@@ -684,11 +790,11 @@ function OnClickPlanAccionM(control){
                         let inputs = $('.form-plan-accion').find('.input-plan-accionm')
                         let selects = $('.form-plan-accion').find('.selectResponsablePopUp');
                         let selectsQuien = $('.form-plan-accion').find('.selectQuienLoHaraPopUp');
-                        
+
                         $.each(res.data, function(i, el){
                             $.each(inputs, function(index, elem){
                                 let idopc = parseInt($(elem).attr('idopc'))
-                               
+
                                 if(idopc == el.plan_accio_man_opc_id){
                                     $(elem).val(el.respuesta)
                                 }
@@ -697,7 +803,7 @@ function OnClickPlanAccionM(control){
                             if($(selects).length != 0) // SI TIENE SELECTS
                             {
                                 let controlSelect = $('.form-plan-accion').find('.selectResponsablePopUp')[0];
-                                let idOpc = $(controlSelect).attr('idopc'); 
+                                let idOpc = $(controlSelect).attr('idopc');
 
                                 if(idOpc == el.plan_accio_man_opc_id)
                                     $(controlSelect).val(el.respuesta).change();
@@ -706,13 +812,13 @@ function OnClickPlanAccionM(control){
                             if($(selectsQuien).length != 0) // SI TIENE SELECTS (QUIEN LO HARA)
                             {
                                 let controlSelectQuienLoHara = $('.form-plan-accion').find('.selectQuienLoHaraPopUp')[0];
-                                let idOpc = $(controlSelectQuienLoHara).attr('idopc'); 
+                                let idOpc = $(controlSelectQuienLoHara).attr('idopc');
 
                                 if(idOpc == el.plan_accio_man_opc_id)
                                     $(controlSelectQuienLoHara).val(el.respuesta).change();
                             }
                         })
-                        
+
                     },
                     error: function(error){
                         toastr.error('Error al obtener la informacion de la lista de chequeo')
@@ -731,7 +837,7 @@ function OnClickPlanAccionM(control){
             toastr.warning('Error al obtener la data para plan de accion manual')
         }
     })
-    
+
 
 }
 
@@ -748,7 +854,7 @@ $('.guardar-plan-accion-manual').on('click', function(){
         idListaChequeo
 
     }
-    
+
     let algunCampoRequerido = 0;
     $.each(inputs, function(index, elem){
         let idopc = $(elem).attr('idopc')
@@ -756,17 +862,17 @@ $('.guardar-plan-accion-manual').on('click', function(){
 
         if(requerido == 'required' && $(elem).val() == '')
             algunCampoRequerido = 1;
-       
+
         if(data.hasOwnProperty(idopc) == false &&  idopc != undefined){
             data[idopc] = $(elem).val()
         }
-        
+
     })
 
     if($('.form-plan-accion').find('.selectResponsablePopUp').length != 0)
     {
         let controlSelect = $('.form-plan-accion').find('.selectResponsablePopUp')[0];
-        let idOpc = $(controlSelect).attr('idopc'); 
+        let idOpc = $(controlSelect).attr('idopc');
         let esObligatorio = $(controlSelect).attr('esObligatorio');
         if(esObligatorio == 1)
         {
@@ -784,7 +890,7 @@ $('.guardar-plan-accion-manual').on('click', function(){
     if($('.form-plan-accion').find('.selectQuienLoHaraPopUp').length != 0)
     {
         let controlSelectQuienHara = $('.form-plan-accion').find('.selectQuienLoHaraPopUp')[0];
-        let idOpcQuien = $(controlSelectQuienHara).attr('idopc'); 
+        let idOpcQuien = $(controlSelectQuienHara).attr('idopc');
         let esObligatorioQuien = $(controlSelectQuienHara).attr('esObligatorio');
         if(esObligatorioQuien == 1)
         {
@@ -873,7 +979,7 @@ function OnClickPopUpComentarioCerrar() {
     $('#popUpComentario').modal('hide');
 }
 
-function OnClickPopUpRespuestaCerrar() 
+function OnClickPopUpRespuestaCerrar()
 {
     $('#respuestaAbiertaText').val('');
     $('#popUpRespuestaAbierta').modal('hide');
@@ -975,7 +1081,7 @@ function cargarArchivosAdjuntos() {
                 }else{
                     toastr.warning('Deben ser maximo 5 archivos y un total de 5MB.');
                 }
-                
+
             } else {
                 toastr.warning('Deben ser maximo 5 archivos y un total de 5MB.');
             }
@@ -1017,7 +1123,7 @@ function limpiarVariablesAdjuntos() {
 }
 
 function OnClickGuardarAdjuntos() {
- 
+
     let filesData = formDataAdjuntos
 
     let archivosAgregados = $('.file_names').length
@@ -1084,7 +1190,7 @@ function EliminarArchivo(control) {
         let fileControl = document.getElementById('et_pb_contact_brand_file_request_0');
         fileControl.value=null;
         objetoAdjuntos.adjuntos = objetoAdjuntos.adjuntos.filter(function(elemento) { return elemento.name == nombreFile; });
-        
+
     }else{//Si el archivo ya esta en el servidor, prodecedo a eliminarlo
         $.ajax({
             type: 'POST',
@@ -1606,7 +1712,7 @@ function OnClickFinalizarListaChequeo() {
                         cancelButtonClass: 'btn btn-secondary ml-3',
                         cancelButtonText: 'No',
                     }).then(function (response) {
-                        if (response.dismiss == undefined) 
+                        if (response.dismiss == undefined)
                         {
                             let idListaChequeo = $('.datosLista').attr('idListaChequeo');
                             $.ajax({
@@ -1633,7 +1739,7 @@ function OnClickFinalizarListaChequeo() {
                                                 data.datos;
                                             window.location.href = url;
                                             break;
-                        
+
                                         case 402:
                                             Swal.fire({
                                                 title: "No puedes continuar con la ejecución",
@@ -1645,7 +1751,7 @@ function OnClickFinalizarListaChequeo() {
                                                 allowOutsideClick: false,
                                             }).then((result) => { });
                                             break;
-                        
+
                                         case 406:
                                             if (data.datos != 1) {
                                                 // DIFERENTE ADMINISTRADOR
@@ -1671,7 +1777,7 @@ function OnClickFinalizarListaChequeo() {
                                                         let idPlan = $.trim(
                                                             $("#popUpSuscripcion").attr("planActual")
                                                         );
-                        
+
                                                         switch (idPlan) {
                                                             case "1":
                                                                 let control = $(
@@ -1683,7 +1789,7 @@ function OnClickFinalizarListaChequeo() {
                                                                     .find(".btn-audeed")
                                                                     .addClass("hidden");
                                                                 break;
-                        
+
                                                             case "2":
                                                             case "3":
                                                             case "4":
@@ -1701,13 +1807,13 @@ function OnClickFinalizarListaChequeo() {
                                                                         .find(".btn-audeed")
                                                                         .addClass("hidden");
                                                                 }
-                        
+
                                                                 break;
-                        
+
                                                             default:
                                                                 break;
                                                         }
-                        
+
                                                         $(".iconoCerrarPopUpPlanes").removeClass(
                                                             "hidden"
                                                         );
@@ -1716,7 +1822,7 @@ function OnClickFinalizarListaChequeo() {
                                                 });
                                             }
                                             break;
-                        
+
                                         default:
                                             break;
                                     }
@@ -1749,7 +1855,7 @@ function OnClickFinalizarListaChequeo() {
     });
 }
 
-function OnClickGuardarRespuestaNumerica() 
+function OnClickGuardarRespuestaNumerica()
 {
     if($('#respuestaNumericaText').val() == '')
     {
@@ -1757,7 +1863,7 @@ function OnClickGuardarRespuestaNumerica()
         $('#respuestaNumericaText').focus();
         return;
     }
-    
+
     objetoEnviarGlobal.respuestaAbierta =  $('#respuestaNumericaText').val();
 
     $.ajax({
@@ -1769,7 +1875,7 @@ function OnClickGuardarRespuestaNumerica()
         beforeSend: function () {
             // CargandoMostrar();
         },
-        success: function (data) 
+        success: function (data)
         {
             // CargandoNoMostrar();
             switch (data.codigoRespuesta) {
@@ -1803,10 +1909,130 @@ function OnClickGuardarRespuestaNumerica()
     });
 }
 
-function OnClickPopUpRespuestaCerrarNumerica() 
+function OnClickPopUpRespuestaCerrarNumerica()
 {
     $('#respuestaNumericaText').val('');
     $('#popUpRespuestaNumerica').modal('hide');
+}
+
+function OnClickGuardarRespuestaTiempo()
+{
+    if($('#respuestaTiempoText').val() == '')
+    {
+        toastr.warning('Debes seleccionar el tiempo');
+        $('#respuestaTiempoText').focus();
+        return;
+    }
+
+    objetoEnviarGlobal.respuestaAbierta =  $('#respuestaTiempoText').val();
+
+    $.ajax({
+        type: 'POST',
+        url: '/listachequeo/ejecucion/agregarRespuestaListaChequeo',
+        data: objetoEnviarGlobal,
+        cache: false,
+        dataType: 'json',
+        beforeSend: function () {
+            // CargandoMostrar();
+        },
+        success: function (data)
+        {
+            // CargandoNoMostrar();
+            switch (data.codigoRespuesta) {
+                case 206:
+
+                    let padre = $(controlGlobal).parents().eq(2);
+                    let listaRespuestas = $(padre).find('.respuesta');
+                    $.each(listaRespuestas, function (indexInArray, itemRespuesta) {
+                        $(itemRespuesta).removeClass('respuestaSeleccion');
+                    });
+
+                    $(controlGlobal).addClass('respuestaSeleccion');
+                    $(controlGlobal).attr('respuestaAbierta', $('#respuestaTiempoText').val());
+                    $('#popUpRespuestaTiempo').modal('hide');
+                    toastr.success(data.mensaje);
+                    break;
+
+                case 406:
+                    toastr.error(data.mensaje);
+
+                    break;
+
+                default:
+                    break;
+            }
+
+        },
+        error: function (data) {
+            // CargandoNoMostrar()
+        }
+    });
+}
+
+function OnClickPopUpRespuestaCerrarTiempo()
+{
+    $('#respuestaTiempoText').val('');
+    $('#popUpRespuestaTiempo').modal('hide');
+}
+
+function OnClickGuardarRespuestaFecha()
+{
+    if($('#respuestaFechaText').val() == '')
+    {
+        toastr.warning('Debes seleccionar la fecha');
+        $('#respuestaFechaText').focus();
+        return;
+    }
+
+    objetoEnviarGlobal.respuestaAbierta =  $('#respuestaFechaText').val();
+
+    $.ajax({
+        type: 'POST',
+        url: '/listachequeo/ejecucion/agregarRespuestaListaChequeo',
+        data: objetoEnviarGlobal,
+        cache: false,
+        dataType: 'json',
+        beforeSend: function () {
+            // CargandoMostrar();
+        },
+        success: function (data)
+        {
+            // CargandoNoMostrar();
+            switch (data.codigoRespuesta) {
+                case 206:
+
+                    let padre = $(controlGlobal).parents().eq(2);
+                    let listaRespuestas = $(padre).find('.respuesta');
+                    $.each(listaRespuestas, function (indexInArray, itemRespuesta) {
+                        $(itemRespuesta).removeClass('respuestaSeleccion');
+                    });
+
+                    $(controlGlobal).addClass('respuestaSeleccion');
+                    $(controlGlobal).attr('respuestaAbierta', $('#respuestaFechaText').val());
+                    $('#popUpRespuestaFecha').modal('hide');
+                    toastr.success(data.mensaje);
+                    break;
+
+                case 406:
+                    toastr.error(data.mensaje);
+
+                    break;
+
+                default:
+                    break;
+            }
+
+        },
+        error: function (data) {
+            // CargandoNoMostrar()
+        }
+    });
+}
+
+function OnClickPopUpRespuestaCerrarFecha()
+{
+    $('#respuestaFechaText').val('');
+    $('#popUpRespuestaFecha').modal('hide');
 }
 
 $('.cancelarPopUp').on('click', OnClickPopUpComentarioCerrar);
@@ -1818,3 +2044,7 @@ $('.cancelarPopUpRespuesta').on('click', OnClickPopUpRespuestaCerrar);
 $('.guardarRespuesta').on('click', OnClickGuardarRespuestaAbierta);
 $('.guardarRespuestaNumerica').on('click', OnClickGuardarRespuestaNumerica);
 $('.cancelarPopUpRespuestaNumerica').on('click', OnClickPopUpRespuestaCerrarNumerica);
+$('.guardarRespuestaTiempo').on('click', OnClickGuardarRespuestaTiempo);
+$('.cancelarPopUpRespuestaTiempo').on('click', OnClickPopUpRespuestaCerrarTiempo);
+$('.guardarRespuestaFecha').on('click', OnClickGuardarRespuestaFecha);
+$('.cancelarPopUpRespuestaFecha').on('click', OnClickPopUpRespuestaCerrarFecha);

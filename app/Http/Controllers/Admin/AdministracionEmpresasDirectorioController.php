@@ -33,7 +33,7 @@ class AdministracionEmpresasDirectorioController extends Controller
     public function Index()
     {
         $idEmpresa = \Request::segment(4);
-        if (!$this->empresa->where('id', '=',$idEmpresa)->exists()) 
+        if (!$this->empresa->where('id', '=',$idEmpresa)->exists())
             return redirect('/administracion/empresas');
 
         $paises = $this->pais
@@ -118,7 +118,7 @@ class AdministracionEmpresasDirectorioController extends Controller
                     ])
                     ->get();
                 }
-                
+
 
                 if(is_null($esResponsableEmpresa) && is_null($esResponsableEstablecimiento))
                 {
@@ -136,10 +136,10 @@ class AdministracionEmpresasDirectorioController extends Controller
                     ])
                     ->get();
                 }
-                    
+
 
                 break;
-            
+
             default:
 
                 break;
@@ -154,11 +154,11 @@ class AdministracionEmpresasDirectorioController extends Controller
     {
         $objetoRecibido = json_decode($request->get('objetoEnviar'));
         $logoImagen = $request->file('file');
-        
+
         if(!is_null($logoImagen))
         {
             $nombreImagen = $objetoRecibido->identificacion . Str::random(10) . '.' . 'png';
-            $imagenNuevoTamano = \Image::make($logoImagen->getRealPath());              
+            $imagenNuevoTamano = \Image::make($logoImagen->getRealPath());
             $imagenNuevoTamano->resize(128, 128);
             $imagenNuevoTamano->save(public_path($this->urlImagenesAvatar.$nombreImagen));
         }
@@ -177,7 +177,7 @@ class AdministracionEmpresasDirectorioController extends Controller
         if(!is_null($correo))
         {
             if ($this->usuario
-            ->where([['correo', '=', $correo],['cuenta_principal_id', '=', auth()->user()->cuenta_principal_id]])->exists()) 
+            ->where([['correo', '=', $correo],['cuenta_principal_id', '=', auth()->user()->cuenta_principal_id]])->exists())
             {
                 return $this->FinalizarRetorno(
                     406,
@@ -185,10 +185,10 @@ class AdministracionEmpresasDirectorioController extends Controller
                 );
             }
         }
-        
+
         if(!is_null($identificacion))
         {
-            if ($this->usuario->where([['identificacion', '=', $identificacion],['cuenta_principal_id', '=', auth()->user()->cuenta_principal_id]])->exists()) 
+            if ($this->usuario->where([['identificacion', '=', $identificacion],['cuenta_principal_id', '=', auth()->user()->cuenta_principal_id]])->exists())
             {
                 return $this->FinalizarRetorno(
                     406,
@@ -196,14 +196,14 @@ class AdministracionEmpresasDirectorioController extends Controller
                 );
             }
         }
-        
+
 
         $arrayInsertar = [
-            'nombre_completo' => $nombres, 
+            'nombre_completo' => $nombres,
             'identificacion' => $identificacion,
             'correo' => $correo,
             'telefono' => $telefono,
-            'cargo_id' => $idCargo, 
+            'cargo_id' => $idCargo,
             'perfil_id' => $perfilId,
             'establecimiento_id' => $establecimientoId,
             // 'usuario' => $usuarioName,
@@ -235,7 +235,7 @@ class AdministracionEmpresasDirectorioController extends Controller
         $idEmpresa = $request->get('idEmpresa');
 
         $usuarios = $this->FuncionTraerUsuariosPorPaginacion($idCuentaPrincipal,$paginacion,$filtros,$idEmpresa);
-        
+
         return $this->FinalizarRetorno(
             202,
             $this->MensajeRetorno('Datos',202),
@@ -253,16 +253,16 @@ class AdministracionEmpresasDirectorioController extends Controller
             return $this->FinalizarRetorno(
                 203,
                 $this->MensajeRetorno('El usuario ',203)
-            );  
+            );
         }
         else
         {
             return $this->FinalizarRetorno(
                 406,
                 $this->MensajeRetorno('',406,'El usuario no pudo eliminarse')
-            ); 
+            );
         }
-        
+
     }
 
     public function ConsultaEditarUsuario(Request $request)
@@ -291,7 +291,7 @@ class AdministracionEmpresasDirectorioController extends Controller
         ->Join('perfil AS pe','pe.id','=','usuario.perfil_id')
         ->leftJoin('empresa AS em','em.id','=','e.empresa_id')
         ->where('usuario.id','=',$idUsuario)->first();
-        
+
         return $this->FinalizarRetorno(
             202,
             $this->MensajeRetorno('Datos',202),
@@ -303,11 +303,11 @@ class AdministracionEmpresasDirectorioController extends Controller
     {
         $objetoRecibido = json_decode($request->get('objetoEnviar'));
         $logoImagen = $request->file('file');
-        
+
         if(!is_null($logoImagen))
         {
             $nombreImagen = $objetoRecibido->identificacion . Str::random(10) . '.' . 'png';
-            $imagenNuevoTamano = \Image::make($logoImagen->getRealPath());              
+            $imagenNuevoTamano = \Image::make($logoImagen->getRealPath());
             $imagenNuevoTamano->resize(128, 128);
             $imagenNuevoTamano->save(public_path($this->urlImagenesAvatar.$nombreImagen));
         }
@@ -330,7 +330,7 @@ class AdministracionEmpresasDirectorioController extends Controller
                 ['identificacion', '=', $identificacion],
                 ['id', '!=', $idUsuario],
                 ['cuenta_principal_id', '==', auth()->user()->cuenta_principal_id]
-            ])->exists()) 
+            ])->exists())
             {
                 return $this->FinalizarRetorno(
                     406,
@@ -338,7 +338,7 @@ class AdministracionEmpresasDirectorioController extends Controller
                 );
             }
         }
-        
+
 
         if(!is_null($correo))
         {
@@ -346,7 +346,7 @@ class AdministracionEmpresasDirectorioController extends Controller
                 ['correo', '=', $correo],
                 ['id', '!=', $idUsuario],
                 ['cuenta_principal_id', '!=', auth()->user()->cuenta_principal_id]
-            ])->exists()) 
+            ])->exists())
             {
                 return $this->FinalizarRetorno(
                     406,
@@ -354,14 +354,14 @@ class AdministracionEmpresasDirectorioController extends Controller
                 );
             }
         }
-        
-        
+
+
         $arrayUpdate = [
-            'nombre_completo' => $nombres, 
+            'nombre_completo' => $nombres,
             'identificacion' => $identificacion,
             'correo' => $correo,
             'telefono' => $telefono,
-            'cargo_id' => $idCargo, 
+            'cargo_id' => $idCargo,
             'perfil_id' => $perfilId,
             'establecimiento_id' => $establecimientoId,
             // 'usuario' => $usuarioName,
@@ -372,7 +372,7 @@ class AdministracionEmpresasDirectorioController extends Controller
         {
             $arrayUpdate['url_imagen'] = $nombreImagen;
             $usuarioActualizado = $this->FuncionTraerUsuarioPorId($idUsuario);
-            if(\File::exists($this->urlImagenesAvatar.$usuarioActualizado->url_imagen)) 
+            if(\File::exists($this->urlImagenesAvatar.$usuarioActualizado->url_imagen))
                 \File::delete($this->urlImagenesAvatar.$usuarioActualizado->url_imagen);
         }
 
@@ -381,7 +381,7 @@ class AdministracionEmpresasDirectorioController extends Controller
             $arrayUpdate['password'] = bcrypt($password);
             $arrayUpdate['password_visible'] = $password_visible;
         }
-        
+
         $respuestaUpdate = $this->usuario->where('id','=',$idUsuario)
         ->update($arrayUpdate);
 
@@ -406,7 +406,7 @@ class AdministracionEmpresasDirectorioController extends Controller
             $estadoCambiado = 1;
         else if($estadoActual == 1)
             $estadoCambiado = 0;
-        
+
         $respuestaUpdate = $this->usuario->where('id','=',$idUsuario)
         ->update(
         [
@@ -429,7 +429,7 @@ class AdministracionEmpresasDirectorioController extends Controller
         $paginacion = $request->get('paginacion');
         $filtros = json_decode($request->get('arrayFiltros'));
         $idEmpresa = $request->get('idEmpresa');
-        
+
         $usuarios = $this->FuncionTraerUsuariosPorPaginacion($idCuentaPrincipal,$paginacion,$filtros,$idEmpresa);
 
         return $this->FinalizarRetorno(
@@ -438,7 +438,7 @@ class AdministracionEmpresasDirectorioController extends Controller
             $usuarios
         );
     }
-    
+
     public function FuncionTraerUsuarioPorId($idUsuario)
     {
         $usuario = $this->usuario->select(
@@ -453,7 +453,7 @@ class AdministracionEmpresasDirectorioController extends Controller
             \DB::raw('IF(e.nombre IS NULL,"Sin establecimiento",e.nombre) AS ESTABLECIMIENTO'),
             'usuario.estado',
             \DB::raw('IF(c.nombre IS NULL,"Sin ciudad",CONCAT(c.nombre,", ",p.nombre)) AS CIUDAD'),
-            \DB::raw('IF(usuario.url_imagen IS NULL,"/vertical/assets/images/users/circle_logo_audiid.png",CONCAT("/imagenes/usuarios/",usuario.url_imagen)) AS FOTO'),
+            \DB::raw('IF(usuario.url_imagen IS NULL,"/vertical/assets/images/logo_horizontal_black.svg",CONCAT("/imagenes/usuarios/",usuario.url_imagen)) AS FOTO'),
             \DB::raw('IF(usuario.usuario IS NULL,"Sin usuario",CONCAT(usuario.usuario,", ",p.nombre)) AS USUARIO'),
             'usuario.usuario AS USUARIO',
             'usuario.password_visible AS PASSWORD',
@@ -468,21 +468,21 @@ class AdministracionEmpresasDirectorioController extends Controller
         ->Join('perfil AS pe','pe.id','=','usuario.perfil_id')
         ->leftJoin('empresa AS em','em.id','=','e.empresa_id')
         ->where('usuario.id','=',$idUsuario)->first();
-        
-        
+
+
         return $usuario;
     }
 
     public function FuncionTraerUsuariosPorPaginacion($idCuentaPrincipal,$paginacion=1,$filtros=[],$idEmpresa)
     {
         $resultadoLimit = $this->CalculoPaginacion($paginacion);
-    
+
         $desde = $resultadoLimit['desde'];
         $hasta = $resultadoLimit['hasta'];
         $cantidadRegistros = 9;
         $filtro_array = [];
 
-        foreach ($filtros as $key => $filtro) 
+        foreach ($filtros as $key => $filtro)
         {
 
             switch ($key) {
@@ -507,10 +507,10 @@ class AdministracionEmpresasDirectorioController extends Controller
                     break;
 
                 default:
-                    
+
                     break;
             }
-            
+
         }
 
         $usuarios = $this->usuario->select(
@@ -525,7 +525,7 @@ class AdministracionEmpresasDirectorioController extends Controller
             \DB::raw('IF(e.nombre IS NULL,"Sin establecimiento",e.nombre) AS ESTABLECIMIENTO'),
             'usuario.estado',
             \DB::raw('IF(c.nombre IS NULL,"Sin ciudad",CONCAT(c.nombre,", ",p.nombre)) AS CIUDAD'),
-            \DB::raw('IF(usuario.url_imagen IS NULL,"/vertical/assets/images/users/circle_logo_audiid.png",CONCAT("/imagenes/usuarios/",usuario.url_imagen)) AS FOTO'),
+            \DB::raw('IF(usuario.url_imagen IS NULL,"/vertical/assets/images/logo_horizontal_black.svg",CONCAT("/imagenes/usuarios/",usuario.url_imagen)) AS FOTO'),
             \DB::raw('IF(usuario.usuario IS NULL,"Sin usuario",usuario.usuario) AS USUARIO'),
             'usuario.password_visible AS PASSWORD',
             \DB::raw('IF((SELECT COUNT(*) FROM empresa ems WHERE ems.usuario_id=usuario.id) != 0,(SELECT ems.nombre FROM empresa ems WHERE ems.usuario_id=usuario.id),"") AS ES_RESPONSABLE_EMPRESA'),
@@ -538,7 +538,7 @@ class AdministracionEmpresasDirectorioController extends Controller
         ->leftJoin('pais AS p','p.id','=','d.pais_id')
         ->leftJoin('cargo AS cg','cg.id','=','usuario.cargo_id')
         ->Join('perfil AS pe','pe.id','=','usuario.perfil_id');
-        
+
         switch (auth()->user()->perfil_id) {
             case 1: // ADMINISTRADOR
                 $usuarios = $usuarios->where([
@@ -567,7 +567,7 @@ class AdministracionEmpresasDirectorioController extends Controller
                         ['usuario.perfil_id','!=', 1]
                     ]);
                 }
-                
+
 
                 if(is_null($esResponsableEmpresa) && is_null($esResponsableEstablecimiento))
                 {
@@ -575,10 +575,10 @@ class AdministracionEmpresasDirectorioController extends Controller
                         ['usuario.id','=',auth()->user()->id]
                     ]);
                 }
-                    
+
 
                 break;
-            
+
             default:
 
                 break;
@@ -588,14 +588,14 @@ class AdministracionEmpresasDirectorioController extends Controller
         {
             $usuarios = $usuarios->where(function($query) use ($filtro_array)
             {
-                foreach ($filtro_array as $keys => $oW) 
+                foreach ($filtro_array as $keys => $oW)
                 {
                     $query->where($oW[0], '=', $oW[2]);
                 }
 
                 return $query;
             });
-            
+
         }
 
         $usuarios = $usuarios->skip($desde)->take($hasta)->get();

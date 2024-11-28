@@ -64,22 +64,22 @@ class ListaChequeoModelosController extends Controller
 
         \DB::statement("SET lc_time_names = 'es_ES'");
         $this->middleware('auth');
-        $this->middleware('isActive');  
+        $this->middleware('isActive');
     }
 
     public function Index()
     {
-      
+
         $sector = $this->modelo->verificacionSector();
         $administradorPlataforma = $this->modelo->administradorPlataforma();
-      
+
         $modelos = $this->modelo
         ->join('modelos_sector','modelo.id','=','modelos_sector.modelo_id')
         ->select('modelo.id','modelo.nombre')->where([
             ['modelo.estado','=',1],
             ['modelos_sector.sector_id','=',$sector]
             ])->get();
-            
+
         $modelosAdmin = $this->modelo->get();
         $sectorAdministrador = \DB::table('sector')->get();
         return view('Admin.listachequeo_modelos',compact('modelos','modelosAdmin','sectorAdministrador','administradorPlataforma'));
@@ -89,7 +89,7 @@ class ListaChequeoModelosController extends Controller
     {
         $paginacion = $request->get('paginacion');
         $filtros = json_decode($request->get('arrayFiltros'));
-     
+
         $modelos = $this->FuncionTraerModelosPorPaginacion($paginacion,$filtros);
 
         return $this->FinalizarRetorno(
@@ -101,49 +101,49 @@ class ListaChequeoModelosController extends Controller
 
     public function CreateListModel(Request $request)
     {
-        
+
         if ($request->has('listaId')) {
-           
+
             $listaId = $request->get('listaId');
             $nombreLista = $request->get('nombreLista');
-          
+
             $listaChequeo = $this->listaChequeos
             ->select('lista_chequeo.*')
-            
+
             ->where('id','=',$listaId)
             ->first();
-          
+
             //INSERCIÓN LISTA DE CHEQUEO
             $arrayInsertar = [
-                'nombre' => $nombreLista . ' - Copia', 
-                'publicacion_destino' => $listaChequeo->publicacion_destino, 
-                'entidad_evaluada' => $listaChequeo->entidad_evaluada, 
-                'estado' => 1, 
-                'usuario_id' => auth()->user()->id, 
-                'espacio_mb' => 0, 
+                'nombre' => $nombreLista . ' - Copia',
+                'publicacion_destino' => $listaChequeo->publicacion_destino,
+                'entidad_evaluada' => $listaChequeo->entidad_evaluada,
+                'estado' => 1,
+                'usuario_id' => auth()->user()->id,
+                'espacio_mb' => 0,
                 'modelo_id' => null
             ];
-           
+
 
         }else{
 
             $idModelo = $request->get('idModelo');
             $nombreModelos = $request->get('nombreModelos');
-    
+
             $listaChequeo = $this->listaChequeos
             ->select('lista_chequeo.*')
             ->Join('modelo AS m','m.lista_chequeo_id','=','lista_chequeo.id')
             ->where('m.id','=',$idModelo)
             ->first();
-            
+
             //INSERCIÓN LISTA DE CHEQUEO
             $arrayInsertar = [
-                'nombre' => $nombreModelos, 
-                'publicacion_destino' => $listaChequeo->publicacion_destino, 
-                'entidad_evaluada' => $listaChequeo->entidad_evaluada, 
-                'estado' => 1, 
-                'usuario_id' => auth()->user()->id, 
-                'espacio_mb' => 0, 
+                'nombre' => $nombreModelos,
+                'publicacion_destino' => $listaChequeo->publicacion_destino,
+                'entidad_evaluada' => $listaChequeo->entidad_evaluada,
+                'estado' => 1,
+                'usuario_id' => auth()->user()->id,
+                'espacio_mb' => 0,
                 'modelo_id' => $idModelo
             ];
         }
@@ -151,55 +151,55 @@ class ListaChequeoModelosController extends Controller
         $listaChequeosNew->fill($arrayInsertar);
         if($listaChequeosNew->save())
         {
-            
+
             $listaEncabezado = $this->listaEncabezado->where('lista_chequeo_id','=', $listaChequeo->id)->first();
 
             // INSERTAR LISTA CHEQUEO ENCABEZADO
             $arrayInsertar = [
-                'fecha' => $listaEncabezado->fecha, 
-                'entidad_evaluada_opcion' => $listaEncabezado->entidad_evaluada_opcion, 
+                'fecha' => $listaEncabezado->fecha,
+                'entidad_evaluada_opcion' => $listaEncabezado->entidad_evaluada_opcion,
                 'lista_chequeo_id' => $listaChequeosNew->id
             ];
             $listaEncabezadoNew = new $this->listaEncabezado;
             $listaEncabezadoNew->fill($arrayInsertar);
-    
-            
+
+
             if($listaEncabezadoNew->save())
             {
                 $categorias = $this->categoria->where('lista_chequeo_id','=', $listaChequeo->id)->get();
-                
+
                 //INSERTAR CATEGORIAS
-                foreach ($categorias as $key => $categoria) 
+                foreach ($categorias as $key => $categoria)
                 {
                     $arrayInsertar = [
-                        'nombre' => $categoria->nombre, 
-                        'ponderado' => $categoria->ponderado, 
+                        'nombre' => $categoria->nombre,
+                        'ponderado' => $categoria->ponderado,
                         'orden_categoria' => $categoria->orden_categoria,
                         'orden_lista' => $categoria->orden_lista,
                         'lista_chequeo_id' => $listaChequeosNew->id
                     ];
-            
+
                     $categoriaNew = new $this->categoria;
                     $categoriaNew->fill($arrayInsertar);
-            
+
                     if($categoriaNew->save())
                     {
 
                         $preguntas = $this->pregunta->where('categoria_id','=', $categoria->id)->get();
 
-                        foreach ($preguntas as $key => $pregunta) 
+                        foreach ($preguntas as $key => $pregunta)
                         {
                             // INSERTAR PREGUNTA
                             $arrayInsertar = [
-                                'nombre' => $pregunta->nombre, 
-                                'ponderado' => $pregunta->ponderado, 
+                                'nombre' => $pregunta->nombre,
+                                'ponderado' => $pregunta->ponderado,
                                 'categoria_id' => $categoriaNew->id,
                                 'orden_lista' => $pregunta->orden_lista,
                                 'lista_chequeo_id' => $listaChequeosNew->id,
                                 'tipo_respuesta_id' => $pregunta->tipo_respuesta_id,
                                 'permitir_noaplica' => $pregunta->permitir_noaplica,
                             ];
-                    
+
                             $preguntaNew = new $this->pregunta;
                             $preguntaNew->fill($arrayInsertar);
                             $respuestaNew = null;
@@ -208,19 +208,19 @@ class ListaChequeoModelosController extends Controller
                                 $respuestas = $this->respuesta->where('pregunta_id','=', $pregunta->id)->get();
 
                                 $idsArrrayQueTienenPlanesDeAccion = [];
-                                foreach ($respuestas as $key => $respuesta) 
+                                foreach ($respuestas as $key => $respuesta)
                                 {
                                      //INSERTAR RESPUESTA
                                     $arrayInsertar = [
-                                        'tipo_respuesta_ponderado_pred_id' => $respuesta->tipo_respuesta_ponderado_pred_id, 
-                                        'valor_personalizado' => $respuesta->valor_personalizado, 
+                                        'tipo_respuesta_ponderado_pred_id' => $respuesta->tipo_respuesta_ponderado_pred_id,
+                                        'valor_personalizado' => $respuesta->valor_personalizado,
                                         'pregunta_id' => $preguntaNew->id,
                                         'ponderado' => $respuesta->ponderado
                                     ];
-                            
+
                                     $respuestaNew = new $this->respuesta;
                                     $respuestaNew->fill($arrayInsertar);
-                            
+
                                     $respuestaNew->save();
 
                                     //GUARDAR LOS ID's NUEVOS CON KEY's DE LOS ID VIEJOS PARA SABER QUIEN CON QUIEN VA EN PLAN DE ACCIÓN
@@ -231,19 +231,19 @@ class ListaChequeoModelosController extends Controller
                                 // INSERTAR OPCIONES PREGUNTAS
                                 $opcionesRespuestas = $this->preguntaOpcionRespuesta->where('pregunta_id','=', $pregunta->id)->get();
                                 $rspNewAnterior = 0; //La uso para evitar crear plan_accion con respuesta repetida
-                                foreach ($opcionesRespuestas as $key => $opcRespuestas) 
+                                foreach ($opcionesRespuestas as $key => $opcRespuestas)
                                 {
                                     $arrayInsertar = [
-                                        'pregunta_id' => $preguntaNew->id, 
+                                        'pregunta_id' => $preguntaNew->id,
                                         'pregunta_respuesta_opcion' => $opcRespuestas->pregunta_respuesta_opcion
                                     ];
                                     $opcionesRespuesta = new $this->preguntaOpcionRespuesta;
                                     $opcionesRespuesta->fill($arrayInsertar);
                                     if($opcionesRespuesta->save())
                                     {
-                                        
+
                                         //INSERTAR PLAN DE ACCIÓN (BUSCAR OPCIONES RESPUESTA Y DESCRIPCION)
-                                        $planAccionOriginal = $this->planAccion->where('pregunta_id', '=', $opcRespuestas->pregunta_id)->first(); 
+                                        $planAccionOriginal = $this->planAccion->where('pregunta_id', '=', $opcRespuestas->pregunta_id)->first();
                                         //En caso de que no tenga datos en la tabla principal (plan_accion) retorne error.
                                         // if($planAccionOriginal === null){
                                         //     //Elimino las categoria que se alcanzo a crear
@@ -262,7 +262,7 @@ class ListaChequeoModelosController extends Controller
                                             //LÓGICA PARA PODER SABER QUE RESPUESTA ID TIENE EL NUEVO PLAN DE ACCIÓN
                                             $rtaNew = NULL;
                                             $planAccionNew = NULL;
-                                            foreach ($idsArrrayQueTienenPlanesDeAccion as $keyrtaold => $rta) 
+                                            foreach ($idsArrrayQueTienenPlanesDeAccion as $keyrtaold => $rta)
                                             {
                                                 $existPlanAccion = $this->planAccion->where('pregunta_id', '=', $preguntaNew->id)->exists();
                                                 //Solo se debe crear 1 plan de accion x pregunta p respuesta
@@ -280,31 +280,31 @@ class ListaChequeoModelosController extends Controller
                                                     $planAccionNew->save();
 
                                                     $arrayInsertar = [
-                                                        'plan_accion_id' => $planAccionNew->id, 
+                                                        'plan_accion_id' => $planAccionNew->id,
                                                         'plan_accion_descripcion' => $planAccionAutomatico->plan_accion_descripcion
                                                     ];
                                                     //Creo un plan de accion automatico por cada respuesta
                                                     $planAccionAutomaticoNew = new $this->planDeAccionAutomatico;
                                                     $planAccionAutomaticoNew->fill($arrayInsertar);
-                                            
+
                                                     $planAccionAutomaticoNew->save();
                                                 }
-                                                    
+
                                             }
-                                            
+
 
                                         }
-                                        
+
                                     }
                                 }
-                               
+
                             }
                         }
-                        
+
                     }
                 }
 
-                
+
             }
         }
 
@@ -339,13 +339,13 @@ class ListaChequeoModelosController extends Controller
     public function FuncionTraerModelosPorPaginacion($paginacion=1,$filtros=[])
     {
         $resultadoLimit = $this->CalculoPaginacion($paginacion);
-    
+
         $desde = $resultadoLimit['desde'];
         $hasta = $resultadoLimit['hasta'];
         $cantidadRegistros = 9;
         $filtro_array = [];
 
-        foreach ($filtros as $key => $filtro) 
+        foreach ($filtros as $key => $filtro)
         {
 
             switch ($key) {
@@ -355,17 +355,17 @@ class ListaChequeoModelosController extends Controller
                     break;
 
                 default:
-                    
+
                     break;
             }
-            
+
         }
         $sector = $this->modelo->verificacionSector();
         $modelos = $this->modelo
         ->join('modelos_sector','modelo.id','=','modelos_sector.modelo_id')
         ->select(
             'modelo.*',
-            \DB::raw('IF(modelo.imagen IS NULL,"/vertical/assets/images/users/circle_logo_audiid.png",CONCAT("/imagenes/modelos/",modelo.imagen)) AS FOTO')
+            \DB::raw('IF(modelo.imagen IS NULL,"/vertical/assets/images/logo_horizontal_black.svg",CONCAT("/imagenes/modelos/",modelo.imagen)) AS FOTO')
         )
         ->where([
             ['modelo.estado','=',1],
@@ -377,7 +377,7 @@ class ListaChequeoModelosController extends Controller
             $modelos = $modelos->where(function($query) use ($filtro_array)
             {
                 // $contador = 0;
-                foreach ($filtro_array as $keys => $oW) 
+                foreach ($filtro_array as $keys => $oW)
                 {
                     // if( $contador == 0)
                     //     $query->where($oW[0], '=', $oW[2]);
@@ -392,7 +392,7 @@ class ListaChequeoModelosController extends Controller
 
                 return $query;
             });
-            
+
         }
 
         $modelos = $modelos->skip($desde)->take($hasta)->get();
@@ -402,7 +402,7 @@ class ListaChequeoModelosController extends Controller
 
     public function sectorConModelo($modelo)
     {
-        
+
         $modelos = \DB::table('modelos_sector')->select('sector_id')->where('modelo_id','=',$modelo)->get();
         return response()->json(['data'=>$modelos ], 200);
 
@@ -412,11 +412,11 @@ class ListaChequeoModelosController extends Controller
         $tipo = $request->get('tipo');
         $modeloId = $request->get('modeloId');
         $sectoriId = $request->get('sectoriId');
-     
+
         $isArray = is_array($sectoriId);
         if ($tipo === 'agregar') {
 
-           
+
 
             if (!$isArray) {
                 $tieneAsignado = \DB::table('modelos_sector')->where([
@@ -424,44 +424,44 @@ class ListaChequeoModelosController extends Controller
                     ['sector_id','=',$sectoriId]
                 ])->first();
                 if (is_null($tieneAsignado)) {
-                    $insert = \DB::table('modelos_sector')->insert( 
+                    $insert = \DB::table('modelos_sector')->insert(
                         ['modelo_id' => $modeloId, 'sector_id' => $sectoriId]
                     );
-                    
+
                     return response()->json(['mensaje'=>'Asignado Correctamente'], 200);
                 }
             }else{
-                
+
                 foreach ($sectoriId as $key => $value) {
-                   
+
                     $tieneAsignado = \DB::table('modelos_sector')->where([
                         ['modelo_id','=',$modeloId],
                         ['sector_id','=',$value]
                     ])->first();
-                   
+
                     if (is_null($tieneAsignado)) {
-                        $insert = \DB::table('modelos_sector')->insert( 
+                        $insert = \DB::table('modelos_sector')->insert(
                             ['modelo_id' => $modeloId, 'sector_id' => $value]
                         );
                     }
-                   
+
                 }
                 return response()->json(['mensaje'=>'Asignado Correctamente'], 200);
             }
-                       
-          
-          
+
+
+
         }else{
             if (!$isArray) {
-               
-                $remover = \DB::table('modelos_sector')->where( 
+
+                $remover = \DB::table('modelos_sector')->where(
                     ['modelo_id' => $modeloId, 'sector_id' => $sectoriId]
                 )->delete();
-    
+
                 return response()->json(['mensaje'=>'Removido Correctamente'], 200);
             }else{
                 foreach ($sectoriId as $key => $value) {
-                    $remover = \DB::table('modelos_sector')->where( 
+                    $remover = \DB::table('modelos_sector')->where(
                         ['modelo_id' => $modeloId, 'sector_id' => $value]
                     )->delete();
                 }
