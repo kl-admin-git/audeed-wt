@@ -255,8 +255,13 @@ class ListaChequeoModelosController extends Controller
                                         //     );
                                         // }
                                         $planAccionAutomatico = NULL;
+                                        $planAccionManual = NULL;
                                         if($planAccionOriginal != null)
+                                        {
                                             $planAccionAutomatico = $this->planDeAccionAutomatico->where('plan_accion_id','=', $planAccionOriginal->id)->first();
+                                        }
+
+                                        // PLAN DE ACCION AUTOMATICO
                                         if(!is_null($planAccionAutomatico))
                                         {
                                             //LÓGICA PARA PODER SABER QUE RESPUESTA ID TIENE EL NUEVO PLAN DE ACCIÓN
@@ -291,13 +296,41 @@ class ListaChequeoModelosController extends Controller
                                                 }
 
                                             }
-
-
                                         }
-
                                     }
                                 }
 
+                                // CREAR PLAN DE ACCION MANUAL
+                                if($this->planAccion->where([['tipo_pa', '=', 2],['pregunta_id', '=', $pregunta->id]])->exists())
+                                {
+                                    $plan_accion_original = $this->planAccion->where('pregunta_id', '=', $pregunta->id)->first();
+                                    $planAccionManual = $this->planAccionManual->where('plan_accion_id','=', $plan_accion_original->id)->get();
+
+                                    $planAccionNew = new $this->planAccion;
+                                    $planAccionNew->fill([
+                                        'tipo_pa' => $plan_accion_original->tipo_pa,
+                                        'obligatorio' => $plan_accion_original->obligatorio,
+                                        'alerta' => $plan_accion_original->alerta,
+                                        'pregunta_id' => $preguntaNew->id
+                                    ]);
+                                    $planAccionNew->save();
+
+                                    // PLAN DE ACCION MANUAL
+                                    foreach ($planAccionManual as $key_pam => $value_pam)
+                                    {
+                                        $arrayInsertar = [
+                                            'plan_accion_id' => $planAccionNew->id,
+                                            'requerido' => $value_pam->requerido,
+                                            'plan_accion_man_opc_id' => $value_pam->plan_accion_man_opc_id,
+                                        ];
+
+                                        //Creo un plan de accion manual por cada respuesta
+                                        $planAccionManualNew = new $this->planAccionManual;
+                                        $planAccionManualNew->fill($arrayInsertar);
+
+                                        $planAccionManualNew->save();
+                                    }
+                                }
                             }
                         }
 

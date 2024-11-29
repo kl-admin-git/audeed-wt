@@ -72,12 +72,12 @@ class ListaChequeoEjecucionController extends Controller
         $this->respuestaEjecucion = $respuestaEjecucion;
         $this->opcRespuesta = $opcRespuesta;
         $this->planAccionAutomatico = $planAccionAutomatico;
-        $this->listaChequeoEjecutadasFotos = $listaChequeoEjecutadasFotos;   
-        $this->ejecucionPlanAccion = $ejecucionPlanAccion;       
-        $this->cuentaPrincipal = $cuentaPrincipal;    
+        $this->listaChequeoEjecutadasFotos = $listaChequeoEjecutadasFotos;
+        $this->ejecucionPlanAccion = $ejecucionPlanAccion;
+        $this->cuentaPrincipal = $cuentaPrincipal;
         $this->establecimiento = $establecimiento;
         $this->configuracionListaChequeo = $configuracionListaChequeo;
-        $this->listaChequeoEjecutadasArchivos = $listaChequeoEjecutadasArchivos;       
+        $this->listaChequeoEjecutadasArchivos = $listaChequeoEjecutadasArchivos;
         $this->planAccion = $planAccion;
         $this->planAccionManual = $planAccionManual;
         $this->planAccionManualDetalle = $planAccionManualDetalle;
@@ -88,26 +88,26 @@ class ListaChequeoEjecucionController extends Controller
             $idListaChequeo = decrypt(\Request::segment(3));
             $datosListaChequeo = $this->listaChequeo->where('id','=',$idListaChequeo)->first();
             $idCuentaPrincipal = $datosListaChequeo->usuario_id;
-            
+
             \Redirect::to('/registro_colaborador/'.encrypt($idCuentaPrincipal).'/'.encrypt($idListaChequeo))->send();
         }
-        
+
         $this->middleware('auth');
         $this->middleware('isActive');
     }
-    
+
     public function Index()
     {
         $fechaActual = date('d-m-Y');
 
         $idListaEjecutada = \Request::segment(4);
-        if (!$this->listaEjecutada->where('id', '=',$idListaEjecutada)->exists()) 
+        if (!$this->listaEjecutada->where('id', '=',$idListaEjecutada)->exists())
             return redirect('/listachequeo/mislistas');
 
         if ($this->listaEjecutada->where([
             ['id', '=',$idListaEjecutada],
             ['estado', '=',2]
-        ])->exists()) 
+        ])->exists())
             return redirect('/listachequeo/mislistas');
 
         return view('Admin.listachequeo_ejecucion',compact('fechaActual','idListaEjecutada'));
@@ -118,11 +118,11 @@ class ListaChequeoEjecucionController extends Controller
         $idListaChequeo = \Request::segment(3);
         if (!$this->listaChequeo
         ->Join('usuario AS u','u.id','=','lista_chequeo.usuario_id')
-        ->where([['lista_chequeo.id', '=',$idListaChequeo],['lista_chequeo.estado', '=', 1],['u.cuenta_principal_id','=',auth()->user()->cuenta_principal_id]])->exists()) 
+        ->where([['lista_chequeo.id', '=',$idListaChequeo],['lista_chequeo.estado', '=', 1],['u.cuenta_principal_id','=',auth()->user()->cuenta_principal_id]])->exists())
             return redirect('/listachequeo/mislistas');
-        
+
         $arrayInsertar = [
-            'lista_chequeo_id' => $idListaChequeo, 
+            'lista_chequeo_id' => $idListaChequeo,
             'usuario_id' => auth()->user()->id,
             'fecha_realizacion' => date('Y-m-d')
         ];
@@ -156,7 +156,7 @@ class ListaChequeoEjecucionController extends Controller
 
         $listaEjecutada = new $this->listaEjecutada;
         $listaEjecutada->fill($arrayInsertar);
-        
+
         if($listaEjecutada->save())
         {
             $idListaEjecutada = $listaEjecutada->id;
@@ -169,7 +169,7 @@ class ListaChequeoEjecucionController extends Controller
     {
         $idListaChequeo = $request->get('idListaChequeo');
         $idListaEjecucion = $request->get('idListaEjecucion');
-        
+
         $encabezado = $this->listaChequeo
         ->select(
             'lista_chequeo.nombre AS NOMBRE_LISTA_CHEQUEO',
@@ -197,14 +197,14 @@ class ListaChequeoEjecucionController extends Controller
             ['lista_chequeo.id','=', $idListaChequeo]
         ])
         ->first();
-        
+
         $llenadoDeSelect = [];
-        
+
         if(!is_null($encabezado))
         {
             switch ($encabezado->EVALUANDO_A) {
                 case 'Empresa':
-    
+
                     if($encabezado->HABILITA_SELECT == 0)
                     {
                         $llenadoDeSelect = $this->usuario
@@ -221,11 +221,11 @@ class ListaChequeoEjecucionController extends Controller
                         ->where('empresa.cuenta_principal_id','=', auth()->user()->cuenta_principal_id)
                         ->get();
                     }
-    
+
                     break;
-    
+
                 case 'Establecimiento':
-                    
+
                     if($encabezado->HABILITA_SELECT == 0)
                     {
                         $llenadoDeSelect = $this->usuario
@@ -243,9 +243,9 @@ class ListaChequeoEjecucionController extends Controller
                         ->get();
                     }
                     break;
-    
+
                 case 'Usuario':
-    
+
                     if($encabezado->HABILITA_SELECT == 0)
                     {
                         $llenadoDeSelect = $this->usuario
@@ -264,11 +264,11 @@ class ListaChequeoEjecucionController extends Controller
                         ->where('usuario.cuenta_principal_id','=', auth()->user()->cuenta_principal_id)
                         ->get();
                     }
-    
+
                     break;
-    
+
                 case 'Proceso':
-                    
+
                     break;
                 case 'Áreas':
                     if($encabezado->HABILITA_SELECT == 0)
@@ -289,7 +289,7 @@ class ListaChequeoEjecucionController extends Controller
                         ->get();
                     }
                     break;
-                
+
                 case 'Equipos':
                     if($encabezado->HABILITA_SELECT == 0)
                     {
@@ -309,7 +309,7 @@ class ListaChequeoEjecucionController extends Controller
                         ->get();
                     }
                     break;
-                
+
                 default:
                     # code...
                     break;
@@ -341,7 +341,7 @@ class ListaChequeoEjecucionController extends Controller
 
     public function ValidarSiPuedeRealizarEjecucion($idListaChequeo,$idUsuario)
     {
-        
+
         // $configuracion = $this->listaEjecutada
         // ->select('lcce.*')
         // ->Join('lista_chequeo_configuracion_ejecucion AS lcce','lcce.lista_chequeo_id','=','lista_chequeo_ejecutadas.lista_chequeo_id')
@@ -350,8 +350,8 @@ class ListaChequeoEjecucionController extends Controller
         $configuracion = $this->configuracionListaChequeo
         ->where('lista_chequeo_id','=',$idListaChequeo)
         ->first();
-        
-        
+
+
         $idChequeo = $idListaChequeo;
 
         $puedeEjecutar = true;
@@ -362,11 +362,11 @@ class ListaChequeoEjecucionController extends Controller
 
             case 1: // DIARIO
 
-                $resultado = \DB::select('SELECT 
-                (CASE WHEN  lcce.frecuencia_ejecucion=0 THEN "Indefinida" 
-                WHEN  lcce.frecuencia_ejecucion=1 THEN "Diaria" 
-                WHEN  lcce.frecuencia_ejecucion=2 THEN "Mensual" 
-                WHEN  lcce.frecuencia_ejecucion=3 THEN "Anual" 
+                $resultado = \DB::select('SELECT
+                (CASE WHEN  lcce.frecuencia_ejecucion=0 THEN "Indefinida"
+                WHEN  lcce.frecuencia_ejecucion=1 THEN "Diaria"
+                WHEN  lcce.frecuencia_ejecucion=2 THEN "Mensual"
+                WHEN  lcce.frecuencia_ejecucion=3 THEN "Anual"
                 END) as frecuencia_nombre,
                 lcce.frecuencia_ejecucion AS conf_frecuencia_ejecucion,
                 lcce.cant_ejecucion AS conf_cantidad_ejecucion,
@@ -374,13 +374,13 @@ class ListaChequeoEjecucionController extends Controller
                 lce.fecha_realizacion AS hoy_fecha_realizacion,
                 (SELECT COUNT(*)  FROM lista_chequeo_ejecutadas lce INNER JOIN lista_chequeo_configuracion_ejecucion lcce on lcce.lista_chequeo_id=lce.lista_chequeo_id WHERE (lce.fecha_realizacion=curdate()) AND  lce.usuario_id=:idUsuarioUno AND lce.lista_chequeo_id=:idListaChequeoUno AND  (lce.estado=1 OR lce.estado=2)) AS ejec_cant_dia,
                 IF((SELECT COUNT(*)  FROM lista_chequeo_ejecutadas lce INNER JOIN lista_chequeo_configuracion_ejecucion lcce on lcce.lista_chequeo_id=lce.lista_chequeo_id WHERE (lce.fecha_realizacion=curdate()) AND  lce.usuario_id=:idUsuarioDos AND lce.lista_chequeo_id=:idListaChequeoDos AND  (lce.estado=1 OR lce.estado=2))<lcce.cant_ejecucion,"TRUE","FALSE") AS puede_ejecutar
-                FROM lista_chequeo_ejecutadas lce 
+                FROM lista_chequeo_ejecutadas lce
                 INNER JOIN lista_chequeo_configuracion_ejecucion lcce on lcce.lista_chequeo_id=lce.lista_chequeo_id
-                 WHERE 
-                lce.usuario_id=:idUsuario 
+                 WHERE
+                lce.usuario_id=:idUsuario
                  AND lce.lista_chequeo_id=:idChequeo
-                 AND  (lce.estado=1 
-                 OR lce.estado=2) 
+                 AND  (lce.estado=1
+                 OR lce.estado=2)
                  GROUP BY lcce.frecuencia_ejecucion',
                  [
                      'idUsuario' => $idUsuario,
@@ -390,36 +390,36 @@ class ListaChequeoEjecucionController extends Controller
                      'idListaChequeoUno' => $idChequeo,
                      'idListaChequeoDos' => $idChequeo
                  ]);
-                
+
                 if(COUNT($resultado) == 0)
                     $puedeEjecutar = true;
                 else
                     $puedeEjecutar = ($resultado[0]->puede_ejecutar == "TRUE" ? true : false);
-                
+
                 break;
 
             case 2: // MENSUAL
-                
-                $resultado = \DB::select('SELECT 
-                (CASE WHEN  lcce.frecuencia_ejecucion=0 THEN "Indefinida" 
-                WHEN  lcce.frecuencia_ejecucion=1 THEN "Diaria" 
-                WHEN  lcce.frecuencia_ejecucion=2 THEN "Mensual" 
-                WHEN  lcce.frecuencia_ejecucion=3 THEN "Anual" 
+
+                $resultado = \DB::select('SELECT
+                (CASE WHEN  lcce.frecuencia_ejecucion=0 THEN "Indefinida"
+                WHEN  lcce.frecuencia_ejecucion=1 THEN "Diaria"
+                WHEN  lcce.frecuencia_ejecucion=2 THEN "Mensual"
+                WHEN  lcce.frecuencia_ejecucion=3 THEN "Anual"
                 END) as frecuencia_nombre,
                 lcce.frecuencia_ejecucion AS conf_frecuencia_ejecucion,
                 lcce.cant_ejecucion AS conf_cantidad_ejecucion,
                 MONTH(CURRENT_DATE()) AS mes_sistema,
                 MONTH(lce.fecha_realizacion) AS mes_fecha_realizacion,
                 (SELECT COUNT(*)  FROM lista_chequeo_ejecutadas lce INNER JOIN lista_chequeo_configuracion_ejecucion lcce on lcce.lista_chequeo_id=lce.lista_chequeo_id WHERE (MONTH(lce.fecha_realizacion)=MONTH(lce.fecha_realizacion)) AND  lce.usuario_id=:idUsuarioUno AND lce.lista_chequeo_id=:idListaChequeoUno AND  (lce.estado=1 OR lce.estado=2) ) AS ejec_cant_mes,
-                IF((SELECT COUNT(*)  FROM lista_chequeo_ejecutadas lce INNER JOIN lista_chequeo_configuracion_ejecucion lcce on lcce.lista_chequeo_id=lce.lista_chequeo_id WHERE (MONTH(lce.fecha_realizacion)=MONTH(lce.fecha_realizacion)) AND  lce.usuario_id=:idUsuarioDos AND lce.lista_chequeo_id=:idListaChequeoDos AND  (lce.estado=1 OR lce.estado=2) 
+                IF((SELECT COUNT(*)  FROM lista_chequeo_ejecutadas lce INNER JOIN lista_chequeo_configuracion_ejecucion lcce on lcce.lista_chequeo_id=lce.lista_chequeo_id WHERE (MONTH(lce.fecha_realizacion)=MONTH(lce.fecha_realizacion)) AND  lce.usuario_id=:idUsuarioDos AND lce.lista_chequeo_id=:idListaChequeoDos AND  (lce.estado=1 OR lce.estado=2)
                 )<lcce.cant_ejecucion,"TRUE","FALSE") AS puede_ejecutar
-                FROM lista_chequeo_ejecutadas lce 
+                FROM lista_chequeo_ejecutadas lce
                 INNER JOIN lista_chequeo_configuracion_ejecucion lcce on lcce.lista_chequeo_id=lce.lista_chequeo_id
-                 WHERE 
-                lce.usuario_id=:idUsuario 
+                 WHERE
+                lce.usuario_id=:idUsuario
                  AND lce.lista_chequeo_id=:idChequeo
-                 AND  (lce.estado=1 
-                 OR lce.estado=2) 
+                 AND  (lce.estado=1
+                 OR lce.estado=2)
                  GROUP BY lcce.frecuencia_ejecucion',[
                      'idUsuario' => $idUsuario,
                      'idChequeo' => $idChequeo,
@@ -428,7 +428,7 @@ class ListaChequeoEjecucionController extends Controller
                      'idListaChequeoUno' => $idChequeo,
                      'idListaChequeoDos' => $idChequeo
                  ]);
-                
+
                  if(COUNT($resultado) == 0)
                     $puedeEjecutar = true;
                 else
@@ -437,31 +437,31 @@ class ListaChequeoEjecucionController extends Controller
                 break;
 
             case 3: // ANUAL
-                
-                $resultado = \DB::select('SELECT 
-                (CASE WHEN  lcce.frecuencia_ejecucion=0 THEN "Indefinida" 
-                WHEN  lcce.frecuencia_ejecucion=1 THEN "Diaria" 
-                WHEN  lcce.frecuencia_ejecucion=2 THEN "Mensual" 
-                WHEN  lcce.frecuencia_ejecucion=3 THEN "Anual" 
+
+                $resultado = \DB::select('SELECT
+                (CASE WHEN  lcce.frecuencia_ejecucion=0 THEN "Indefinida"
+                WHEN  lcce.frecuencia_ejecucion=1 THEN "Diaria"
+                WHEN  lcce.frecuencia_ejecucion=2 THEN "Mensual"
+                WHEN  lcce.frecuencia_ejecucion=3 THEN "Anual"
                 END) as frecuencia_nombre,
                 lcce.frecuencia_ejecucion AS conf_frecuencia_ejecucion,
                 lcce.cant_ejecucion AS conf_cantidad_ejecucion,
-                
-                
+
+
                 YEAR(CURRENT_DATE()) AS anual_sistema,
                 YEAR(lce.fecha_realizacion) AS anual_fecha_realizacion,
-                
+
                 (SELECT COUNT(*)  FROM lista_chequeo_ejecutadas lce INNER JOIN lista_chequeo_configuracion_ejecucion lcce on lcce.lista_chequeo_id=lce.lista_chequeo_id WHERE (YEAR(lce.fecha_realizacion)=YEAR(lce.fecha_realizacion)) AND  lce.usuario_id=:idUsuarioUno AND lce.lista_chequeo_id=:idListaChequeoUno AND  (lce.estado=1 OR lce.estado=2) ) AS ejec_cant_ano,
                 IF(
-                (SELECT COUNT(*)  FROM lista_chequeo_ejecutadas lce INNER JOIN lista_chequeo_configuracion_ejecucion lcce on lcce.lista_chequeo_id=lce.lista_chequeo_id WHERE (YEAR(lce.fecha_realizacion)=YEAR(lce.fecha_realizacion)) AND  lce.usuario_id=:idUsuarioDos AND lce.lista_chequeo_id=:idListaChequeoDos AND  (lce.estado=1 OR lce.estado=2) 
+                (SELECT COUNT(*)  FROM lista_chequeo_ejecutadas lce INNER JOIN lista_chequeo_configuracion_ejecucion lcce on lcce.lista_chequeo_id=lce.lista_chequeo_id WHERE (YEAR(lce.fecha_realizacion)=YEAR(lce.fecha_realizacion)) AND  lce.usuario_id=:idUsuarioDos AND lce.lista_chequeo_id=:idListaChequeoDos AND  (lce.estado=1 OR lce.estado=2)
                 )<lcce.cant_ejecucion,"TRUE","FALSE") AS puede_ejecutar
-                FROM lista_chequeo_ejecutadas lce 
+                FROM lista_chequeo_ejecutadas lce
                 INNER JOIN lista_chequeo_configuracion_ejecucion lcce on lcce.lista_chequeo_id=lce.lista_chequeo_id
-                 WHERE 
-                lce.usuario_id=:idUsuario 
+                 WHERE
+                lce.usuario_id=:idUsuario
                  AND lce.lista_chequeo_id=:idChequeo
-                 AND  (lce.estado=1 
-                 OR lce.estado=2) 
+                 AND  (lce.estado=1
+                 OR lce.estado=2)
                  GROUP BY lcce.frecuencia_ejecucion',[
                      'idUsuario' => $idUsuario,
                      'idChequeo' => $idChequeo,
@@ -470,15 +470,15 @@ class ListaChequeoEjecucionController extends Controller
                      'idListaChequeoUno' => $idChequeo,
                      'idListaChequeoDos' => $idChequeo
                  ]);
-                
+
                  if(COUNT($resultado) == 0)
                     $puedeEjecutar = true;
                 else
                     $puedeEjecutar = ($resultado[0]->puede_ejecutar == "TRUE" ? true : false);
                 break;
-            
+
             default:
-                
+
                 break;
         }
 
@@ -500,12 +500,12 @@ class ListaChequeoEjecucionController extends Controller
         ->orderBy('categoria.orden_lista','ASC')
         ->get();
 
-        
+
         $arrayFinal = [];
-        foreach ($consultaListaChequeo as $key => $categoria) 
+        foreach ($consultaListaChequeo as $key => $categoria)
         {
             $objeto = new \stdClass();
-            
+
             $preguntas = $this->pregunta
             ->Join('tipo_respuesta AS tr','tr.id','pregunta.tipo_respuesta_id')
             ->Join('tipo_respuesta_categoria AS trc','trc.id','tr.tipo_respuesta_categoria')
@@ -523,7 +523,7 @@ class ListaChequeoEjecucionController extends Controller
             $objeto->ORDEN_LISTA = $categoria->orden_lista;
             $objeto->LISTA_CHEQUEO_ID = $categoria->lista_chequeo_id;
             $objeto->ETIQUETA = $categoria->ETIQUETA;
-            foreach ($preguntas as $key => $pregunta) 
+            foreach ($preguntas as $key => $pregunta)
             {
                 // TRAER OPCIONES GENERALES ESCOGIDAS POR USUARIO
                 $opcionesGenerales = $this->preguntaOpcionRespuesta
@@ -533,7 +533,7 @@ class ListaChequeoEjecucionController extends Controller
                     ['pro.id','!=',4]
                 ])
                 ->get();
-                
+
                 //CONSULTO EL PLAN DE ACCION MANUAL PARA LUEGO PINTARLO EN LA VISTA COMO UN BOTON
                 $planManual = \DB::table('plan_accion')->select("plan_accion.tipo_pa as tipo",
                 "plan_accion.obligatorio as obligatorio", "plan_accion.alerta as alerta", "pam.plan_accion_man_opc_id as opcion_id",
@@ -542,14 +542,14 @@ class ListaChequeoEjecucionController extends Controller
                 ->join("plan_accion_manual as pam", "plan_accion.id", "=", "pam.plan_accion_id")
                 ->leftJoin("plan_accion_man_opc as pamo", "pam.plan_accion_man_opc_id", "=", "pamo.id")
                 ->where("pregunta_id", "=", $pregunta->id)->get();
-                
+
 
                 // TRAER LOS QUE TIENEN AGREGADOS EN OPCIONES DE RESPUESTA
                 $datoEjecucion = $this->respuestaEjecucion->where([
                     ['lista_chequeo_ejec_id', '=',$idListaEjecucion],
                     ['pregunta_id', '=',$pregunta->id]
                 ])->first();
-                    
+
                 $OpcionesGeneralesLlenas = NULL;
                 if(!is_null($datoEjecucion))
                 {
@@ -562,7 +562,7 @@ class ListaChequeoEjecucionController extends Controller
                     )
                     ->where('lista_chequeo_ejec_respuestas_id', '=',$datoEjecucion->id)->first();
                 }
-                
+
                 $cantidadPreguntas = NULL;
                 if(!is_null($datoEjecucion))
                     $cantidadPreguntas = $this->listaChequeoEjecutadasFotos->where('lista_chequeo_ejec_respuestas','=',$datoEjecucion->id)->count();
@@ -570,33 +570,33 @@ class ListaChequeoEjecucionController extends Controller
                 $opcGeneralesAdjuntos = NULL;
                 if(!is_null($datoEjecucion))
                     $opcGeneralesAdjuntos = $this->listaChequeoEjecutadasArchivos->where('lista_chequeo_ejec_respuesta_id','=',$datoEjecucion->id)->count();
-                
+
                 $opcGeneralesPlanAccionM = NULL;
                 if(!is_null($datoEjecucion))
                     $opcGeneralesPlanAccionM = $this->planAccionManualDetalle->where('lista_cheq_ejec_respuesta_id','=',$datoEjecucion->id)->exists();
 
-                $tiposRespuestas = \DB::select("SELECT 
+                $tiposRespuestas = \DB::select("SELECT
                 respuesta.*,
                 respuesta.tipo_respuesta_ponderado_pred_id TIPO_RESPUESTA,
                 IF(
                 (
-					SELECT COUNT(*) FROM lista_chequeo_ejec_respuestas lcer 
+					SELECT COUNT(*) FROM lista_chequeo_ejec_respuestas lcer
                     WHERE (lcer.pregunta_id = respuesta.pregunta_id
 					AND lcer.lista_chequeo_ejec_id = :idEjecu)
                 ) != 0,true,false) AS EXISTE_REGISTRO,
-                
-                (SELECT lcers.respuesta_id FROM lista_chequeo_ejec_respuestas lcers 
+
+                (SELECT lcers.respuesta_id FROM lista_chequeo_ejec_respuestas lcers
                     WHERE (lcers.pregunta_id = respuesta.pregunta_id
 					AND lcers.lista_chequeo_ejec_id = :idEj)) AS rta,
 
-                (SELECT lcers.respuesta_abierta FROM lista_chequeo_ejec_respuestas lcers 
+                (SELECT lcers.respuesta_abierta FROM lista_chequeo_ejec_respuestas lcers
                     WHERE (lcers.pregunta_id = respuesta.pregunta_id
 					AND lcers.lista_chequeo_ejec_id = :idEjects)) AS rta_abierta,
-                    
+
                     (SELECT lcerss.no_aplica FROM lista_chequeo_ejec_respuestas lcerss
                     WHERE (lcerss.pregunta_id = respuesta.pregunta_id
 					AND lcerss.lista_chequeo_ejec_id = :idEjecutada)) AS NA
-                    
+
                 FROM respuesta
                 WHERE respuesta.pregunta_id = :idPregunta",
                 [
@@ -615,7 +615,7 @@ class ListaChequeoEjecucionController extends Controller
                 $preguntas[$key]['opcionesGeneralesLlenasFotos'] = $cantidadPreguntas;
                 $preguntas[$key]['opcionesGeneralesLlenasAdjuntos'] = $opcGeneralesAdjuntos;
                 $preguntas[$key]['opcionesGeneralesLlenasPlanAccionM'] = $opcGeneralesPlanAccionM;
-                
+
             }
 
             $objeto->PREGUNTAS = $preguntas;
@@ -644,7 +644,7 @@ class ListaChequeoEjecucionController extends Controller
         }
         else
             $noAplica = 0;
-        
+
         if($this->respuestaEjecucion->where([
             ['lista_chequeo_ejec_id', '=',$idListaChequeoEjec],
             ['pregunta_id', '=',$idPregunta]
@@ -661,17 +661,17 @@ class ListaChequeoEjecucionController extends Controller
                 ['lista_chequeo_ejec_id', '=',$idListaChequeoEjec],
                 ['pregunta_id', '=',$idPregunta]
             ])->update($arrayActualizar);
-            
+
             //ACTUALIZANDO PLAN DE ACCIÓN
             $datosEjecucion = $this->respuestaEjecucion->where([
                 ['lista_chequeo_ejec_id', '=',$idListaChequeoEjec],
                 ['pregunta_id', '=',$idPregunta]
             ])->first();
-            
+
             if($this->opcRespuesta->where(
                 'lista_chequeo_ejec_respuestas_id', '=',$datosEjecucion->id
             )->exists())
-            {             
+            {
                 $idPlanDeAccion = NULL;
                 if($datosEjecucion->no_aplica == 0)
                 {
@@ -679,13 +679,13 @@ class ListaChequeoEjecucionController extends Controller
                     //$idPlanDeAccion = $this->planAccionAutomatico->where('respuesta_id','=',$datosEjecucion->respuesta_id)->first();
                     if(!is_null($idPlanDeAccion))
                         $idPlanDeAccion = $idPlanDeAccion->id;
-                        
+
                 }
 
                 $arrayActualizar = [
                     'plan_accion_id' => $idPlanDeAccion
                 ];
-                
+
                 $respuestaUpdate = $this->opcRespuesta->where('lista_chequeo_ejec_respuestas_id', '=',$datosEjecucion->id)->update($arrayActualizar);
 
                 //ELIMINAR CORRECTIVO
@@ -699,10 +699,10 @@ class ListaChequeoEjecucionController extends Controller
                     $arrayInsertar = [
                         'lista_chequeo_ejec_opciones' => $opc->id
                     ];
-            
+
                     $ejecucionPlanAccion = new $this->ejecucionPlanAccion;
                     $ejecucionPlanAccion->fill($arrayInsertar);
-                    
+
                     $ejecucionPlanAccion->save();
                 }
             }
@@ -714,9 +714,9 @@ class ListaChequeoEjecucionController extends Controller
 
         }else
         {
-            
+
             $arrayInsertar = [
-                'pregunta_id' => $idPregunta, 
+                'pregunta_id' => $idPregunta,
                 'ponderado_pregunta' => $ponderadoPregunta,
                 'categoria_id' => $idCategoria,
                 'ponderado_categoria' => $ponderadoCategoria,
@@ -725,13 +725,13 @@ class ListaChequeoEjecucionController extends Controller
                 'lista_chequeo_ejec_id' => $idListaChequeoEjec,
                 'respuesta_abierta' => $respuestaAbierta
             ];
-    
+
             $respuestaEjecucion = new $this->respuestaEjecucion;
             $respuestaEjecucion->fill($arrayInsertar);
-            
+
             if($respuestaEjecucion->save())
             {
-               
+
                 $idPlanDeAccion = NULL;
                 if($noAplica == 0)
                 {
@@ -742,21 +742,21 @@ class ListaChequeoEjecucionController extends Controller
                 }
                 if($idPlanDeAccion != null){
                     $arrayInsertar = [
-                        'lista_chequeo_ejec_respuestas_id' => $respuestaEjecucion->id, 
+                        'lista_chequeo_ejec_respuestas_id' => $respuestaEjecucion->id,
                         'plan_accion_id' => $idPlanDeAccion
                     ];
-            
+
                     $opcRespuesta = new $this->opcRespuesta;
                     $opcRespuesta->fill($arrayInsertar);
-                    
+
                     $opcRespuesta->save();
                 }
-                
+
                  //ELIMINAR CORRECTIVO
                  $opc = $this->opcRespuesta->where(
                     'lista_chequeo_ejec_respuestas_id', '=',$respuestaEjecucion->id
                 )->first();
-                
+
                 if(ISSET($opc->id))
                     $respuesta = $this->ejecucionPlanAccion->where('lista_chequeo_ejec_opciones', $opc->id)->delete();
 
@@ -765,10 +765,10 @@ class ListaChequeoEjecucionController extends Controller
                     $arrayInsertar = [
                         'lista_chequeo_ejec_opciones' => $opc->id
                     ];
-            
+
                     $ejecucionPlanAccion = new $this->ejecucionPlanAccion;
                     $ejecucionPlanAccion->fill($arrayInsertar);
-                    
+
                     $ejecucionPlanAccion->save();
                 }
 
@@ -793,13 +793,13 @@ class ListaChequeoEjecucionController extends Controller
         $idPregunta = $request->get('idPregunta');
         $idListaChequeoEjec = $request->get('idListaChequeoEjec');
         $comentario = $request->get('comentario');
-        
+
         $respuestaEjecucion = $this->respuestaEjecucion->where([
             ['lista_chequeo_ejec_id', '=',$idListaChequeoEjec],
             ['pregunta_id', '=',$idPregunta]
         ])->first();
 
-        
+
         if($this->opcRespuesta->where('lista_chequeo_ejec_respuestas_id', '=',$respuestaEjecucion->id)->exists())
         {
             //ACTUALIZAR RESPUESTA
@@ -818,13 +818,13 @@ class ListaChequeoEjecucionController extends Controller
         }else
         {
             $arrayInsertar = [
-                'lista_chequeo_ejec_respuestas_id' => $respuestaEjecucion->id, 
+                'lista_chequeo_ejec_respuestas_id' => $respuestaEjecucion->id,
                 'comentario' => $comentario,
             ];
-    
+
             $opcRespuesta = new $this->opcRespuesta;
             $opcRespuesta->fill($arrayInsertar);
-            
+
             if($opcRespuesta->save())
             {
                 return $this->FinalizarRetorno(
@@ -848,7 +848,7 @@ class ListaChequeoEjecucionController extends Controller
         $idPregunta = $request->get('dataImagen')['idPregunta'];
         $idListaChequeoEjec = $request->get('dataImagen')['idListaChequeoEjecutada'];
         $imagenes = $request->get('dataImagen')['imagenes'];
-        
+
         $respuestaEjecucion = $this->respuestaEjecucion->where([
             ['lista_chequeo_ejec_id', '=',$idListaChequeoEjec],
             ['pregunta_id', '=',$idPregunta]
@@ -856,15 +856,15 @@ class ListaChequeoEjecucionController extends Controller
 
         $preguntas = $this->listaChequeoEjecutadasFotos->where('lista_chequeo_ejec_respuestas','=',$respuestaEjecucion->id)->get();
 
-        foreach ($preguntas as $key => $foto) 
+        foreach ($preguntas as $key => $foto)
         {
-            if(\File::exists($this->urlImagenesListaChequeo.$foto->foto)) 
+            if(\File::exists($this->urlImagenesListaChequeo.$foto->foto))
                 \File::delete($this->urlImagenesListaChequeo.$foto->foto);
         }
 
         $listaChequeoEjecutadasFotos = $this->listaChequeoEjecutadasFotos->where('lista_chequeo_ejec_respuestas', $respuestaEjecucion->id)->delete();
 
-        foreach ($imagenes as $key => $valueId) 
+        foreach ($imagenes as $key => $valueId)
         {
             foreach($valueId as $keyImg => $valueImg)
             {
@@ -874,12 +874,12 @@ class ListaChequeoEjecucionController extends Controller
                 $imagen = $valueImg['img'];
                 $implode = explode(',', $imagen);
                 $guardado = \File::put($this->urlImagenesListaChequeo.$nombreImagen, base64_decode($implode[1]));
-                
+
                 $listaChequeoEjecutadasFotos->fill([
-                    'foto' => $nombreImagen, 
+                    'foto' => $nombreImagen,
                     'lista_chequeo_ejec_respuestas' => $respuestaEjecucion->id
                 ]);
-                
+
                 $listaChequeoEjecutadasFotos->save();
             }
         }
@@ -889,7 +889,7 @@ class ListaChequeoEjecucionController extends Controller
             $this->MensajeRetorno('',206,'Imagenes agregadas correctamente')
         );
     }
-  
+
     //Esta funcion va a depurar los archivos que no existan fisicamente los eliminara de la BD
     private function depurarArchivosAdjuntosServer(){
         $adjuntos = $this->listaChequeoEjecutadasArchivos->all();
@@ -912,8 +912,8 @@ class ListaChequeoEjecucionController extends Controller
             ['lista_chequeo_ejec_id', '=',$idListaChequeoEjec],
             ['pregunta_id', '=',$idPregunta]
         ])->first();
-           
-        
+
+
         $fileName = ''; //Nombre con el que se va a guardar el archivo
         $originalName = ''; //Nombre original cuando se subio el archivo
         foreach($archivos as $key => $archivo){
@@ -925,7 +925,7 @@ class ListaChequeoEjecucionController extends Controller
                 'lista_chequeo_ejec_respuesta_id' => $respuestaEjecucion->id
             ]);
             $path = \Storage::putFile('public', $archivo);
-        
+
         }
         $this->depurarArchivosAdjuntosServer();//Depuro para no dejar registros en la BD que no existan en la carpeta storage
         return response()->json(['msg' => 'Los archivos han sido cargados.']);
@@ -938,13 +938,13 @@ class ListaChequeoEjecucionController extends Controller
             ['lista_chequeo_ejec_id', '=',$idListaChequeoEjec],
             ['pregunta_id', '=',$idPregunta]
         ])->first();
-           
+
         $adjuntos = $this->listaChequeoEjecutadasArchivos->where('lista_chequeo_ejec_respuesta_id','=', $respuestaEjecucion->id)->get();
         $arrayAdjuntos =[];
         if(count($adjuntos) != 0)
         {
             foreach ($adjuntos as $key => $value) {
-            
+
                 $alias = $value->archivo_alias;
                 array_push($arrayAdjuntos,['id'=> $value->id, 'nombre' => $alias]);
             }
@@ -960,7 +960,7 @@ class ListaChequeoEjecucionController extends Controller
         $archivoAlias = $archivo->archivo_alias;
         //Valido si existe el archivo y lo elimino
         $exists = \Storage::disk('public')->exists($archivo->archivo_codificado);
-            if($exists) 
+            if($exists)
                 \Storage::disk('public')->delete($archivo->archivo_codificado);
         $archivo->delete();
         return response()->json(['msg'=> 'Se elimino el archivo ' . $archivoAlias]);
@@ -977,16 +977,16 @@ class ListaChequeoEjecucionController extends Controller
         ])->first();
 
         $fotos = $this->listaChequeoEjecutadasFotos->where('lista_chequeo_ejec_respuestas','=',$respuestaEjecucion->id)->get();
-        
+
         $arrayImage =[];
         if(COUNT($fotos) != 0)
         {
             foreach ($fotos as $key => $value) {
-            
+
                 $url = $this->urlImagenesListaChequeo.$value->foto;
                 $content = file_get_contents($url);
                 $imdata = base64_encode($content);
-                
+
                 $arrayImage[] = 'data:image/jpg;base64,'.$imdata;
 
             }
@@ -1078,7 +1078,7 @@ class ListaChequeoEjecucionController extends Controller
             $usuarioResponsableEmpresa = $this->usuario->where('id','=',$idUsuarioResponsable->ID_USUARIO_ESTABLECIMIENTO )->first();
             array_push($arrayCorreos,$usuarioResponsableEmpresa->correo);
         }
-        
+
         \Mail::to($arrayCorreos)->send(new MailFinalizarListaChequeo($listaDeChequeo));
 
         $respuesta = $this->ValidarSiTieneResponsable($idListaChequeoEjec);
@@ -1087,7 +1087,7 @@ class ListaChequeoEjecucionController extends Controller
         $arrayCorreoUsuarioResponsable = [];
         if(COUNT($respuesta) != 0)
         {
-            foreach ($respuesta as $key => $usuarioEncontrado) 
+            foreach ($respuesta as $key => $usuarioEncontrado)
             {
                 $usuario = $this->usuario
                 ->where('id','=', $usuarioEncontrado->ID_USUARIO_RESPONSABLE)
@@ -1099,7 +1099,7 @@ class ListaChequeoEjecucionController extends Controller
         }
         else if(COUNT($respuestaQuien) != 0)
         {
-            foreach ($respuestaQuien as $key => $usuarioEncontradoQuien) 
+            foreach ($respuestaQuien as $key => $usuarioEncontradoQuien)
             {
                 $usuarioQuien = $this->usuario
                 ->where('id','=', $usuarioEncontradoQuien->ID_USUARIO_RESPONSABLE)
@@ -1132,7 +1132,7 @@ class ListaChequeoEjecucionController extends Controller
             'lc.nombre',
             \DB::raw('(CASE
                         WHEN lc.entidad_evaluada=1 THEN (SELECT semp.nombre FROM empresa semp WHERE semp.id=lce.evaluado_id)
-                        WHEN lc.entidad_evaluada=2 THEN (SELECT semp.nombre FROM establecimiento sest 
+                        WHEN lc.entidad_evaluada=2 THEN (SELECT semp.nombre FROM establecimiento sest
                                                         INNER JOIN empresa semp ON semp.id = sest.empresa_id WHERE sest.id=lce.evaluado_id)
                         WHEN lc.entidad_evaluada=3 THEN (SELECT semp.nombre FROM usuario susu
                                                         INNER JOIN establecimiento sesta ON sesta.id = susu.establecimiento_id
@@ -1234,7 +1234,7 @@ class ListaChequeoEjecucionController extends Controller
         }
         else
             return false;
-        
+
     }
 
     public function FuncionValidarSiEstaAlDia()
@@ -1265,7 +1265,7 @@ class ListaChequeoEjecucionController extends Controller
         }
         else
             return false;
-        
+
     }
 
     public function lista_opc_plan_accion_manual(Request $request){
@@ -1279,7 +1279,7 @@ class ListaChequeoEjecucionController extends Controller
 
         $idListaChequeo = $request->get('idListaChequeo');
         $idEvaluado = $request->get('evaluadoId');
-        
+
         $busqueda = $this->listaChequeo
         ->select(
             \DB::raw('(
@@ -1298,15 +1298,15 @@ class ListaChequeoEjecucionController extends Controller
             ['lista_chequeo.id','=', $idListaChequeo]
         ])
         ->first();
-        
+
         $llenadoDeSelect = [];
-        
+
 
         if(!is_null($busqueda))
         {
             switch ($busqueda->EVALUANDO_A) {
                 case 'Empresa':
-    
+
                     $llenadoDeSelect = $this->usuario
                     ->select(
                         'usuario.*',
@@ -1317,11 +1317,11 @@ class ListaChequeoEjecucionController extends Controller
                     ->Join('empresa AS em','em.id','e.empresa_id')
                     ->where('em.id','=', $idEvaluado)
                     ->get();
-    
+
                     break;
-    
+
                 case 'Establecimiento':
-                    
+
 
                     $sacarIdEmpresa = $this->usuario
                     ->select(
@@ -1344,9 +1344,9 @@ class ListaChequeoEjecucionController extends Controller
                     ->get();
 
                     break;
-    
+
                 case 'Usuario':
-    
+
                     $sacarIdEmpresa = $this->usuario
                     ->select(
                         'em.id AS ID_EMPRESA'
@@ -1366,13 +1366,13 @@ class ListaChequeoEjecucionController extends Controller
                     ->Join('empresa AS em','em.id','e.empresa_id')
                     ->where('em.id','=', $sacarIdEmpresa->ID_EMPRESA)
                     ->get();
-    
+
                     break;
-    
+
                 case 'Proceso':
-                    
+
                     break;
-                
+
                 case 'Equipos':
                     $llenadoDeSelect = $this->usuario
                     ->select(
@@ -1413,7 +1413,8 @@ class ListaChequeoEjecucionController extends Controller
         $eliminarUnaVez =0;
 
         foreach($request->all() as $key => $valor){
-            if($key != 'idpregunta' AND $valor != '' AND $lista_cheque_ejec_resp != null AND $key != 'idListaChequeo'){
+            if($key != 'idpregunta' AND $valor != '' AND $valor !== "0" AND $lista_cheque_ejec_resp != null AND $key != 'idListaChequeo')
+            {
                 $data = [
                     'plan_accio_man_opc_id' => $key,
                     'lista_cheq_ejec_respuesta_id' => $lista_cheque_ejec_resp->id,
@@ -1425,43 +1426,43 @@ class ListaChequeoEjecucionController extends Controller
                     $this->planAccionManualDetalle->where('lista_cheq_ejec_respuesta_id','=',$lista_cheque_ejec_resp->id)->delete();
                     $eliminarUnaVez = 1;
                 }
-                
-               
+
+
                 $this->planAccionManualDetalle->updateOrCreate($data);
-                
-            } 
+
+            }
         }
 
-        //GUARDO EN LISTA DE CHEQUEO EJEC OPCIONES PARA PODER APLICAR UNA ACCION CORRECTIVA                
+        //GUARDO EN LISTA DE CHEQUEO EJEC OPCIONES PARA PODER APLICAR UNA ACCION CORRECTIVA
         $idPlanDeAccion = $this->planAccion->where('pregunta_id', '=', $idpregunta)->first();
         if($idPlanDeAccion != null){
             $arrayInsertar = [
-                'lista_chequeo_ejec_respuestas_id' => $lista_cheque_ejec_resp->id, 
+                'lista_chequeo_ejec_respuestas_id' => $lista_cheque_ejec_resp->id,
                 'plan_accion_id' => $idPlanDeAccion->id
             ];
             $this->opcRespuesta->updateOrCreate(
                 ['lista_chequeo_ejec_respuestas_id' => $lista_cheque_ejec_resp->id],
                 $arrayInsertar);
         }
-        
+
 
          //ELIMINAR CORRECTIVO
         $opc = $this->opcRespuesta->where(
             'lista_chequeo_ejec_respuestas_id', '=', $lista_cheque_ejec_resp->id
         )->first();
-        
+
         $respuesta = $this->ejecucionPlanAccion->where('lista_chequeo_ejec_opciones', $opc->id)->delete();
 
-        
+
         $arrayInsertar = [
             'lista_chequeo_ejec_opciones' => $opc->id
         ];
-    
+
         $ejecucionPlanAccion = new $this->ejecucionPlanAccion;
         $ejecucionPlanAccion->fill($arrayInsertar);
         $ejecucionPlanAccion->save();
-        
-     
+
+
         return response()->json(['res' => 'Se guardo']);
     }
 
