@@ -20,7 +20,7 @@
     <link href="{{ assets_version('/vertical/assets/plugins/bootstrap-touchspin/css/jquery.bootstrap-touchspin.min.css') }}" rel="stylesheet" />
     <link href="{{ assets_version('/vertical/assets/plugins/sweet-alert2/sweetalert2.min.css') }}" rel="stylesheet" />
     <link href="{{ assets_version('/vertical/assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet">
-    
+
     <link href="{{    assets_version('/vertical/assets/js/tour/shepherd.css') }}" rel="stylesheet">
     <link href="{{    assets_version('/vertical/assets/js/tour/tour.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ assets_version('/vertical/assets/css/listachequeo/detalle/main.css') }}">
@@ -28,7 +28,7 @@
 <body>
  <style>
      .titulo-pdf{
-       
+
         text-align: center;
         font-weight: bold;
         width: 1000px;
@@ -37,6 +37,16 @@
         height: 50px;
         text-align: center;
      }
+     .question-pdf
+     {
+        padding-top: 5px !important;
+        padding-bottom: 5px !important;
+        margin-left: 15px !important;
+        width: 970px;
+        background-color: #6C7681!important;
+        color: white;
+        min-height: 50px;
+    }
      .td-seccionuno{
          width: 480px;
          height: 50px;
@@ -55,17 +65,17 @@
         height: 50px;
         background-color: #44505c!important;
         color: white;
-        margin-bottom: 15px !important; 
+        margin-bottom: 15px !important;
      }
      .titulo-resultado-final{
         background-color: #44505c!important;
         color: white;
-        margin-top: 15px !important; 
+        margin-top: 15px !important;
         width: 1000px !important;
         height: 50px;
         color: white;
         text-align: center;
-       
+
      }
    /*   .contenedoresCategoriasPDF
         {
@@ -95,7 +105,7 @@
     }
     .seccion { page-break-inside:avoid; page-break-after:always; }
  </style>
-    
+
     <div class="row datosLista" idListaChequeoEjecutada="{{ Request::segment(3) }}">
         <div class="col-lg-12">
             <div class="row m-b-10">
@@ -104,15 +114,15 @@
                     <div class="contenedorEncabezado">
                         <div id="accordion">
                             <div class="card">
-    
+
                                 <table>
                                     <tr>
                                         <td class="titulo-pdf"> INFORME DE LA LISTA DE CHEQUEO</td>
                                     </tr>
                                 </table>
-    
+
                                 <div id="" class="collapse show contenedorTextosEncabezado">
-    
+
                                     <div class="card-header subtituloEncabezado">
                                         <p class="m-0">
                                             <a class="">
@@ -121,8 +131,8 @@
                                         </p>
                                     </div>
                                     <hr>
-    
-                                    
+
+
                                         <table>
                                             <tr>
                                                 <td class="td-seccionuno">Modelo</td>
@@ -144,6 +154,19 @@
                                                 </td>
                                                 <td>{{$seccionUno->FECHA_REALIZACION}}</td>
                                             </tr>
+
+                                            <tr>
+                                                <td class="td-seccionuno">Inicio de ejecución</td>
+                                                <td class="td-seccionuno">Finalización de ejecución</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    {{$seccionUno->INICIO_EJECUCION}}
+                                                </td>
+                                                <td>{{$seccionUno->FINALIZACION_EJECUCION}}</td>
+                                            </tr>
+
                                             <tr>
                                                 <td class="td-seccionuno">Evaluado</td>
                                                 <td class="td-seccionuno">Evaluador</td>
@@ -156,27 +179,27 @@
                                             </tr>
 
                                         </table>
-                                        
-    
-                                   
-    
+
+
+
+
                                 </div>
-    
+
                             </div>
-    
+
                         </div>
                     </div>
-                    
-                   
+
+
                     {{-- FIN PRIMERA SECCION --}}
-    
+
                     {{-- SEGUNDA SECCION --}}
                     <div class="segundaSeccion">
                         <div id="accordion">
                             <div class="card">
-    
+
                                 <div id="" class="collapse show contenedorTextosEncabezado ">
-    
+
                                     <div class="card-header subtituloEncabezado">
                                         <p class="m-0">
                                             <a class="">
@@ -186,8 +209,8 @@
                                     </div>
                                     <hr>
 
-                                    
-    
+
+
                                  {{--    <br />
                                     <br />
                                     @php
@@ -214,7 +237,7 @@
 
                                         @php $contador++; @endphp
                                     @endforeach --}}
-                                   
+
                                     <table>
                                         <tr>
                                             <th class="td-seccionuno">Categoria</th>
@@ -231,32 +254,33 @@
                                             </tr>
                                         @endforeach
                                     </table>
-                                        
+
                                     <table>
                                         <tr>
                                             <td class="titulo-resultado-final"> Resultado final : % {{$seccionDos['ResultadoFinal']}}</td>
                                         </tr>
                                     </table>
-                                    
-    
+
+
                                 </div>
-    
+
                             </div>
-    
+
                         </div>
                     </div>
                     <br>
                     <br>
-                    
+
                     {{-- FIN SEGUNDA SECCION --}}
-                    <div class="seccion"></div>
+                    <div class="seccion">
+                    </div>
                     {{-- TERCERA SECCION --}}
                     <div class="terceraSeccion">
                         <div id="accordion">
                             <div class="card">
-    
+
                                 <div id="" class="collapse show contenedorTextosEncabezado ">
-    
+
                                     <div class="card-header subtituloEncabezado">
                                         <p class="m-0">
                                             <a class="">
@@ -265,9 +289,9 @@
                                         </p>
                                     </div>
                                     <hr>
-    
-                                   
-                                 
+
+
+
                                         @foreach ($seccionTres as $item)
                                             @php
                                                 $categoriaPonderado = $item['PONDERADO_CATEGORIA'];
@@ -285,7 +309,7 @@
                                                 @endphp
                                                 <table>
                                                     <tr>
-                                                        <td>{{$preguntas->ORDEN_PREGUNTA }}. {{$preguntas->NOMBRE_PREGUNTA}} : {{$preguntaPonderado}} % </td>
+                                                        <td class="question-pdf">{{$preguntas->ORDEN_PREGUNTA }}. {{$preguntas->NOMBRE_PREGUNTA}} : {{$preguntaPonderado}} % </td>
                                                         {{-- <td></td> --}}
                                                     </tr>
                                                     <table>
@@ -301,11 +325,11 @@
                                                             @endif
 
                                                             @if ($preguntas->PERMITE_NO_APLICA == 1)
-                                                        
+
                                                                 <td>N/A</td>
                                                             @endif
                                                         </tr>
-                                                            
+
                                                         <tr>
                                                             {{--  // tipos de respuesta --}}
                                                                 @if ($preguntas->ES_RESPUESTA_ABIERTA != 1)
@@ -317,10 +341,10 @@
                                                                             }
                                                                         @endphp
                                                                         <td class="resultado-cal">{{$marca}}</td>
-                                                                        
+
                                                                     @endforeach
                                                                 @endif
-                                                                
+
                                                                 @if ($preguntas->PERMITE_NO_APLICA == 1)
                                                                     @if ($preguntas->RESPUESTA_ID == 0)
                                                                         <td class="resultado-cal">X</td>
@@ -330,8 +354,8 @@
 
                                                     </table>
                                                 </table>
-                                              
-                                    
+
+
                                                 {{-- seccion de fotos --}}
                                                 <table>
                                                     @if (isset($preguntas->FOTOS))
@@ -343,7 +367,7 @@
                                                         @if (isset($preguntas->FOTOS))
                                                             @foreach ($preguntas->FOTOS as $fotos)
                                                                 @php
-                                                                
+
                                                                     // $imagenes = $_SERVER["DOCUMENT_ROOT"].'/'.$fotos['FOTO'];
                                                                     // $imagenes = 'https://'.$_SERVER['SERVER_NAME'].'/'.$fotos['FOTO'];
                                                                     // $imagenes = public_path().'/'.$fotos['FOTO'];
@@ -351,57 +375,78 @@
                                                                         $imagenes = $fotos['FOTO'];
                                                                 //    dd($imagenes.'----'.$fotos['FOTO']);
                                                                 @endphp
-                                                              
+
                                                                 <td ><img  width="150" height="150"  src="{{public_path($imagenes)}}" alt="evidencia audiid"></td>
                                                             @endforeach
-                                                                
+
                                                         @endif
                                                     </tr>
-
                                                 </table>
                                                 <table>
+                                                    @if($preguntas->PLAN_ACCION != "Sin plan de acción")
                                                     <tr>
                                                         <td style="text-align: center;font-weight: bold;">Plan de accion</td>
                                                     </tr>
                                                     <tr>
                                                         <td>{{$preguntas->PLAN_ACCION}}</td>
                                                     </tr>
-                                                    <tr>
-                                                        <td style="font-weight: bold;">Observacion : {{$preguntas->COMENTARIO}}</td>  
-                                                    </tr>
+                                                    @endif
 
+                                                    @if($preguntas->COMENTARIO != "Sin observación")
+                                                        <tr>
+                                                            <td style="font-weight: bold;">Observacion : {{$preguntas->COMENTARIO}}</td>
+                                                        </tr>
+                                                    @endif
                                                 </table>
-                                                
-                                    
-                                                
                                             @endforeach
                                         <div class="seccion"></div>
                                         @endforeach
 
-                                  
+
+
                                 </div>
-    
+
                             </div>
-    
+
                         </div>
                     </div>
-                   
                     {{-- FIN TERCERA SECCION --}}
-    
-               
-    
-    
-                 
+                    <div class="contenedorEncabezado">
+                        <div id="accordion">
+                            <div class="card">
+
+                                @if(ISSET($seccionUno->OBSERVACION_GENERAL))
+                                <table>
+                                    <tr>
+                                        <td class="titulo-pdf"> OBSERVACIÓN GENERAL</td>
+                                    </tr>
+                                </table>
+
+                                <div id="" class="collapse show contenedorTextosEncabezado">
+
+                                    <div class="card-header subtituloEncabezado">
+                                        <p class="m-0">
+                                            <a class="">
+                                                <span>{{$seccionUno->OBSERVACION_GENERAL}}</span>
+                                            </a>
+                                        </p>
+                                    </div>
+                                    <hr>
+                                </div>
+                                @endif
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+
                 </div>
             </div>
         </div>
     </div>
-    
+
 </body>
 </html>
-
-
-
-
-
-

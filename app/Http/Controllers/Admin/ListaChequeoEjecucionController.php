@@ -1011,7 +1011,7 @@ class ListaChequeoEjecucionController extends Controller
         $fechaRealizacion = $request->get('fechaRealizacion');
         $idListaChequeoEjec = $request->get('idListaChequeoEjec');
         $obsgeneral = $request->get('obsgeneral');
-        $finished = date('Y-m-d');
+        $finished = date('Y-m-d H:i:s');
         $fechaRealizacion = date('Y-m-d', strtotime($fechaRealizacion));
         $fechaRealizacion = Carbon::createFromFormat('Y-m-d', $fechaRealizacion);
 

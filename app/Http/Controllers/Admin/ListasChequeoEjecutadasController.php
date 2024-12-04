@@ -61,7 +61,7 @@ class ListasChequeoEjecutadasController extends Controller
                     ['u.cuenta_principal_id', '=',auth()->user()->cuenta_principal_id]
                 ])
                 ->groupBy('lc.nombre')
-                ->get();       
+                ->get();
                 break;
 
             case 2: // COLABORADOR
@@ -82,7 +82,7 @@ class ListasChequeoEjecutadasController extends Controller
                     ->groupBy('lc.nombre')
                     ->get();
                 }
-                    
+
 
                 //VERIFICAR SI ES RESPONSABLE DE ESTABLECIMIENTO
                 $esResponsableEstablecimiento = $this->FuncionParaSaberSiEsResponsableEstablecimiento(auth()->user()->id);
@@ -100,7 +100,7 @@ class ListasChequeoEjecutadasController extends Controller
                     ->groupBy('lc.nombre')
                     ->get();
                 }
-                    
+
 
                 if(is_null($esResponsableEmpresa) && is_null($esResponsableEstablecimiento))
                 {
@@ -114,14 +114,14 @@ class ListasChequeoEjecutadasController extends Controller
                     ->groupBy('lc.nombre')
                     ->get();
                 }
-                    
+
 
                 break;
-            
+
             default:
 
                 break;
-        };   
+        };
         return view('Admin.listachequeo_mis_listas_ejecutadas',compact('listasEjecutadas'));
     }
 
@@ -132,7 +132,7 @@ class ListasChequeoEjecutadasController extends Controller
 
         switch (auth()->user()->perfil_id) {
             case 1: // ADMINISTRADOR
-                $listasEjecutadas = $this->FuncionTraerEjecutadasPorPaginacionAdministrado($paginacion,$filtros);        
+                $listasEjecutadas = $this->FuncionTraerEjecutadasPorPaginacionAdministrado($paginacion,$filtros);
                 break;
 
             case 2: // COLABORADOR
@@ -140,7 +140,7 @@ class ListasChequeoEjecutadasController extends Controller
                 $esResponsableEmpresa = $this->FuncionParaSaberSiEsResponsableEmpresa(auth()->user()->id);
 
                 if(!is_null($esResponsableEmpresa))
-                    $listasEjecutadas = $this->FuncionTraerEjecutadasPorPaginacionResponsableEmpresa($esResponsableEmpresa->id,$paginacion,$filtros);        
+                    $listasEjecutadas = $this->FuncionTraerEjecutadasPorPaginacionResponsableEmpresa($esResponsableEmpresa->id,$paginacion,$filtros);
 
                 //VERIFICAR SI ES RESPONSABLE DE ESTABLECIMIENTO
                 $esResponsableEstablecimiento = $this->FuncionParaSaberSiEsResponsableEstablecimiento(auth()->user()->id);
@@ -152,7 +152,7 @@ class ListasChequeoEjecutadasController extends Controller
                     $listasEjecutadas = $this->FuncionTraerEjecutadasPorPaginacionColaborador(auth()->user()->id,$paginacion,$filtros);
 
                 break;
-            
+
             default:
 
                 break;
@@ -172,7 +172,7 @@ class ListasChequeoEjecutadasController extends Controller
 
         switch (auth()->user()->perfil_id) {
             case 1: // ADMINISTRADOR
-                $listasEjecutadas = $this->FuncionTraerEjecutadasPorPaginacionAdministrado($paginacion,$filtros);        
+                $listasEjecutadas = $this->FuncionTraerEjecutadasPorPaginacionAdministrado($paginacion,$filtros);
                 break;
 
             case 2: // COLABORADOR
@@ -180,7 +180,7 @@ class ListasChequeoEjecutadasController extends Controller
                 $esResponsableEmpresa = $this->FuncionParaSaberSiEsResponsableEmpresa(auth()->user()->id);
 
                 if(!is_null($esResponsableEmpresa))
-                    $listasEjecutadas = $this->FuncionTraerEjecutadasPorPaginacionResponsableEmpresa($esResponsableEmpresa->id,$paginacion,$filtros);        
+                    $listasEjecutadas = $this->FuncionTraerEjecutadasPorPaginacionResponsableEmpresa($esResponsableEmpresa->id,$paginacion,$filtros);
 
                 //VERIFICAR SI ES RESPONSABLE DE ESTABLECIMIENTO
                 $esResponsableEstablecimiento = $this->FuncionParaSaberSiEsResponsableEstablecimiento(auth()->user()->id);
@@ -192,7 +192,7 @@ class ListasChequeoEjecutadasController extends Controller
                     $listasEjecutadas = $this->FuncionTraerEjecutadasPorPaginacionColaborador(auth()->user()->id,$paginacion,$filtros);
 
                 break;
-            
+
             default:
 
                 break;
@@ -203,18 +203,18 @@ class ListasChequeoEjecutadasController extends Controller
             $this->MensajeRetorno('Datos',202),
             $listasEjecutadas
         );
-    }   
+    }
 
     public function FuncionTraerEjecutadasPorPaginacionAdministrado($paginacion=1,$filtros=[])
     {
         $resultadoLimit = $this->CalculoPaginacion($paginacion,12);
-    
+
         $desde = $resultadoLimit['desde'];
         $hasta = $resultadoLimit['hasta'];
         $cantidadRegistros = 12;
         $filtro_array = [];
 
-        foreach ($filtros as $key => $filtro) 
+        foreach ($filtros as $key => $filtro)
         {
 
             switch ($key) {
@@ -224,10 +224,10 @@ class ListasChequeoEjecutadasController extends Controller
                     break;
 
                 default:
-                    
+
                     break;
             }
-            
+
         }
 
         $listasEjecutadas = $this->listaEjecutada
@@ -239,7 +239,7 @@ class ListasChequeoEjecutadasController extends Controller
             \DB::raw('DATE_FORMAT(lista_chequeo_ejecutadas.fecha_realizacion,"%d de %M %Y") AS FECHA_EJECUCION'),
             \DB::raw('
             IF(lista_chequeo_ejecutadas.evaluado_id IS NULL,"Sin Asignar",
-                (CASE    
+                (CASE
                     WHEN lc.entidad_evaluada = 1 THEN (SELECT nombre FROM empresa WHERE id=lista_chequeo_ejecutadas.evaluado_id)
                     WHEN lc.entidad_evaluada = 2 THEN (SELECT nombre FROM establecimiento WHERE id=lista_chequeo_ejecutadas.evaluado_id)
                     WHEN lc.entidad_evaluada = 3 THEN (SELECT nombre_completo FROM usuario WHERE id=lista_chequeo_ejecutadas.evaluado_id)
@@ -262,7 +262,7 @@ class ListasChequeoEjecutadasController extends Controller
             $listasEjecutadas = $listasEjecutadas->where(function($query) use ($filtro_array)
             {
                 // $contador = 0;
-                foreach ($filtro_array as $keys => $oW) 
+                foreach ($filtro_array as $keys => $oW)
                 {
                     // if( $contador == 0)
                     //     $query->where($oW[0], '=', $oW[2]);
@@ -277,7 +277,7 @@ class ListasChequeoEjecutadasController extends Controller
 
                 return $query;
             });
-            
+
         }
 
         $listasEjecutadas = $listasEjecutadas->skip($desde)->take($hasta)->get();
@@ -288,13 +288,13 @@ class ListasChequeoEjecutadasController extends Controller
     public function FuncionTraerEjecutadasPorPaginacionResponsableEmpresa($idEmpresa,$paginacion=1,$filtros=[])
     {
         $resultadoLimit = $this->CalculoPaginacion($paginacion,12);
-    
+
         $desde = $resultadoLimit['desde'];
         $hasta = $resultadoLimit['hasta'];
         $cantidadRegistros = 12;
         $filtro_array = [];
 
-        foreach ($filtros as $key => $filtro) 
+        foreach ($filtros as $key => $filtro)
         {
 
             switch ($key) {
@@ -304,12 +304,12 @@ class ListasChequeoEjecutadasController extends Controller
                     break;
 
                 default:
-                    
+
                     break;
             }
-            
+
         }
-        
+
         $listasEjecutadas = $this->listaEjecutada
         ->select(
             'lc.id AS ID_LISTA_CHEQUEO',
@@ -319,7 +319,7 @@ class ListasChequeoEjecutadasController extends Controller
             \DB::raw('DATE_FORMAT(lista_chequeo_ejecutadas.fecha_realizacion,"%d de %M %Y") AS FECHA_EJECUCION'),
             \DB::raw('
             IF(lista_chequeo_ejecutadas.evaluado_id IS NULL,"Sin Asignar",
-                (CASE    
+                (CASE
                     WHEN lc.entidad_evaluada = 1 THEN (SELECT nombre FROM empresa WHERE id=lista_chequeo_ejecutadas.evaluado_id)
                     WHEN lc.entidad_evaluada = 2 THEN (SELECT nombre FROM establecimiento WHERE id=lista_chequeo_ejecutadas.evaluado_id)
                     WHEN lc.entidad_evaluada = 3 THEN (SELECT nombre_completo FROM usuario WHERE id=lista_chequeo_ejecutadas.evaluado_id)
@@ -343,7 +343,7 @@ class ListasChequeoEjecutadasController extends Controller
             $listasEjecutadas = $listasEjecutadas->where(function($query) use ($filtro_array)
             {
                 // $contador = 0;
-                foreach ($filtro_array as $keys => $oW) 
+                foreach ($filtro_array as $keys => $oW)
                 {
                     // if( $contador == 0)
                     //     $query->where($oW[0], '=', $oW[2]);
@@ -358,7 +358,7 @@ class ListasChequeoEjecutadasController extends Controller
 
                 return $query;
             });
-            
+
         }
 
         $listasEjecutadas = $listasEjecutadas->skip($desde)->take($hasta)->get();
@@ -369,13 +369,13 @@ class ListasChequeoEjecutadasController extends Controller
     public function FuncionTraerEjecutadasPorPaginacionResponsableEstablecimiento($idEstablecimiento,$paginacion=1,$filtros=[])
     {
         $resultadoLimit = $this->CalculoPaginacion($paginacion,12);
-    
+
         $desde = $resultadoLimit['desde'];
         $hasta = $resultadoLimit['hasta'];
         $cantidadRegistros = 12;
         $filtro_array = [];
 
-        foreach ($filtros as $key => $filtro) 
+        foreach ($filtros as $key => $filtro)
         {
 
             switch ($key) {
@@ -385,10 +385,10 @@ class ListasChequeoEjecutadasController extends Controller
                     break;
 
                 default:
-                    
+
                     break;
             }
-            
+
         }
 
         $listasEjecutadas = $this->listaEjecutada
@@ -400,7 +400,7 @@ class ListasChequeoEjecutadasController extends Controller
             \DB::raw('DATE_FORMAT(lista_chequeo_ejecutadas.fecha_realizacion,"%d de %M %Y") AS FECHA_EJECUCION'),
             \DB::raw('
             IF(lista_chequeo_ejecutadas.evaluado_id IS NULL,"Sin Asignar",
-                (CASE    
+                (CASE
                     WHEN lc.entidad_evaluada = 1 THEN (SELECT nombre FROM empresa WHERE id=lista_chequeo_ejecutadas.evaluado_id)
                     WHEN lc.entidad_evaluada = 2 THEN (SELECT nombre FROM establecimiento WHERE id=lista_chequeo_ejecutadas.evaluado_id)
                     WHEN lc.entidad_evaluada = 3 THEN (SELECT nombre_completo FROM usuario WHERE id=lista_chequeo_ejecutadas.evaluado_id)
@@ -423,7 +423,7 @@ class ListasChequeoEjecutadasController extends Controller
             $listasEjecutadas = $listasEjecutadas->where(function($query) use ($filtro_array)
             {
                 // $contador = 0;
-                foreach ($filtro_array as $keys => $oW) 
+                foreach ($filtro_array as $keys => $oW)
                 {
                     // if( $contador == 0)
                     //     $query->where($oW[0], '=', $oW[2]);
@@ -438,7 +438,7 @@ class ListasChequeoEjecutadasController extends Controller
 
                 return $query;
             });
-            
+
         }
 
         $listasEjecutadas = $listasEjecutadas->skip($desde)->take($hasta)->get();
@@ -449,13 +449,13 @@ class ListasChequeoEjecutadasController extends Controller
     public function FuncionTraerEjecutadasPorPaginacionColaborador($idUsuario,$paginacion=1,$filtros=[])
     {
         $resultadoLimit = $this->CalculoPaginacion($paginacion,12);
-    
+
         $desde = $resultadoLimit['desde'];
         $hasta = $resultadoLimit['hasta'];
         $cantidadRegistros = 12;
         $filtro_array = [];
 
-        foreach ($filtros as $key => $filtro) 
+        foreach ($filtros as $key => $filtro)
         {
 
             switch ($key) {
@@ -465,10 +465,10 @@ class ListasChequeoEjecutadasController extends Controller
                     break;
 
                 default:
-                    
+
                     break;
             }
-            
+
         }
 
         $listasEjecutadas = $this->listaEjecutada
@@ -480,7 +480,7 @@ class ListasChequeoEjecutadasController extends Controller
             \DB::raw('DATE_FORMAT(lista_chequeo_ejecutadas.fecha_realizacion,"%d de %M %Y") AS FECHA_EJECUCION'),
             \DB::raw('
             IF(lista_chequeo_ejecutadas.evaluado_id IS NULL,"Sin Asignar",
-                (CASE    
+                (CASE
                     WHEN lc.entidad_evaluada = 1 THEN (SELECT nombre FROM empresa WHERE id=lista_chequeo_ejecutadas.evaluado_id)
                     WHEN lc.entidad_evaluada = 2 THEN (SELECT nombre FROM establecimiento WHERE id=lista_chequeo_ejecutadas.evaluado_id)
                     WHEN lc.entidad_evaluada = 3 THEN (SELECT nombre_completo FROM usuario WHERE id=lista_chequeo_ejecutadas.evaluado_id)
@@ -502,7 +502,7 @@ class ListasChequeoEjecutadasController extends Controller
             $listasEjecutadas = $listasEjecutadas->where(function($query) use ($filtro_array)
             {
                 // $contador = 0;
-                foreach ($filtro_array as $keys => $oW) 
+                foreach ($filtro_array as $keys => $oW)
                 {
                     // if( $contador == 0)
                     //     $query->where($oW[0], '=', $oW[2]);
@@ -517,7 +517,7 @@ class ListasChequeoEjecutadasController extends Controller
 
                 return $query;
             });
-            
+
         }
 
         $listasEjecutadas = $listasEjecutadas->skip($desde)->take($hasta)->get();
@@ -558,7 +558,7 @@ class ListasChequeoEjecutadasController extends Controller
             \DB::raw('DATE_FORMAT(lista_chequeo_ejecutadas.fecha_realizacion,"%d de %M %Y") AS FECHA_EJECUCION'),
             \DB::raw('
             IF(lista_chequeo_ejecutadas.evaluado_id IS NULL,"Sin Asignar",
-                (CASE    
+                (CASE
                     WHEN lc.entidad_evaluada = 1 THEN (SELECT nombre FROM empresa WHERE id=lista_chequeo_ejecutadas.evaluado_id)
                     WHEN lc.entidad_evaluada = 2 THEN (SELECT nombre FROM establecimiento WHERE id=lista_chequeo_ejecutadas.evaluado_id)
                     WHEN lc.entidad_evaluada = 3 THEN (SELECT nombre_completo FROM usuario WHERE id=lista_chequeo_ejecutadas.evaluado_id)
@@ -581,11 +581,11 @@ class ListasChequeoEjecutadasController extends Controller
     }
 
     // FUNCIONES PARA EL DETALLE DE LA LISTA EJECUTADA
-    
+
     public function IndexDetalleListaChequeo()
     {
         $idListaEjecutada = \Request::segment(3);
-        
+
         if (!$this->listaEjecutada
         ->Join('lista_chequeo AS lc','lc.id','=','lista_chequeo_ejecutadas.lista_chequeo_id')
         ->Join('usuario AS u','u.id','=','lista_chequeo_ejecutadas.usuario_id')
@@ -593,9 +593,9 @@ class ListasChequeoEjecutadasController extends Controller
             ['lista_chequeo_ejecutadas.id', '=',$idListaEjecutada],
             ['lista_chequeo_ejecutadas.estado', '=', 2],
             ['u.cuenta_principal_id', '=', auth()->user()->cuenta_principal_id]
-        ])->exists()) 
+        ])->exists())
             return back();
-        
+
         $seccionUno = $this->FuncionConsultaEncabezado($idListaEjecutada);
         $seccionDos = $this->FuncionConsultaCategoriaPreguntasSeccionDos($idListaEjecutada);
         $seccionTres = $this->FuncionConsultaCategoriaPreguntasSeccionTres($idListaEjecutada);
@@ -605,7 +605,7 @@ class ListasChequeoEjecutadasController extends Controller
         ->select(\DB::raw('IF(observacion_general IS NULL, "", observacion_general) AS OBS_GENERAL'))
         ->where('id', '=', $idListaEjecutada)
         ->first()->OBS_GENERAL;
-        
+
         return view('Admin.listachequeo_detalle',compact('seccionUno','seccionDos','seccionTres','seccionCuatro','seccionQuinta', 'observacion_general'));
     }
 
@@ -623,8 +623,10 @@ class ListasChequeoEjecutadasController extends Controller
                 END
             ) AS PUBLICADO_EN"),
             \DB::raw("DATE_FORMAT(lista_chequeo_ejecutadas.fecha_realizacion,'%d %M %Y') AS FECHA_REALIZACION"),
+            \DB::raw("DATE_FORMAT(lista_chequeo_ejecutadas.created_at,'%d %M %Y %h:%i:%s %p') AS INICIO_EJECUCION"),
+            \DB::raw("DATE_FORMAT(lista_chequeo_ejecutadas.finished_at,'%d %M %Y %h:%i:%s %p') AS FINALIZACION_EJECUCION"),
             \DB::raw('IF(lista_chequeo_ejecutadas.evaluado_id IS NULL,"Sin Asignar",
-                    (CASE    
+                    (CASE
                         WHEN lc.entidad_evaluada = 1 THEN (SELECT nombre FROM empresa WHERE id=lista_chequeo_ejecutadas.evaluado_id)
                         WHEN lc.entidad_evaluada = 2 THEN (SELECT nombre FROM establecimiento WHERE id=lista_chequeo_ejecutadas.evaluado_id)
                         WHEN lc.entidad_evaluada = 3 THEN (SELECT nombre_completo FROM usuario WHERE id=lista_chequeo_ejecutadas.evaluado_id)
@@ -633,7 +635,8 @@ class ListasChequeoEjecutadasController extends Controller
                         ELSE "Sin asignar"
                     END)
                 ) AS EVALUADO_A'),
-            'u.nombre_completo AS EVALUADOR'
+            'u.nombre_completo AS EVALUADOR',
+            'lista_chequeo_ejecutadas.observacion_general AS OBSERVACION_GENERAL'
             )
         ->Join('lista_chequeo AS lc','lc.id','=','lista_chequeo_ejecutadas.lista_chequeo_id')
         ->leftJoin('modelo AS m','m.lista_chequeo_id','=','lc.id')
@@ -644,7 +647,7 @@ class ListasChequeoEjecutadasController extends Controller
         ])
         ->first();
 
-        return $seccionUno; 
+        return $seccionUno;
     }
 
     public function FuncionConsultaCategoriaPreguntasSeccionDos($idListaEjecutada)
@@ -666,7 +669,7 @@ class ListasChequeoEjecutadasController extends Controller
         INNER JOIN categoria cat ON cat.id=pre.categoria_id
         WHERE  lcer.lista_chequeo_ejec_id=:idEjecutada
         ORDER BY cat.id;"),['idEjecutada' => $idListaEjecutada]);
-        
+
         $suma = (COUNT($consultaResultadoFinal)== 0 ? 0 : $consultaResultadoFinal[0]->res_final);
 
         $seccionDos = \DB::select(\DB::raw("SELECT
@@ -687,7 +690,7 @@ class ListasChequeoEjecutadasController extends Controller
         WHERE  lcer.lista_chequeo_ejec_id=:idEjecutada
         GROUP BY cat.id
         ORDER BY cat.id;"),['idEjecutada' => $idListaEjecutada]);
-        
+
         $arrayFinal = array
         (
             'Categorias' => $seccionDos,
@@ -697,10 +700,10 @@ class ListasChequeoEjecutadasController extends Controller
 
         return $arrayFinal;
     }
-    
+
     public function FuncionConsultaCategoriaPreguntasSeccionTres($idListaEjecutada)
     {
-        // $seccionTres = \DB::select(\DB::raw("SELECT 
+        // $seccionTres = \DB::select(\DB::raw("SELECT
         // p.id AS ID_PREGUNTA,
         // c.id AS ID_CATEGORIA,
         // c.nombre AS NOMBRE_CATEGORIA,
@@ -724,14 +727,14 @@ class ListasChequeoEjecutadasController extends Controller
         // INNER JOIN lista_chequeo_ejec_respuestas AS lcer ON (lcer.lista_chequeo_ejec_id=lce.id AND lcer.pregunta_id=p.id)
         // LEFT JOIN respuesta AS r ON r.id=lcer.respuesta_id
         // LEFT JOIN lista_chequeo_ejec_opciones AS lceo ON lceo.lista_chequeo_ejec_respuestas_id=r.id
-        // WHERE lce.estado = :idEstado 
-        // AND lce.id = :idEjecutada 
+        // WHERE lce.estado = :idEstado
+        // AND lce.id = :idEjecutada
         // ORDER BY p.orden_lista ASC"),['idEstado' => 2, 'idEjecutada' => $idListaEjecutada]);
 
-         $seccionTres = \DB::select(\DB::raw("SELECT 
+         $seccionTres = \DB::select(\DB::raw("SELECT
          pre.id AS ID_PREGUNTA,
          cat.id AS ID_CATEGORIA,
-         cat.nombre as NOMBRE_CATEGORIA, 
+         cat.nombre as NOMBRE_CATEGORIA,
          pre.orden_lista AS ORDEN_PREGUNTA,
          IF(lcer.respuesta_id IS NULL,0,lcer.respuesta_id) RESPUESTA_ID,
          lcer.no_aplica AS PERMITE_NO_APLICA,
@@ -750,13 +753,13 @@ class ListasChequeoEjecutadasController extends Controller
              IF((SELECT COUNT(*) FROM plan_accion_manu_det pamd WHERE pamd.lista_cheq_ejec_respuesta_id=lcer.id) = 0,0,1)
         ) AS HAY_PLAN_ACCION,
         IF(lcer.id IS NULL,0,lcer.id) RESPUESTA_FOTOS,
-         IF(res.valor_personalizado IS NULL, 'No aplica',res.valor_personalizado) as respuesta, 
+         IF(res.valor_personalizado IS NULL, 'No aplica',res.valor_personalizado) as respuesta,
          cat.ponderado as PONDERAD_CATEGORIA,
          pre.ponderado as PONDERADO_PREGUNTA,
          IF(res.ponderado IS NULL,100,res.ponderado ) as res_ponderado,
          lcer.no_aplica,
          IF(lcer.no_aplica=1,'',TRUNCATE((pre.ponderado*(IF(res.ponderado IS NULL,100,res.ponderado ))/100),2))as porcentaje_pregunta,
-         IF((SELECT 
+         IF((SELECT
             paass.plan_accion_descripcion as plan_accion
             FROM lista_chequeo_ejec_respuestas lcerss
             LEFT JOIN lista_chequeo_ejecutadas lcess ON lcess.id=lcerss.lista_chequeo_ejec_id
@@ -766,7 +769,7 @@ class ListasChequeoEjecutadasController extends Controller
             LEFT JOIN plan_accion pa ON pa.respuesta_id=lcerss.respuesta_id
             INNER JOIN plan_accion_automatico paass ON paass.plan_accion_id=pa.id
             WHERE lcess.id=lce.id AND press.id= pre.id
-            GROUP BY catss.id, press.id) IS NULL,'Sin plan de acción',(SELECT 
+            GROUP BY catss.id, press.id) IS NULL,'Sin plan de acción',(SELECT
             paass.plan_accion_descripcion as plan_accion
             FROM lista_chequeo_ejec_respuestas lcerss
             LEFT JOIN lista_chequeo_ejecutadas lcess ON lcess.id=lcerss.lista_chequeo_ejec_id
@@ -788,7 +791,7 @@ class ListasChequeoEjecutadasController extends Controller
          GROUP BY cat.id, pre.id
          ORDER BY pre.orden_lista"),['idEstado' => 2, 'idEjecutada' => $idListaEjecutada]);
 
-        foreach ($seccionTres as $key => $itemPregunta) 
+        foreach ($seccionTres as $key => $itemPregunta)
         {
             if($itemPregunta->HAY_FOTOS != 0 )
             {
@@ -825,7 +828,7 @@ class ListasChequeoEjecutadasController extends Controller
         }
 
         $arrayFinal = [];
-        foreach ($seccionTres as $key => $seccion) 
+        foreach ($seccionTres as $key => $seccion)
         {
             $arrayFinal[$seccion->NOMBRE_CATEGORIA]['ID_CATEGORIA'] = $seccion->ID_CATEGORIA;
             $arrayFinal[$seccion->NOMBRE_CATEGORIA]['NOMBRE_CATEGORIA'] = $seccion->NOMBRE_CATEGORIA;
@@ -839,8 +842,8 @@ class ListasChequeoEjecutadasController extends Controller
     public function FuncionConsultaCategoriaPreguntasSeccionCuatro($idListaEjecutada)
     {
         $seccionCuatro = \DB::select(\DB::raw("SELECT
-        lcer.no_aplica, 
-        IF(res.valor_personalizado IS NULL, 'No aplica',res.valor_personalizado) as respuesta, 
+        lcer.no_aplica,
+        IF(res.valor_personalizado IS NULL, 'No aplica',res.valor_personalizado) as respuesta,
         count(*) as cant,
         SUM(IF(lcer.no_aplica=1,'',(pre.ponderado*(IF(res.ponderado IS NULL,100,res.ponderado ))/100)))as porcentaje_pregunta,
         (SELECT COUNT(*) FROM categoria AS cs WHERE cs.lista_chequeo_id=lc.id) AS CANTIDAD_CATEGORIAS
@@ -857,20 +860,20 @@ class ListasChequeoEjecutadasController extends Controller
 
     public function FuncionConsultaCategoriaPreguntasSeccionQuinta($idListaEjecutada)
     {
-        $seccionQuinta = \DB::select(\DB::raw("SELECT 
+        $seccionQuinta = \DB::select(\DB::raw("SELECT
         pre.nombre as pregunta,
-        IF(res.valor_personalizado IS NULL, 'No aplica',res.valor_personalizado) as respuesta, 
+        IF(res.valor_personalizado IS NULL, 'No aplica',res.valor_personalizado) as respuesta,
         paa.plan_accion_descripcion as plan_accion,
-        (SELECT 
-            (SELECT 
-				CONCAT(sacs.titulo,':',' ',IF(sacs.descripcion IS NULL,'Sin descripción',sacs.descripcion)) 
-				FROM accion_correctiva sacs 
+        (SELECT
+            (SELECT
+				CONCAT(sacs.titulo,':',' ',IF(sacs.descripcion IS NULL,'Sin descripción',sacs.descripcion))
+				FROM accion_correctiva sacs
 				INNER JOIN lista_chequeo_ejec_planaccion slcep ON slcep.accion_correctiva_id = sacs.id
 				INNER JOIN lista_chequeo_ejec_opciones slceo ON slceo.id = slcep.lista_chequeo_ejec_opciones
 				INNER JOIN lista_chequeo_ejec_respuestas slcer ON slcer.id = slceo.lista_chequeo_ejec_respuestas_id
 				WHERE slcer.lista_chequeo_ejec_id = lcess.id AND slcer.pregunta_id = press.id
 			) AS titulo
-            
+
             FROM lista_chequeo_ejec_respuestas lcerss
             LEFT JOIN lista_chequeo_ejecutadas lcess ON lcess.id=lcerss.lista_chequeo_ejec_id
             INNER JOIN lista_chequeo lcss ON lcss.id=lcess.lista_chequeo_id
@@ -887,7 +890,7 @@ class ListasChequeoEjecutadasController extends Controller
             LEFT JOIN lista_chequeo_ejec_planaccion lcepss ON lcepss.lista_chequeo_ejec_opciones=lceoss.id
             WHERE press.id=pre.id AND lcess.id = lce.id
         ) AS ACCION_CORRECTIVA
-                
+
         FROM lista_chequeo_ejec_respuestas lcer
         LEFT JOIN lista_chequeo_ejecutadas lce ON lce.id=lcer.lista_chequeo_ejec_id
         LEFT JOIN categoria cat ON cat.id=lcer.categoria_id
@@ -905,7 +908,7 @@ class ListasChequeoEjecutadasController extends Controller
     {
         $idListaEjecutada = $request->get('listaId');
         $tipo = $request->get('tipo');
-      
+
         if (!$this->listaEjecutada
         ->Join('lista_chequeo AS lc','lc.id','=','lista_chequeo_ejecutadas.lista_chequeo_id')
         ->Join('usuario AS u','u.id','=','lc.usuario_id')
@@ -913,20 +916,19 @@ class ListasChequeoEjecutadasController extends Controller
             ['lista_chequeo_ejecutadas.id', '=',$idListaEjecutada],
             ['lista_chequeo_ejecutadas.estado', '=', 2],
             ['u.cuenta_principal_id', '=', auth()->user()->cuenta_principal_id]
-        ])->exists()) 
+        ])->exists())
             return back();
-        
+
         $seccionUno = $this->FuncionConsultaEncabezado($idListaEjecutada);
         $seccionDos = $this->FuncionConsultaCategoriaPreguntasSeccionDos($idListaEjecutada);
         $seccionTres = $this->FuncionConsultaCategoriaPreguntasSeccionTres($idListaEjecutada);
         $seccionCuatro = $this->FuncionConsultaCategoriaPreguntasSeccionCuatro($idListaEjecutada);
         $seccionQuinta = $this->FuncionConsultaCategoriaPreguntasSeccionQuinta($idListaEjecutada);
-        
-        // dd($seccionTres);
+
         // return view('exports.listaChequeo');
         if ($tipo === 'excel') {
             return \Excel::download(new DetalleListaChequeo($seccionUno,$seccionDos,$seccionTres), 'lista_detalle.xlsx');
-           
+
         }else{
             $pdf = \PDF::loadView('exports.listaChequeoPdf', compact(
             'seccionUno',
@@ -975,21 +977,21 @@ class ListasChequeoEjecutadasController extends Controller
 
         }
 
-        
+
     }
 
     public function traer_data_plan_accion_manual(Request $request){
         $idpregunta = $request->idpregunta;
         //dd($request->idlistachequeo);
         $planAccionM = \DB::select(\DB::raw("
-        SELECT pamd.plan_accio_man_opc_id as id_opcion, pamo.opcion as opcion, 
+        SELECT pamd.plan_accio_man_opc_id as id_opcion, pamo.opcion as opcion,
         IF((pamd.plan_accio_man_opc_id = 8 OR pamd.plan_accio_man_opc_id = 5),
             (SELECT uss.nombre_completo FROM usuario AS uss WHERE uss.id=pamd.respuesta),
-        pamd.respuesta 
+        pamd.respuesta
         ) AS respuesta
         FROM plan_accion_manu_det pamd
         JOIN lista_chequeo_ejec_respuestas lcer ON pamd.lista_cheq_ejec_respuesta_id = lcer.id
-        INNER JOIN plan_accion_man_opc pamo ON pamd.plan_accio_man_opc_id = pamo.id 
+        INNER JOIN plan_accion_man_opc pamo ON pamd.plan_accio_man_opc_id = pamo.id
         WHERE lcer.pregunta_id =:idpregunta AND lcer.lista_chequeo_ejec_id =:idlistaejec;
         "), ['idpregunta' => $idpregunta, 'idlistaejec' => $request->idlistachequeo]);
 
