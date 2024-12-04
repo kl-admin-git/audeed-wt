@@ -1858,6 +1858,7 @@ function OnClickTerminarListaDeChequeo() {
     let entidad_evaluada_opcion = $('.empresaEvaluadaSelect ').val();
     let asociado = $('.empresaSelect ').val();
     let cantCategorias = $('.ContenedorCategoriaYPreguntas').children().length
+    let show_percentage = ($('#checkBoxShowPercentage').is(':checked') ? 1 : 0);
     if (cantCategorias == 0) {
         toastr.error('Debes agregar almenos una categoría');
         return;
@@ -1929,7 +1930,8 @@ function OnClickTerminarListaDeChequeo() {
             fecha: fecha,
             asociado: asociado,
             idListaChequeo: $('.datosListas').attr('idListaChequeo'),
-            entidad_evaluada_opcion: entidad_evaluada_opcion
+            entidad_evaluada_opcion: entidad_evaluada_opcion,
+            show_percentage: show_percentage
         },
         cache: false,
         dataType: 'json',

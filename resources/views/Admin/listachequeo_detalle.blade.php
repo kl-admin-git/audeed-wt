@@ -269,15 +269,17 @@
 
                                                                     </div>
 
-                                                                    <div class="row m-t-10 col-md-6 m-r-10">
-                                                                        <div class="form-group ">
-                                                                            <label
-                                                                                class="col-lg-12 col-form-label">Observación
-                                                                            </label>
-                                                                            <label
-                                                                                class="col-lg-12 col-form-label font-light ">{{ $pregunta->COMENTARIO }}</label>
+                                                                    @if($pregunta->COMENTARIO != "Sin observación")
+                                                                        <div class="row m-t-10 col-md-6 m-r-10">
+                                                                            <div class="form-group ">
+                                                                                <label
+                                                                                    class="col-lg-12 col-form-label">Observación
+                                                                                </label>
+                                                                                <label
+                                                                                    class="col-lg-12 col-form-label font-light ">{{ $pregunta->COMENTARIO }}</label>
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
+                                                                    @endif
                                                                 </div>
 
                                                                 @if ($pregunta->HAY_FOTOS == 1)
@@ -329,15 +331,17 @@
 
                                                                     @if($pregunta->HAY_PLAN_ACCION != 1)
                                                                     <div class="row m-t-10 col-md-4 m-r-10">
-                                                                        <div class="row m-t-10 col-md-6 m-r-10">
-                                                                            <div class="form-group ">
-                                                                                <label
-                                                                                    class="col-lg-12 col-form-label">Plan
-                                                                                    de acción automatico</label>
-                                                                                <label
-                                                                                    class="col-lg-12 col-form-label font-light ">{{ $pregunta->PLAN_ACCION }}</label>
+                                                                        @if($pregunta->PLAN_ACCION != "Sin plan de acción")
+                                                                            <div class="row m-t-10 col-md-6 m-r-10">
+                                                                                <div class="form-group ">
+                                                                                    <label
+                                                                                        class="col-lg-12 col-form-label">Plan
+                                                                                        de acción automatico</label>
+                                                                                    <label
+                                                                                        class="col-lg-12 col-form-label font-light ">{{ $pregunta->PLAN_ACCION }}</label>
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
+                                                                        @endif
                                                                     </div>
 
                                                                     @elseif($pregunta->HAY_PLAN_ACCION == 1)
@@ -539,18 +543,20 @@
                 @endif
 
 
-                <div class="col-lg-12">
-                    <div class="card-header subtituloEncabezado">
-                        <p class="m-0">
-                            <a class="">
-                                OBSERVACIÓN GENERAL
-                            </a>
-                        </p>
+                @if($observacion_general != "")
+                    <div class="col-lg-12">
+                        <div class="card-header subtituloEncabezado">
+                            <p class="m-0">
+                                <a class="">
+                                    OBSERVACIÓN GENERAL
+                                </a>
+                            </p>
+                        </div>
+                        <div class="col-lg-12 card">
+                            <p class="mt-3">{{ $observacion_general }}</p>
+                        </div>
                     </div>
-                    <div class="col-lg-12 card">
-                        <p class="mt-3">{{ $observacion_general }}</p>
-                    </div>
-                </div>
+                @endif
 
 
             </div>

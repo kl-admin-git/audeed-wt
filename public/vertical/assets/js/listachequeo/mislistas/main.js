@@ -148,7 +148,7 @@ function ComponenteMisListas(
             accionEditar = "OnClickEdicionListaChequeo(this);"
             tooltipEditar = ''
         }
-        
+
 
         stringAccionesListasChequeo = `
                 <div style="cursor:pointer;" idListaChequeo="${idListaChequeo}" onclick="OnClickListaDeChequeo(this);" class="dropdown-item" ><i class="mdi mdi-eye m-r-5"></i>Previsualización</div>
@@ -184,10 +184,10 @@ function ComponenteMisListas(
     let stringTarjeta = `<div class="col-lg-4" style="display:${display}" idListaChequeo="${idListaChequeo}">
                                 <div class="card m-b-20">
                                     <div class="card-body">
-                      
+
                                         <div class="media">
                                             <div class="media-body">
-                                                
+
                                                 <h5 class="m-t-10 font-18 mb-1">${nombreMiLista}</h5>
                                                 <div class="btn-group m-b-10 menuFlotante">
                                                     <button type="button" class="btn dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -221,7 +221,7 @@ function ComponenteMisListas(
 
                                             <div class="">
                                                 <button idListaChequeo="${idListaChequeo}" onclick="${eventoBtn}" type="button" class="btn btn-success waves-effect waves-light ejecutar ${claseEjecutar} ${estadoBoton}"  ${tooltipMsg}>Ejecutar</button>
-                                            </div>  
+                                            </div>
                                         </div>
                                         <div class="col-sm-4 col-lg-3">
                                             ${stringEstrella}
@@ -298,6 +298,7 @@ function OnClickCrearNuevaLista() {
     var form = $("#formularioCrearMiLista");
     form.parsley().validate();
 
+    let show_percentage = ($('#checkBoxShowPercentage').is(':checked') ? 1 : 0);
     if (form.parsley().isValid()) {
         let objetoEnviar = {
             _token: $('meta[name="csrf-token"]').attr("content"),
@@ -306,6 +307,7 @@ function OnClickCrearNuevaLista() {
             publicacion_destino: $(".estadoInicialPopUp ").val(),
             estadoInicial: $(".estadoInicialPopUp").val(),
             checkAutomatico: $("#checkBoxAutomatico").is(":checked"),
+            show_percentage: show_percentage
         };
 
         $.ajax({
@@ -954,7 +956,7 @@ function ComponentePregunta(
 
                 </div>
             </div>
-                
+
                 `;
 
     return string;
@@ -983,7 +985,7 @@ function ComponenteCategoriaCompleta(
                                 ${preguntas}
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>`;
 
@@ -1026,7 +1028,7 @@ $(document).on("click", ".duplicar-lista", function () {
             CargandoNoMostrar();
             if(response.codigoRespuesta == 406){
                 toastr.error(response.mensaje)
-                return 
+                return
             }
             let url = window.location.origin + '/listachequeo/mislistas/' + response.datos.idNuevaListaChequeo;
             window.location.href = url;

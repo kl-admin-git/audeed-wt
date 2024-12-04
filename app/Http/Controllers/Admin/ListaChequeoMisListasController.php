@@ -72,10 +72,10 @@ class ListaChequeoMisListasController extends Controller
         $this->categoriaEtiquetas = $categoriaEtiquetas;
         $this->planAccion = $planAccion;
         $this->planAccionManual = $planAccionManual;
-        
+
         \DB::statement("SET lc_time_names = 'es_ES'");
         $this->middleware('auth');
-        $this->middleware('isActive');        
+        $this->middleware('isActive');
     }
 
     public function Index()
@@ -156,7 +156,7 @@ class ListaChequeoMisListasController extends Controller
                 }
 
                 break;
-            
+
             default:
 
                 break;
@@ -168,20 +168,20 @@ class ListaChequeoMisListasController extends Controller
     public function IndexCrearListaChequeo()
     {
         $idListaChequeo = \Request::segment(3);
-        if (!$this->listaChequeos->where('id', '=',$idListaChequeo)->exists()) 
+        if (!$this->listaChequeos->where('id', '=',$idListaChequeo)->exists())
             return redirect('/listachequeo/mislistas');
 
         $url = (\Request::root().'/listachequeo/ejecucion/'.encrypt($idListaChequeo));
         if(!$this->configuracionEjecucion->where('lista_chequeo_id', '=',$idListaChequeo)->exists())
         {
             $arrayInsertar = [
-                'link' => $url, 
+                'link' => $url,
                 'lista_chequeo_id' => $idListaChequeo
             ];
-    
+
             $configuracionEjecucion = new $this->configuracionEjecucion;
             $configuracionEjecucion->fill($arrayInsertar);
-    
+
             $configuracionEjecucion->save();
         }
 
@@ -203,20 +203,22 @@ class ListaChequeoMisListasController extends Controller
         $publicacion_destino = $request->get('publicacion_destino');
         $estadoInicial = $request->get('estadoInicial');
         $checkAutomatico = $request->get('checkAutomatico');
-        
+        $show_percentage = $request->get('show_percentage');
+
         if($checkAutomatico == 'true')
             $checkAutomatico = 1;
         else
             $checkAutomatico = 0;
-        
+
         $arrayInsertar = [
-            'nombre' => $nombreMiLista, 
+            'nombre' => $nombreMiLista,
             'publicacion_destino' => $publicacion_destino,
             'entidad_evaluada' => $entidad_evaluada,
             'usuario_id' => auth()->user()->id,
             // 'modelo_id' => 0, // NO MODELO
             'estado'=> $estadoInicial,
-            'tipo_ponderados' => $checkAutomatico
+            'tipo_ponderados' => $checkAutomatico,
+            'mostrar_porcentajes' => $show_percentage
         ];
 
         $listaChequeo = new $this->listaChequeos;
@@ -262,14 +264,14 @@ class ListaChequeoMisListasController extends Controller
         $idEtiqueta = $request->get('idEtiqueta');
 
         $arrayInsertar = [
-            'nombre' => $nombre, 
+            'nombre' => $nombre,
             'ponderado' => $ponderado,
             'orden_categoria' => $orden_categoria,
             'orden_lista' => $orden_lista,
             'lista_chequeo_id' => $lista_chequeo_id,
             'id_etiqueta' => $idEtiqueta
         ];
-        
+
         if($orden_lista == 'final')
         {
             $consultaListaChequeo = $this->categoria
@@ -277,9 +279,9 @@ class ListaChequeoMisListasController extends Controller
                 ['lista_chequeo_id','=',$lista_chequeo_id]
             ])->max('orden_lista');
 
-            if (is_null($consultaListaChequeo)) 
+            if (is_null($consultaListaChequeo))
                 $consultaListaChequeo = 1;
-            else 
+            else
                 $consultaListaChequeo = $consultaListaChequeo + 1;
 
             $cantidad = $consultaListaChequeo;
@@ -316,7 +318,7 @@ class ListaChequeoMisListasController extends Controller
                 }
                 else
                 {
-                    
+
                     $arrayUpdate = [
                         'orden_lista' => $orden_lista
                     ];
@@ -324,7 +326,7 @@ class ListaChequeoMisListasController extends Controller
                     $respuestaUpdate = $this->categoria->where('id','=',$categoria->id)
                     ->update($arrayUpdate);
                 }
-                
+
             }
 
             if($esAutomatico)
@@ -341,7 +343,7 @@ class ListaChequeoMisListasController extends Controller
         {
             return $this->FinalizarRetorno(
                 402,
-                $this->MensajeRetorno('La categoría ',402)            
+                $this->MensajeRetorno('La categoría ',402)
             );
         }
     }
@@ -353,7 +355,7 @@ class ListaChequeoMisListasController extends Controller
         ->where('categoria.lista_chequeo_id','=',$listaDeChequeo)
         ->get();
 
-        foreach ($categoriasPorListaChequeo as $key => $itemCategoria) 
+        foreach ($categoriasPorListaChequeo as $key => $itemCategoria)
         {
             $consultaPreguntasPorCategoria = $this->pregunta
             ->select(
@@ -365,7 +367,7 @@ class ListaChequeoMisListasController extends Controller
             ->orderBy('orden_lista','DESC');
 
             $sumaPonderadoPRegunta = $consultaPreguntasPorCategoria->get();
-            
+
             $actualizarCategoria = $this->categoria
             ->where('id','=',$itemCategoria->id)
             ->update([
@@ -373,9 +375,9 @@ class ListaChequeoMisListasController extends Controller
             ]);
 
         }
-        
-        
-        
+
+
+
         // if(COUNT($consultaPreguntasPorCategoria->get()) != 0)
         // {
         //     $totalCategorias = COUNT($consultaPreguntasPorCategoria->get());
@@ -408,7 +410,7 @@ class ListaChequeoMisListasController extends Controller
         //     }
 
         // }
-        
+
     }
 
     public function EditarCategoria(Request $request)
@@ -420,18 +422,18 @@ class ListaChequeoMisListasController extends Controller
         $lista_chequeo_id = $request->get('lista_chequeo_id');
         $idCategoria = $request->get('idCategoria');
         $idEtiqueta = $request->get('idEtiqueta');
-        
+
         switch ($orden_lista) {
             case 'final':
-                
+
                 $consultaListaChequeo = $this->categoria
                 ->where([
                     ['lista_chequeo_id','=',$lista_chequeo_id],
-                    
+
                 ])
                 ->orderBy('orden_lista','DESC')
                 ->get();
-                
+
                 $respuestaUpdate = $this->categoria->where('id','=', $idCategoria)
                 ->update([
                     'orden_lista' => (COUNT($consultaListaChequeo) + 1)
@@ -440,21 +442,21 @@ class ListaChequeoMisListasController extends Controller
                 $consultaListaChequeo = $this->categoria
                 ->where([
                     ['lista_chequeo_id','=',$lista_chequeo_id],
-                    
+
                 ])
                 ->orderBy('orden_lista','DESC')
                 ->get();
-    
+
                 $contador = COUNT($consultaListaChequeo);
-                
-                foreach ($consultaListaChequeo as $key => $itemCategoria) 
+
+                foreach ($consultaListaChequeo as $key => $itemCategoria)
                 {
-                   
+
                     $respuestaUpdate = $this->categoria->where('id','=',$itemCategoria->id)
                     ->update([
                         'orden_lista' => $contador
                     ]);
-    
+
                     $contador = $contador - 1;
                 }
 
@@ -467,7 +469,7 @@ class ListaChequeoMisListasController extends Controller
                 ])
                 ->orderBy('orden_lista','ASC')
                 ->get();
-    
+
                 $respuestaUpdate = $this->categoria->where('id','=', $idCategoria)
                 ->update([
                     'orden_lista' => 0
@@ -479,20 +481,20 @@ class ListaChequeoMisListasController extends Controller
                 ])
                 ->orderBy('orden_lista','ASC')
                 ->get();
-    
+
                 $contador = 1;
-    
-                foreach ($consultaListaChequeo as $key => $itemCategoria) 
+
+                foreach ($consultaListaChequeo as $key => $itemCategoria)
                 {
                     $respuestaUpdate = $this->categoria->where('id','=',$itemCategoria->id)
                     ->update([
                         'orden_lista' => $contador
                     ]);
-    
+
                     $contador = $contador + 1;
                 }
                 break;
-            
+
             default:
                 $consultaListaChequeo = $this->categoria
                 ->where([
@@ -518,7 +520,7 @@ class ListaChequeoMisListasController extends Controller
                     'orden_lista' => $contador
                 ]);
 
-                foreach ($consultaListaChequeo as $key => $itemCategoria) 
+                foreach ($consultaListaChequeo as $key => $itemCategoria)
                 {
                     $contador = $contador + 1;
 
@@ -527,26 +529,26 @@ class ListaChequeoMisListasController extends Controller
                         'orden_lista' => $contador
                     ]);
 
-                    
+
                 }
                 break;
         }
-      
+
 
         $arrayUpdate = [
-            'nombre' => $nombre, 
+            'nombre' => $nombre,
             'ponderado' => $ponderado,
             'id_etiqueta' => $idEtiqueta
         ];
-        
+
         $respuestaUpdate = $this->categoria->where('id','=',$idCategoria)->update($arrayUpdate);
-        
+
         return $this->FinalizarRetorno(
             201,
             $this->MensajeRetorno('La categoría',201)
         );
-        
-    }    
+
+    }
 
     public function ActualizarCategorias($idListaChequeo,$despuesDe,$ponderado)
     {
@@ -561,14 +563,14 @@ class ListaChequeoMisListasController extends Controller
             ->get();
 
             $orden = 2;
-            foreach ($consultaListaChequeo as $key => $itemCategoria) 
+            foreach ($consultaListaChequeo as $key => $itemCategoria)
             {
                 $respuestaUpdate = $this->categoria->where('id','=',$itemCategoria->id)
                 ->update([
                     'orden_lista' => $orden,
                     // 'ponderado' => $ponderado,
                 ]);
-                
+
                 $orden = $orden + 1;
             }
         }
@@ -584,7 +586,7 @@ class ListaChequeoMisListasController extends Controller
 
             $orden = ($despuesDe - 1);
 
-            foreach ($consultaListaChequeo as $key => $itemCategoria) 
+            foreach ($consultaListaChequeo as $key => $itemCategoria)
             {
                 $orden = $orden + 1;
 
@@ -594,11 +596,11 @@ class ListaChequeoMisListasController extends Controller
                     // 'ponderado' => $ponderado,
                 ]);
             }
-    
-            
+
+
         }
 
-        
+
 
     }
 
@@ -606,7 +608,7 @@ class ListaChequeoMisListasController extends Controller
     {
         $lista_chequeo_id = $request->get('lista_chequeo_id');
         $final = $this->ConsultaCategoriasPreguntasPorListaChequeo($lista_chequeo_id);
-        
+
         return $this->FinalizarRetorno(
             202,
             $this->MensajeRetorno('Datos',202),
@@ -629,7 +631,7 @@ class ListaChequeoMisListasController extends Controller
 
         return $consultaListaChequeo;
     }
-    
+
     public function ConsultaCategoriasPreguntasPorListaChequeo($lista_chequeo_id)
     {
         $consultaListaChequeo = $this->categoria
@@ -647,10 +649,10 @@ class ListaChequeoMisListasController extends Controller
         ->get();
 
         $arrayFinal = [];
-        foreach ($consultaListaChequeo as $key => $categoria) 
+        foreach ($consultaListaChequeo as $key => $categoria)
         {
             $objeto = new \stdClass();
-            
+
             $preguntas = $this->pregunta
             ->Join('tipo_respuesta AS tr','tr.id','pregunta.tipo_respuesta_id')
             ->Join('tipo_respuesta_categoria AS trc','trc.id','tr.tipo_respuesta_categoria')
@@ -670,7 +672,7 @@ class ListaChequeoMisListasController extends Controller
             $objeto->LISTA_CHEQUEO_ID = $categoria->lista_chequeo_id;
             $objeto->ETIQUETANOMBRE = $categoria->ETIQUETA;
             $objeto->IDETIQUETA = $categoria->IDETIQUETA;
-            foreach ($preguntas as $key => $pregunta) 
+            foreach ($preguntas as $key => $pregunta)
             {
                 $opcionesGenerales = $this->preguntaOpcionRespuesta
                 ->Join('pregunta_respuesta_opcion AS pro','pro.id','pregunta_preguntarespuestaopcion.pregunta_respuesta_opcion')
@@ -708,7 +710,7 @@ class ListaChequeoMisListasController extends Controller
             'trc.nombre AS NOMBRE_CATEGORIA',
             'tr.icono AS ICONO_TIPO_RESPUESTA'
         )->where('pregunta.id','=',$idPregunta)->first();
-            
+
         $opcionesGenerales = $this->preguntaOpcionRespuesta
         ->select(
             'pro.*',
@@ -726,7 +728,7 @@ class ListaChequeoMisListasController extends Controller
         ->where('pregunta_preguntarespuestaopcion.pregunta_id','=',$idPregunta)
         ->get();
         $pregunta['OpcionesGenerales'] = $opcionesGenerales;
-        
+
         $opcionesPlanAccionManual = $this->planAccion->select(
             'pam.plan_accion_man_opc_id as OPCIONES',
             'pam.requerido as REQUERIDO'
@@ -735,7 +737,7 @@ class ListaChequeoMisListasController extends Controller
         $pregunta['OpcionesPlanAccionManual'] = $opcionesPlanAccionManual;
 
         $planAccion = false;
-        foreach ($opcionesGenerales as $key => $itemGeneral) 
+        foreach ($opcionesGenerales as $key => $itemGeneral)
         {
             if($itemGeneral->id == 4)
             {
@@ -762,13 +764,13 @@ class ListaChequeoMisListasController extends Controller
 
         //SE DEBE VALIDAR SI TIENE REGISTROS  PARA SABER SI SE PEUDE BORRAR O NO
         $cantidad = $this->categoria->Join('lista_chequeo_ejecutadas AS lce','lce.lista_chequeo_id','=','categoria.lista_chequeo_id')->where('categoria.id','=',$idCategoria)->count();
-        
+
         if($cantidad != 0)
         {
             return $this->FinalizarRetorno(
                 406,
                 $this->MensajeRetorno('',406,'La categoría no puede eliminarse porque ya tiene registros de ejecución')
-            ); 
+            );
         }
 
         $datosCategoria = $this->categoria->where('categoria.id','=',$idCategoria)->first();
@@ -795,18 +797,18 @@ class ListaChequeoMisListasController extends Controller
 
                 $this->PonderadoCalculadoCategorias($lista_chequeo_id);
             }
-            
+
             return $this->FinalizarRetorno(
                 203,
                 $this->MensajeRetorno('La categoría ',203)
-            );  
+            );
         }
         else
         {
             return $this->FinalizarRetorno(
                 406,
                 $this->MensajeRetorno('',406,'La categoría no pudo eliminarse')
-            ); 
+            );
         }
     }
 
@@ -817,13 +819,13 @@ class ListaChequeoMisListasController extends Controller
         //SE DEBE VALIDAR SI TIENE REGISTROS  PARA SABER SI SE PEUDE BORRAR O NO
 
         $cantidad = $this->pregunta->Join('lista_chequeo_ejecutadas AS lce','lce.lista_chequeo_id','=','pregunta.lista_chequeo_id')->where('pregunta.id','=',$idPregunta)->count();
-        
+
         if($cantidad != 0)
         {
             return $this->FinalizarRetorno(
                 406,
                 $this->MensajeRetorno('',406,'La pregunta no puede eliminarse porque ya tiene registros de ejecución')
-            ); 
+            );
         }
 
         $datosPregunta = $this->pregunta->where('pregunta.id','=',$idPregunta)->first();
@@ -831,7 +833,7 @@ class ListaChequeoMisListasController extends Controller
         $lista_chequeo_id = $datosPregunta->lista_chequeo_id;
         $categoriaId = $datosPregunta->categoria_id;
         $planAccion = $this->planAccion->where('pregunta_id', '=', $idPregunta)->first();
-        
+
         if($planAccion != null){
             $planAccionManual = $this->planAccionManual->where('plan_accion_id', '=', $planAccion->id);
             //Valido si existe datos relacionados en plan_Accion y plan_accion_automatio
@@ -845,8 +847,8 @@ class ListaChequeoMisListasController extends Controller
                 $planAccion->delete();
             }
         }
-        
-            
+
+
         $respuesta = $this->pregunta->where('id', $idPregunta)->delete();
 
         if($respuesta)
@@ -876,14 +878,14 @@ class ListaChequeoMisListasController extends Controller
             return $this->FinalizarRetorno(
                 203,
                 $this->MensajeRetorno('La pregunta ',203)
-            );  
+            );
         }
         else
         {
             return $this->FinalizarRetorno(
                 406,
                 $this->MensajeRetorno('',406,'La pregunta no pudo eliminarse')
-            ); 
+            );
         }
     }
 
@@ -917,7 +919,7 @@ class ListaChequeoMisListasController extends Controller
         ->get();
 
         $arrayTipoRespuesta = [];
-        foreach ($tipoRespuestas as $key => $value) 
+        foreach ($tipoRespuestas as $key => $value)
         {
             $arrayTipoRespuesta[$value->NOMBRE_CATEGORIA][] = $value;
         }
@@ -944,7 +946,7 @@ class ListaChequeoMisListasController extends Controller
         //     'tipo_respuesta_ponderado_pred.*',
         //     \DB::raw('IF(r.valor_personalizado IS NULL,"",r.valor_personalizado) AS VALOR_PERSONALIZADO'),
         //     'tipo_respuesta_ponderado_pred.valor_original'
-        // ) 
+        // )
         // ->leftJoin('respuesta AS r','r.tipo_respuesta_ponderado_pred_id','=','tipo_respuesta_ponderado_pred.id')
         // ->where('tipo_respuesta_ponderado_pred.tipo_respuesta_id','=',$idRespuesta)
         // ->get();
@@ -952,7 +954,7 @@ class ListaChequeoMisListasController extends Controller
         $respuestas = $this->respuestaPredeterminada
         ->select(
             'tipo_respuesta_ponderado_pred.*'
-        ) 
+        )
         ->where('tipo_respuesta_ponderado_pred.tipo_respuesta_id','=',$idRespuesta)
         ->get();
 
@@ -989,7 +991,7 @@ class ListaChequeoMisListasController extends Controller
             \DB::raw('IF(r.valor_personalizado IS NULL,"",r.valor_personalizado) AS VALOR_PERSONALIZADO'),
             'tipo_respuesta_ponderado_pred.valor_original',
             \DB::raw('IF(r.ponderado IS NULL,"",r.ponderado) AS PONDERADO')
-        ) 
+        )
         ->leftJoin('respuesta AS r','tipo_respuesta_ponderado_pred.id','=','r.tipo_respuesta_ponderado_pred_id')
         ->where([
             ['tipo_respuesta_ponderado_pred.tipo_respuesta_id','=',$idRespuesta],
@@ -1005,7 +1007,7 @@ class ListaChequeoMisListasController extends Controller
                 \DB::raw('(SELECT "") AS VALOR_PERSONALIZADO'),
                 'tipo_respuesta_ponderado_pred.valor_original',
                 \DB::raw('(SELECT "") AS PONDERADO')
-            ) 
+            )
             ->where('tipo_respuesta_ponderado_pred.tipo_respuesta_id','=',$idRespuesta)
             ->get();
         }
@@ -1015,11 +1017,11 @@ class ListaChequeoMisListasController extends Controller
         //     $respuestas = $this->respuestaPredeterminada
         //     ->select(
         //         'tipo_respuesta_ponderado_pred.*'
-        //     ) 
+        //     )
         //     ->where('tipo_respuesta_ponderado_pred.tipo_respuesta_id','=',$idRespuesta)
         //     ->get();
         // }
-        
+
         $tipoRespuestaDescripcion = $this->tipoRespuesta->where('id','=',$idRespuesta)->first();
         $nombreDescripcion = '';
         if(!is_null($tipoRespuestaDescripcion))
@@ -1050,11 +1052,11 @@ class ListaChequeoMisListasController extends Controller
         {
             $totalPreguntas = COUNT($consultaPreguntas->get());
             $valorParaCadaPregunta = FLOOR(((100 / $totalPreguntas) * 100)) / 100;
-            
+
             if($totalPreguntas != 1)
             {
                 $valorTotal = ($totalPreguntas * $valorParaCadaPregunta);
-                // $valorRestante = (100 - ($valorTotal - $valorParaCadaPregunta));
+                $valorRestante = (100 - ($valorTotal - $valorParaCadaPregunta));
                 $respuestaUpdate = $this->pregunta
                 ->where([
                     ['lista_chequeo_id','=',$lista_chequeo_id],
@@ -1066,11 +1068,11 @@ class ListaChequeoMisListasController extends Controller
 
                 $ultimoElemento = $consultaPreguntas->latest('orden_lista')->first();
 
-                // $actualizarUltimo = $this->pregunta
-                // ->where('id','=',$ultimoElemento->id)
-                // ->update([
-                //     'ponderado' => $valorRestante
-                // ]);
+                $actualizarUltimo = $this->pregunta
+                ->where('id','=',$ultimoElemento->id)
+                ->update([
+                    'ponderado' => $valorRestante
+                ]);
 
             }else
             {
@@ -1085,7 +1087,7 @@ class ListaChequeoMisListasController extends Controller
             }
 
         }
-        
+
     }
 
     public function OrdenPreguntasCalculo($idCategoria)
@@ -1093,12 +1095,12 @@ class ListaChequeoMisListasController extends Controller
         $preguntasCategoria = $this->pregunta->where('categoria_id','=',$idCategoria)->orderby('id','ASC')->get();
 
         $numeroPregunta = 1;
-        foreach ($preguntasCategoria as $key => $pregunta) 
+        foreach ($preguntasCategoria as $key => $pregunta)
         {
             $arrayActualizar = [
                 'orden_lista' => $numeroPregunta,
             ];
-            
+
             $respuestaUpdate = $this->pregunta->where('id','=',$pregunta->id)->update($arrayActualizar);
             $numeroPregunta = $numeroPregunta + 1;
         }
@@ -1111,7 +1113,7 @@ class ListaChequeoMisListasController extends Controller
         $nombre = $objetoRecibido->stepsEnviar->stepUno->pregunta;
         $ponderado = $objetoRecibido->stepsEnviar->stepUno->ponderado;
         $permiteNoAplica = $objetoRecibido->stepsEnviar->stepUno->permiteNoAplica;
-        $categoriaId = ($objetoRecibido->stepsEnviar->stepUno->preguntaEnCategoria == false ? NULL : $objetoRecibido->stepsEnviar->stepUno->preguntaEnCategoria); 
+        $categoriaId = ($objetoRecibido->stepsEnviar->stepUno->preguntaEnCategoria == false ? NULL : $objetoRecibido->stepsEnviar->stepUno->preguntaEnCategoria);
         $lista_chequeo_id = $objetoRecibido->idListaChequeo;
         $IdtipoRespuesta = $objetoRecibido->stepsEnviar->stepDos->idRespuesta;
 
@@ -1131,9 +1133,9 @@ class ListaChequeoMisListasController extends Controller
         }
 
         $orden_lista = $ordenMaximo + 1;
-        
+
         $arrayInsertar = [
-            'nombre' => $nombre, 
+            'nombre' => $nombre,
             'ponderado' => $ponderado,
             'categoria_id' => $categoriaId,
             'orden_lista' => $orden_lista,
@@ -1141,7 +1143,7 @@ class ListaChequeoMisListasController extends Controller
             'tipo_respuesta_id' => $IdtipoRespuesta,
             'permitir_noaplica' => $permiteNoAplica
         ];
-        
+
         $pregunta = new $this->pregunta;
         $pregunta->fill($arrayInsertar);
 
@@ -1151,12 +1153,12 @@ class ListaChequeoMisListasController extends Controller
             $idPregunta = $pregunta->id;
             $respuestasPersonalizadas = $objetoRecibido->stepsEnviar->stepTres->personalizadas;
 
-            foreach ($respuestasPersonalizadas as $key => $itemPersonalizado) 
+            foreach ($respuestasPersonalizadas as $key => $itemPersonalizado)
             {
                 $ponderadoConsulta = $this->respuestaPredeterminada->where('id','=',$itemPersonalizado->idPredeterminado)->first();
                 if($itemPersonalizado->valorPersonalizado != '')
                 {
-                    
+
                     if($IdtipoRespuesta == 4) //SI ES MULTIPLE SIEMPRE TIENE UN VALOR PERSONALIZADO
                     {
                         $ponderadoConsulta = $this->respuestaPredeterminada->where('tipo_respuesta_id','=',$itemPersonalizado->idPredeterminado)->first();
@@ -1164,7 +1166,7 @@ class ListaChequeoMisListasController extends Controller
                         $respuesta = new $this->respuesta;
                         $respuesta->fill(
                         [
-                            'tipo_respuesta_ponderado_pred_id' => $ponderadoConsulta->id, 
+                            'tipo_respuesta_ponderado_pred_id' => $ponderadoConsulta->id,
                             'valor_personalizado' => $itemPersonalizado->valorPersonalizado,
                             'ponderado' => $itemPersonalizado->valorPersonalizadoPonderado,
                             'pregunta_id' => $idPregunta
@@ -1177,21 +1179,21 @@ class ListaChequeoMisListasController extends Controller
                         $respuesta = new $this->respuesta;
                         $respuesta->fill(
                         [
-                            'tipo_respuesta_ponderado_pred_id' => $itemPersonalizado->idPredeterminado, 
+                            'tipo_respuesta_ponderado_pred_id' => $itemPersonalizado->idPredeterminado,
                             'valor_personalizado' => $itemPersonalizado->valorPersonalizado,
                             'ponderado' => $ponderadoConsulta->ponderado,
                             'pregunta_id' => $idPregunta
                         ]);
                         $respuesta->save();
                     }
-                    
+
                 }
                 else
                 {
                     $respuesta = new $this->respuesta;
                     $respuesta->fill(
                     [
-                        'tipo_respuesta_ponderado_pred_id' => $itemPersonalizado->idPredeterminado, 
+                        'tipo_respuesta_ponderado_pred_id' => $itemPersonalizado->idPredeterminado,
                         'valor_personalizado' => $itemPersonalizado->valorPredeterminado,
                         'ponderado' => $ponderadoConsulta->ponderado,
                         'pregunta_id' => $idPregunta
@@ -1204,7 +1206,7 @@ class ListaChequeoMisListasController extends Controller
             // INGRESO DE PREGUNTA OPCIÓN RESPUESTA
             $opcionesRespuestaArray = $objetoRecibido->stepsEnviar->stepCuatro->opcionesRespuesta;
 
-            foreach ($opcionesRespuestaArray as $key => $opcRespuesta) 
+            foreach ($opcionesRespuestaArray as $key => $opcRespuesta)
             {
 
                 //Valido si ya hay preguntas en la tabla pregunta_preguntarespuestaopcion
@@ -1217,7 +1219,7 @@ class ListaChequeoMisListasController extends Controller
                     $preguntaOpcionRespuesta = new $this->preguntaOpcionRespuesta;
                     $preguntaOpcionRespuesta->fill(
                     [
-                        'pregunta_id' => $idPregunta, 
+                        'pregunta_id' => $idPregunta,
                         'pregunta_respuesta_opcion' => $opcRespuesta->idopcionrespuesta
                     ]);
                 }
@@ -1226,9 +1228,9 @@ class ListaChequeoMisListasController extends Controller
                 {
                     // INGRESO DE PLAN DE ACCIÓN
                     $aplicaPlanDeAccion = $objetoRecibido->stepsEnviar->stepCuatro->aplicaPlanAccion;
-                    
-                    if($aplicaPlanDeAccion){ 
-                        
+
+                    if($aplicaPlanDeAccion){
+
                         $tipoPlanAccion = $objetoRecibido->stepsEnviar->stepCuatro->tipoPlanAccion;
                         if($tipoPlanAccion == 'automatico') //PLAN DE ACCION AUTOMATICO
                         {
@@ -1236,13 +1238,13 @@ class ListaChequeoMisListasController extends Controller
                             $planDeAccionDescripcion = $objetoRecibido->stepsEnviar->stepCuatro->planDeAccion;
                             if($opcRespuesta->idopcionrespuesta == 4) //ID PLAN DE ACCIÓN
                             {
-                                if($IdtipoRespuesta == 4) //SI ES MULTIPLE 
+                                if($IdtipoRespuesta == 4) //SI ES MULTIPLE
                                 {
                                     $consultaRespuesta = $this->respuesta->where([
                                         ['valor_personalizado','=', $objetoRecibido->stepsEnviar->stepCuatro->idRespuesta],
                                         ['pregunta_id','=',$idPregunta]
                                     ])->first();
-    
+
                                     $idRespuesta = $consultaRespuesta->id;
                                 }
                                 else
@@ -1254,7 +1256,7 @@ class ListaChequeoMisListasController extends Controller
 
                                     $idRespuesta = $idRespuestaTabla->id;
                                 }
-                                
+
                                 $planAccion = new $this->planAccion;
                                 $planAccion->fill([
                                     'tipo_pa' => 1,
@@ -1275,7 +1277,7 @@ class ListaChequeoMisListasController extends Controller
                                 ]);
 
                                 $planDeAccionAutomatico->save();
-                                
+
                             }
 
                         }else if($tipoPlanAccion == 'manual'){ //PLAN DE ACCION MANUAL
@@ -1302,11 +1304,11 @@ class ListaChequeoMisListasController extends Controller
                                     ]);
                                     $planAccionManual->save();
                                 }
-                                
+
                             }
                         }
                     }
-                    
+
                 }
             }
 
@@ -1315,7 +1317,7 @@ class ListaChequeoMisListasController extends Controller
             ->where([
                 ['lista_chequeo.id', '=',$lista_chequeo_id]
             ])->first();
-            
+
             $esAutomatico = ($datosListaChequeo->tipo_ponderados == 1 ? true : false);
 
             if($esAutomatico)
@@ -1345,7 +1347,7 @@ class ListaChequeoMisListasController extends Controller
         {
             return $this->FinalizarRetorno(
                 402,
-                $this->MensajeRetorno('La pregunta  ',402)            
+                $this->MensajeRetorno('La pregunta  ',402)
             );
         }
     }
@@ -1358,22 +1360,22 @@ class ListaChequeoMisListasController extends Controller
         $nombre = $objetoRecibido->stepsEnviar->stepUno->pregunta;
         $ponderado = $objetoRecibido->stepsEnviar->stepUno->ponderado;
         $permiteNoAplica = $objetoRecibido->stepsEnviar->stepUno->permiteNoAplica;
-        $categoriaId = ($objetoRecibido->stepsEnviar->stepUno->preguntaEnCategoria == false ? NULL : $objetoRecibido->stepsEnviar->stepUno->categoriaId); 
+        $categoriaId = ($objetoRecibido->stepsEnviar->stepUno->preguntaEnCategoria == false ? NULL : $objetoRecibido->stepsEnviar->stepUno->categoriaId);
         $lista_chequeo_id = $objetoRecibido->idListaChequeo;
         $IdtipoRespuesta = $objetoRecibido->stepsEnviar->stepDos->idRespuesta;
 
         $cantidad = $this->pregunta->Join('lista_chequeo_ejecutadas AS lce','lce.lista_chequeo_id','=','pregunta.lista_chequeo_id')->where('pregunta.id','=',$idPregunta)->count();
-        
+
         if($cantidad != 0)
         {
             return $this->FinalizarRetorno(
                 406,
                 $this->MensajeRetorno('',406,'La pregunta no puede actualizarse porque ya tiene registros de ejecución')
-            ); 
+            );
         }
 
         $arrayActualizar = [
-            'nombre' => $nombre, 
+            'nombre' => $nombre,
             'ponderado' => $ponderado,
             'categoria_id' => $categoriaId,
             // 'orden_lista' => $orden_lista,
@@ -1381,7 +1383,7 @@ class ListaChequeoMisListasController extends Controller
             'tipo_respuesta_id' => $IdtipoRespuesta,
             'permitir_noaplica' => $permiteNoAplica
         ];
-        
+
         $respuestaUpdate = $this->pregunta->where('id','=',$idPregunta)->update($arrayActualizar);
         if($respuestaUpdate)
         {
@@ -1392,7 +1394,7 @@ class ListaChequeoMisListasController extends Controller
             if($respuestaExist->count() >= 1)
                 $respuestaExist->delete();
 
-            foreach ($respuestasPersonalizadas as $key => $itemPersonalizado) 
+            foreach ($respuestasPersonalizadas as $key => $itemPersonalizado)
             {
                 $ponderadoConsulta = $this->respuestaPredeterminada->where('id','=',$itemPersonalizado->idPredeterminado)->first();
                 if($itemPersonalizado->valorPersonalizado != '')
@@ -1404,7 +1406,7 @@ class ListaChequeoMisListasController extends Controller
                         $respuesta = new $this->respuesta;
                         $respuesta->fill(
                         [
-                            'tipo_respuesta_ponderado_pred_id' => $ponderadoConsulta->id, 
+                            'tipo_respuesta_ponderado_pred_id' => $ponderadoConsulta->id,
                             'valor_personalizado' => $itemPersonalizado->valorPersonalizado,
                             'ponderado' => $itemPersonalizado->valorPersonalizadoPonderado,
                             'pregunta_id' => $idPregunta
@@ -1417,22 +1419,22 @@ class ListaChequeoMisListasController extends Controller
                         $respuesta = new $this->respuesta;
                         $respuesta->fill(
                         [
-                            'tipo_respuesta_ponderado_pred_id' => $itemPersonalizado->idPredeterminado, 
+                            'tipo_respuesta_ponderado_pred_id' => $itemPersonalizado->idPredeterminado,
                             'valor_personalizado' => $itemPersonalizado->valorPersonalizado,
                             'ponderado' => $ponderadoConsulta->ponderado,
                             'pregunta_id' => $idPregunta
                         ]);
                         $respuesta->save();
                     }
-                    
-                    
+
+
                 }
                 else
                 {
                     $respuesta = new $this->respuesta;
                     $respuesta->fill(
                     [
-                        'tipo_respuesta_ponderado_pred_id' => $itemPersonalizado->idPredeterminado, 
+                        'tipo_respuesta_ponderado_pred_id' => $itemPersonalizado->idPredeterminado,
                         'valor_personalizado' => $itemPersonalizado->valorPredeterminado,
                         'ponderado' => $ponderadoConsulta->ponderado,
                         'pregunta_id' => $idPregunta
@@ -1441,18 +1443,18 @@ class ListaChequeoMisListasController extends Controller
                     $respuesta->save();
                 }
             }
-            
+
             // INGRESO DE PREGUNTA OPCIÓN RESPUESTA
             $opcionesRespuestaArray = $objetoRecibido->stepsEnviar->stepCuatro->opcionesRespuesta;
 
             $this->preguntaOpcionRespuesta->where('pregunta_id', $idPregunta)->delete();
 
-            foreach ($opcionesRespuestaArray as $key => $opcRespuesta) 
+            foreach ($opcionesRespuestaArray as $key => $opcRespuesta)
             {
                 $preguntaOpcionRespuesta = new $this->preguntaOpcionRespuesta;
                 $preguntaOpcionRespuesta->fill(
                 [
-                    'pregunta_id' => $idPregunta, 
+                    'pregunta_id' => $idPregunta,
                     'pregunta_respuesta_opcion' => $opcRespuesta->idopcionrespuesta
                 ]);
 
@@ -1468,18 +1470,18 @@ class ListaChequeoMisListasController extends Controller
                     if($aplicaPlanDeAccion)
                     {
                         if($objetoRecibido->stepsEnviar->stepCuatro->tipoPlanAccion == 'automatico'){
-                            
+
                             //VALIDO QUE NO EXISTA PLAN DE ACCION MANUAL
                             $existPlanAccionManual = $this->planAccion->where('pregunta_id', '=', $idPregunta);
                             if($existPlanAccionManual->count() >= 1 && $existPlanAccionManual->first()->tipo_pa == 2){
                                 //Borro los datos en plan_accion_manual
-                                
+
                                 $planAccionManualTabla = $this->planAccionManual->where('plan_accion_id','=',$existPlanAccionManual->first()->id);
                                 $existPlanAccionManual->delete(); //Borro plan de accion
                                 $planAccionManualTabla->delete(); //Borro los registros en la tabla plan_accion_manual
                             }
 
-                            if($IdtipoRespuesta == 4) //SI ES MULTIPLE 
+                            if($IdtipoRespuesta == 4) //SI ES MULTIPLE
                             {
                                 $consultaRespuesta = $this->respuesta->where([
                                     ['valor_personalizado','=', $objetoRecibido->stepsEnviar->stepCuatro->idRespuesta],
@@ -1490,12 +1492,12 @@ class ListaChequeoMisListasController extends Controller
                             }
                             else
                                 $idRespuesta = $objetoRecibido->stepsEnviar->stepCuatro->idRespuesta;
-                            
+
                             $planDeAccionDescripcion = $objetoRecibido->stepsEnviar->stepCuatro->planDeAccion;
-                            
+
                             if($opcRespuesta->idopcionrespuesta == 4) //ID PLAN DE ACCIÓN
                             {
-                                
+
                                 if($IdtipoRespuesta == 4) //SI ES MULTIPLE
                                     $respuestaId = $idRespuesta;
                                 else
@@ -1521,20 +1523,20 @@ class ListaChequeoMisListasController extends Controller
                                 $planDeAccionAutomatico = new $this->planDeAccionAutomatico;
                                 $planDeAccionAutomatico->fill(
                                 [
-                                    'plan_accion_id' => $planAccion->id, 
+                                    'plan_accion_id' => $planAccion->id,
                                     'plan_accion_descripcion' => $planDeAccionDescripcion
                                 ]);
-    
+
                                 $planDeAccionAutomatico->save();
-                                
+
                             }
                         }else{ //SI ES MANUAL ENTONCES HAGO LO SIGUIENTE
-                            
+
                              //VALIDO QUE NO EXISTA PLAN DE ACCION MANUAL
                              $existPlanAccion = $this->planAccion->where('pregunta_id', '=', $idPregunta);
                              if($existPlanAccion->count() > 0 ){
                                 $existPlanAccion->delete(); //Borro plan de accion
-                                 
+
                              }
 
                              //Agrego los nuevos datos para Plan de Accion Manual
@@ -1562,7 +1564,7 @@ class ListaChequeoMisListasController extends Controller
 
 
                         }
-                       
+
 
                     }
                 }
@@ -1583,8 +1585,8 @@ class ListaChequeoMisListasController extends Controller
                     ['lista_chequeo_id','=',$lista_chequeo_id]
                 ])
                 ->orderBy('orden_lista','DESC')->get();
-                
-                foreach ($consultaPreguntasCategorias as $key => $itemCategoria) 
+
+                foreach ($consultaPreguntasCategorias as $key => $itemCategoria)
                 {
                     $consultaPreguntas = $this->pregunta
                     ->where([
@@ -1592,13 +1594,13 @@ class ListaChequeoMisListasController extends Controller
                         // ['pregunta.categoria_id', '=',$itemCategoria->id]
                     ])
                     ->orderBy('orden_lista','DESC');
-    
-                    $this->PonderadoCalculadoPregunta($consultaPreguntas,$lista_chequeo_id);    
+
+                    $this->PonderadoCalculadoPregunta($consultaPreguntas,$lista_chequeo_id);
 
                     //CALCULO PARA CATEGORÍAS
                     $this->PonderadoCalculadoCategorias($lista_chequeo_id);
                 }
-                
+
             }
 
             return $this->FinalizarRetorno(
@@ -1610,7 +1612,7 @@ class ListaChequeoMisListasController extends Controller
         {
             return $this->FinalizarRetorno(
                 402,
-                $this->MensajeRetorno('La pregunta  ',402)            
+                $this->MensajeRetorno('La pregunta  ',402)
             );
         }
     }
@@ -1629,7 +1631,8 @@ class ListaChequeoMisListasController extends Controller
         $asociado = $request->get('asociado');
         $listaChequeo = $request->get('idListaChequeo');
         $entidad_evaluada_opcion = $request->get('entidad_evaluada_opcion');
-        
+        $show_percentage = $request->get('show_percentage');
+
         $configuracion = $this->configuracionEjecucion->where('lista_chequeo_id','=',$listaChequeo)->first();
 
         $arrayActualizar = [
@@ -1641,18 +1644,19 @@ class ListaChequeoMisListasController extends Controller
         if(!$this->listaEncabezado->where('lista_chequeo_id', '=',$listaChequeo)->exists())
         {
             $arrayInsertar = [
-                'fecha' => $fecha, 
+                'fecha' => $fecha,
                 'entidad_evaluada_opcion' => $entidad_evaluada_opcion,
                 'lista_chequeo_id' => $listaChequeo
             ];
-            
+
             $listaEncabezado = new $this->listaEncabezado;
             $listaEncabezado->fill($arrayInsertar);
-    
+
             if($listaEncabezado->save())
             {
                 $respuestaUpdate = $this->listaChequeos->where('id','=',$listaChequeo)->update([
-                    'tipo_ponderados' => 0
+                    'tipo_ponderados' => 0,
+                    'mostrar_porcentajes' => $show_percentage
                 ]);
 
                 return $this->FinalizarRetorno(
@@ -1670,13 +1674,14 @@ class ListaChequeoMisListasController extends Controller
         }else
         {
             $arrayActualizar = [
-                'fecha' => $fecha, 
-                'entidad_evaluada_opcion' => $entidad_evaluada_opcion
+                'fecha' => $fecha,
+                'entidad_evaluada_opcion' => $entidad_evaluada_opcion,
             ];
 
             $respuestaUpdate = $this->listaEncabezado->where('lista_chequeo_id','=',$listaChequeo)->update($arrayActualizar);
             $respuestaUpdate = $this->listaChequeos->where('id','=',$listaChequeo)->update([
-                'tipo_ponderados' => 0
+                'tipo_ponderados' => 0,
+                'mostrar_porcentajes' => $show_percentage
             ]);
 
             return $this->FinalizarRetorno(
@@ -1685,8 +1690,8 @@ class ListaChequeoMisListasController extends Controller
                 $configuracion
             );
         }
-        
-        
+
+
     }
 
     public function ActualizarConfiguracion(Request $request)
@@ -1706,7 +1711,7 @@ class ListaChequeoMisListasController extends Controller
                 'favorita' => 0
             ]);
 
-            
+
             $updateListaFavorito = $this->listaChequeos->where('id','=',$idListaChequeo)
             ->update(
             [
@@ -1717,10 +1722,10 @@ class ListaChequeoMisListasController extends Controller
         $url = (\Request::root().'/listachequeo/ejecucion/'.encrypt($idListaChequeo));
         $arrayActualizar = [
             'link' => $url,
-            'frecuencia_ejecucion' => $frecuencia, 
+            'frecuencia_ejecucion' => $frecuencia,
             'cant_ejecucion' => $cantidad
         ];
-        
+
         $respuestaUpdate = $this->configuracionEjecucion->where('lista_chequeo_id','=',$idListaChequeo)->update($arrayActualizar);
         if($respuestaUpdate)
         {
@@ -1737,7 +1742,7 @@ class ListaChequeoMisListasController extends Controller
         $descripcion = $request->get('descripcion');
 
         $arrayInsertar = [
-            'nombre' => $nombreEtiqueta, 
+            'nombre' => $nombreEtiqueta,
             'descripcion' => $descripcion,
             'cuenta_principal_id' => auth()->user()->cuenta_principal_id
         ];
@@ -1780,7 +1785,7 @@ class ListaChequeoMisListasController extends Controller
             $respuesta = $this->categoriaEtiquetas->where('id', $idEtiqueta)->delete();
 
             $etiquetas = $this->categoriaEtiquetas->where('cuenta_principal_id','=',auth()->user()->cuenta_principal_id)->get();
-            
+
             return $this->FinalizarRetorno(
                 206,
                 $this->MensajeRetorno('',206,'La etiqueta se ha eliminado correctamente'),
@@ -1794,19 +1799,19 @@ class ListaChequeoMisListasController extends Controller
                 $this->MensajeRetorno('',406,'La etiqueta no se pudo eliminar por que está en usado')
             );
         }
-        
-        
+
+
     }
-    
+
     // PAGINA PRINCIPAL LISTAS DE CHEQUEO
     public function ConsultarListasDeChequeo(Request $request)
     {
         $paginacion = $request->get('paginacion');
         $filtros = []; // ;json_decode($request->get('arrayFiltros'));
-        
+
         switch (auth()->user()->perfil_id) {
             case 1: // ADMINISTRADOR
-                $listasDeChequeo = $this->FuncionTraerListasDeChequeoPorPaginacionAdministrador($paginacion,$filtros);        
+                $listasDeChequeo = $this->FuncionTraerListasDeChequeoPorPaginacionAdministrador($paginacion,$filtros);
                 break;
 
             case 2: // COLABORADOR
@@ -1814,7 +1819,7 @@ class ListaChequeoMisListasController extends Controller
                 $esResponsableEmpresa = $this->FuncionParaSaberSiEsResponsableEmpresa(auth()->user()->id);
 
                 if(!is_null($esResponsableEmpresa))
-                    $listasDeChequeo = $this->FuncionTraerListasDeChequeoPorPaginacionResponsableEmpresa($esResponsableEmpresa->id,$paginacion,$filtros);        
+                    $listasDeChequeo = $this->FuncionTraerListasDeChequeoPorPaginacionResponsableEmpresa($esResponsableEmpresa->id,$paginacion,$filtros);
 
                 //VERIFICAR SI ES RESPONSABLE DE ESTABLECIMIENTO
                 $esResponsableEstablecimiento = $this->FuncionParaSaberSiEsResponsableEstablecimiento(auth()->user()->id);
@@ -1826,7 +1831,7 @@ class ListaChequeoMisListasController extends Controller
                     $listasDeChequeo = $this->FuncionTraerListasDeChequeoPorPaginacionColaborador(auth()->user()->id,$paginacion,$filtros);
 
                 break;
-            
+
             default:
 
                 break;
@@ -1850,7 +1855,7 @@ class ListaChequeoMisListasController extends Controller
             return $this->FinalizarRetorno(
                 406,
                 $this->MensajeRetorno('',406,'La lista de chequeo no pudo eliminarse por que ya existen registros en ejecución')
-            ); 
+            );
         }
 
         $cantidadModelo = $this->modelo->where('lista_chequeo_id','=',$idListaChequeo)->count();
@@ -1859,7 +1864,7 @@ class ListaChequeoMisListasController extends Controller
             return $this->FinalizarRetorno(
                 406,
                 $this->MensajeRetorno('',406,'La lista de chequeo no pudo eliminarse por que está siendo usada por un modelo')
-            ); 
+            );
         }
 
         $respuesta = $this->listaChequeos->where('id', $idListaChequeo)->delete();
@@ -1869,14 +1874,14 @@ class ListaChequeoMisListasController extends Controller
             return $this->FinalizarRetorno(
                 203,
                 $this->MensajeRetorno('La lista de chequeo ',203)
-            );  
+            );
         }
         else
         {
             return $this->FinalizarRetorno(
                 406,
                 $this->MensajeRetorno('',406,'La lista de chequeo no pudo eliminarse')
-            ); 
+            );
         }
     }
 
@@ -1900,7 +1905,7 @@ class ListaChequeoMisListasController extends Controller
 
         switch (auth()->user()->perfil_id) {
             case 1: // ADMINISTRADOR
-                $listasDeChequeo = $this->FuncionTraerListasDeChequeoPorPaginacionAdministrador($paginacion,$filtros);        
+                $listasDeChequeo = $this->FuncionTraerListasDeChequeoPorPaginacionAdministrador($paginacion,$filtros);
                 break;
 
             case 2: // COLABORADOR
@@ -1908,7 +1913,7 @@ class ListaChequeoMisListasController extends Controller
                 $esResponsableEmpresa = $this->FuncionParaSaberSiEsResponsableEmpresa(auth()->user()->id);
 
                 if(!is_null($esResponsableEmpresa))
-                    $listasDeChequeo = $this->FuncionTraerListasDeChequeoPorPaginacionResponsableEmpresa($esResponsableEmpresa->id,$paginacion,$filtros);        
+                    $listasDeChequeo = $this->FuncionTraerListasDeChequeoPorPaginacionResponsableEmpresa($esResponsableEmpresa->id,$paginacion,$filtros);
 
                 //VERIFICAR SI ES RESPONSABLE DE ESTABLECIMIENTO
                 $esResponsableEstablecimiento = $this->FuncionParaSaberSiEsResponsableEstablecimiento(auth()->user()->id);
@@ -1920,7 +1925,7 @@ class ListaChequeoMisListasController extends Controller
                     $listasDeChequeo = $this->FuncionTraerListasDeChequeoPorPaginacionColaborador(auth()->user()->id,$paginacion,$filtros);
 
                 break;
-            
+
             default:
 
                 break;
@@ -1963,7 +1968,7 @@ class ListaChequeoMisListasController extends Controller
                 auth()->user()->perfil_id
             );
         }
-        
+
         $resultadoDeValidacion = $this->ValidarSiPuedeRealizarEjecucion($idListaChequeo,auth()->user()->id);
         if(!$resultadoDeValidacion)
         {
@@ -1972,16 +1977,16 @@ class ListaChequeoMisListasController extends Controller
                 $this->MensajeRetorno('Datos ',402)
             );
         }
-        
+
          $arrayInsertar = [
-            'lista_chequeo_id' => $idListaChequeo, 
+            'lista_chequeo_id' => $idListaChequeo,
             'usuario_id' => auth()->user()->id,
             'fecha_realizacion' => date('Y-m-d')
         ];
 
         $listaEjecutada = new $this->listaEjecutada;
         $listaEjecutada->fill($arrayInsertar);
-        
+
         if($listaEjecutada->save())
         {
             $idListaEjecutada = $listaEjecutada->id;
@@ -1992,12 +1997,12 @@ class ListaChequeoMisListasController extends Controller
                 $idListaEjecutada
             );
         }
-        
+
     }
 
     public function ValidarSiPuedeRealizarEjecucion($idListaChequeo,$idUsuario)
     {
-        
+
         // $configuracion = $this->listaEjecutada
         // ->select('lcce.*')
         // ->Join('lista_chequeo_configuracion_ejecucion AS lcce','lcce.lista_chequeo_id','=','lista_chequeo_ejecutadas.lista_chequeo_id')
@@ -2006,8 +2011,8 @@ class ListaChequeoMisListasController extends Controller
         $configuracion = $this->listaChequeoConfiguracion
         ->where('lista_chequeo_id','=',$idListaChequeo)
         ->first();
-        
-        
+
+
         $idChequeo = $idListaChequeo;
 
         $puedeEjecutar = true;
@@ -2018,11 +2023,11 @@ class ListaChequeoMisListasController extends Controller
 
             case 1: // DIARIO
 
-                $resultado = \DB::select('SELECT 
-                (CASE WHEN  lcce.frecuencia_ejecucion=0 THEN "Indefinida" 
-                WHEN  lcce.frecuencia_ejecucion=1 THEN "Diaria" 
-                WHEN  lcce.frecuencia_ejecucion=2 THEN "Mensual" 
-                WHEN  lcce.frecuencia_ejecucion=3 THEN "Anual" 
+                $resultado = \DB::select('SELECT
+                (CASE WHEN  lcce.frecuencia_ejecucion=0 THEN "Indefinida"
+                WHEN  lcce.frecuencia_ejecucion=1 THEN "Diaria"
+                WHEN  lcce.frecuencia_ejecucion=2 THEN "Mensual"
+                WHEN  lcce.frecuencia_ejecucion=3 THEN "Anual"
                 END) as frecuencia_nombre,
                 lcce.frecuencia_ejecucion AS conf_frecuencia_ejecucion,
                 lcce.cant_ejecucion AS conf_cantidad_ejecucion,
@@ -2030,13 +2035,13 @@ class ListaChequeoMisListasController extends Controller
                 lce.fecha_realizacion AS hoy_fecha_realizacion,
                 (SELECT COUNT(*)  FROM lista_chequeo_ejecutadas lce INNER JOIN lista_chequeo_configuracion_ejecucion lcce on lcce.lista_chequeo_id=lce.lista_chequeo_id WHERE (lce.fecha_realizacion=curdate()) AND  lce.usuario_id=:idUsuarioUno AND lce.lista_chequeo_id=:idListaChequeoUno AND  (lce.estado=1 OR lce.estado=2)) AS ejec_cant_dia,
                 IF((SELECT COUNT(*)  FROM lista_chequeo_ejecutadas lce INNER JOIN lista_chequeo_configuracion_ejecucion lcce on lcce.lista_chequeo_id=lce.lista_chequeo_id WHERE (lce.fecha_realizacion=curdate()) AND  lce.usuario_id=:idUsuarioDos AND lce.lista_chequeo_id=:idListaChequeoDos AND  (lce.estado=1 OR lce.estado=2))<lcce.cant_ejecucion,"TRUE","FALSE") AS puede_ejecutar
-                FROM lista_chequeo_ejecutadas lce 
+                FROM lista_chequeo_ejecutadas lce
                 INNER JOIN lista_chequeo_configuracion_ejecucion lcce on lcce.lista_chequeo_id=lce.lista_chequeo_id
-                 WHERE 
-                lce.usuario_id=:idUsuario 
+                 WHERE
+                lce.usuario_id=:idUsuario
                  AND lce.lista_chequeo_id=:idChequeo
-                 AND  (lce.estado=1 
-                 OR lce.estado=2) 
+                 AND  (lce.estado=1
+                 OR lce.estado=2)
                  GROUP BY lcce.frecuencia_ejecucion',
                  [
                      'idUsuario' => $idUsuario,
@@ -2046,36 +2051,36 @@ class ListaChequeoMisListasController extends Controller
                      'idListaChequeoUno' => $idChequeo,
                      'idListaChequeoDos' => $idChequeo
                  ]);
-                
+
                 if(COUNT($resultado) == 0)
                     $puedeEjecutar = true;
                 else
                     $puedeEjecutar = ($resultado[0]->puede_ejecutar == "TRUE" ? true : false);
-                
+
                 break;
 
             case 2: // MENSUAL
-                
-                $resultado = \DB::select('SELECT 
-                (CASE WHEN  lcce.frecuencia_ejecucion=0 THEN "Indefinida" 
-                WHEN  lcce.frecuencia_ejecucion=1 THEN "Diaria" 
-                WHEN  lcce.frecuencia_ejecucion=2 THEN "Mensual" 
-                WHEN  lcce.frecuencia_ejecucion=3 THEN "Anual" 
+
+                $resultado = \DB::select('SELECT
+                (CASE WHEN  lcce.frecuencia_ejecucion=0 THEN "Indefinida"
+                WHEN  lcce.frecuencia_ejecucion=1 THEN "Diaria"
+                WHEN  lcce.frecuencia_ejecucion=2 THEN "Mensual"
+                WHEN  lcce.frecuencia_ejecucion=3 THEN "Anual"
                 END) as frecuencia_nombre,
                 lcce.frecuencia_ejecucion AS conf_frecuencia_ejecucion,
                 lcce.cant_ejecucion AS conf_cantidad_ejecucion,
                 MONTH(CURRENT_DATE()) AS mes_sistema,
                 MONTH(lce.fecha_realizacion) AS mes_fecha_realizacion,
                 (SELECT COUNT(*)  FROM lista_chequeo_ejecutadas lce INNER JOIN lista_chequeo_configuracion_ejecucion lcce on lcce.lista_chequeo_id=lce.lista_chequeo_id WHERE (MONTH(lce.fecha_realizacion)=MONTH(lce.fecha_realizacion)) AND  lce.usuario_id=:idUsuarioUno AND lce.lista_chequeo_id=:idListaChequeoUno AND  (lce.estado=1 OR lce.estado=2) ) AS ejec_cant_mes,
-                IF((SELECT COUNT(*)  FROM lista_chequeo_ejecutadas lce INNER JOIN lista_chequeo_configuracion_ejecucion lcce on lcce.lista_chequeo_id=lce.lista_chequeo_id WHERE (MONTH(lce.fecha_realizacion)=MONTH(lce.fecha_realizacion)) AND  lce.usuario_id=:idUsuarioDos AND lce.lista_chequeo_id=:idListaChequeoDos AND  (lce.estado=1 OR lce.estado=2) 
+                IF((SELECT COUNT(*)  FROM lista_chequeo_ejecutadas lce INNER JOIN lista_chequeo_configuracion_ejecucion lcce on lcce.lista_chequeo_id=lce.lista_chequeo_id WHERE (MONTH(lce.fecha_realizacion)=MONTH(lce.fecha_realizacion)) AND  lce.usuario_id=:idUsuarioDos AND lce.lista_chequeo_id=:idListaChequeoDos AND  (lce.estado=1 OR lce.estado=2)
                 )<lcce.cant_ejecucion,"TRUE","FALSE") AS puede_ejecutar
-                FROM lista_chequeo_ejecutadas lce 
+                FROM lista_chequeo_ejecutadas lce
                 INNER JOIN lista_chequeo_configuracion_ejecucion lcce on lcce.lista_chequeo_id=lce.lista_chequeo_id
-                 WHERE 
-                lce.usuario_id=:idUsuario 
+                 WHERE
+                lce.usuario_id=:idUsuario
                  AND lce.lista_chequeo_id=:idChequeo
-                 AND  (lce.estado=1 
-                 OR lce.estado=2) 
+                 AND  (lce.estado=1
+                 OR lce.estado=2)
                  GROUP BY lcce.frecuencia_ejecucion',[
                      'idUsuario' => $idUsuario,
                      'idChequeo' => $idChequeo,
@@ -2084,7 +2089,7 @@ class ListaChequeoMisListasController extends Controller
                      'idListaChequeoUno' => $idChequeo,
                      'idListaChequeoDos' => $idChequeo
                  ]);
-                
+
                  if(COUNT($resultado) == 0)
                     $puedeEjecutar = true;
                 else
@@ -2093,31 +2098,31 @@ class ListaChequeoMisListasController extends Controller
                 break;
 
             case 3: // ANUAL
-                
-                $resultado = \DB::select('SELECT 
-                (CASE WHEN  lcce.frecuencia_ejecucion=0 THEN "Indefinida" 
-                WHEN  lcce.frecuencia_ejecucion=1 THEN "Diaria" 
-                WHEN  lcce.frecuencia_ejecucion=2 THEN "Mensual" 
-                WHEN  lcce.frecuencia_ejecucion=3 THEN "Anual" 
+
+                $resultado = \DB::select('SELECT
+                (CASE WHEN  lcce.frecuencia_ejecucion=0 THEN "Indefinida"
+                WHEN  lcce.frecuencia_ejecucion=1 THEN "Diaria"
+                WHEN  lcce.frecuencia_ejecucion=2 THEN "Mensual"
+                WHEN  lcce.frecuencia_ejecucion=3 THEN "Anual"
                 END) as frecuencia_nombre,
                 lcce.frecuencia_ejecucion AS conf_frecuencia_ejecucion,
                 lcce.cant_ejecucion AS conf_cantidad_ejecucion,
-                
-                
+
+
                 YEAR(CURRENT_DATE()) AS anual_sistema,
                 YEAR(lce.fecha_realizacion) AS anual_fecha_realizacion,
-                
+
                 (SELECT COUNT(*)  FROM lista_chequeo_ejecutadas lce INNER JOIN lista_chequeo_configuracion_ejecucion lcce on lcce.lista_chequeo_id=lce.lista_chequeo_id WHERE (YEAR(lce.fecha_realizacion)=YEAR(lce.fecha_realizacion)) AND  lce.usuario_id=:idUsuarioUno AND lce.lista_chequeo_id=:idListaChequeoUno AND  (lce.estado=1 OR lce.estado=2) ) AS ejec_cant_ano,
                 IF(
-                (SELECT COUNT(*)  FROM lista_chequeo_ejecutadas lce INNER JOIN lista_chequeo_configuracion_ejecucion lcce on lcce.lista_chequeo_id=lce.lista_chequeo_id WHERE (YEAR(lce.fecha_realizacion)=YEAR(lce.fecha_realizacion)) AND  lce.usuario_id=:idUsuarioDos AND lce.lista_chequeo_id=:idListaChequeoDos AND  (lce.estado=1 OR lce.estado=2) 
+                (SELECT COUNT(*)  FROM lista_chequeo_ejecutadas lce INNER JOIN lista_chequeo_configuracion_ejecucion lcce on lcce.lista_chequeo_id=lce.lista_chequeo_id WHERE (YEAR(lce.fecha_realizacion)=YEAR(lce.fecha_realizacion)) AND  lce.usuario_id=:idUsuarioDos AND lce.lista_chequeo_id=:idListaChequeoDos AND  (lce.estado=1 OR lce.estado=2)
                 )<lcce.cant_ejecucion,"TRUE","FALSE") AS puede_ejecutar
-                FROM lista_chequeo_ejecutadas lce 
+                FROM lista_chequeo_ejecutadas lce
                 INNER JOIN lista_chequeo_configuracion_ejecucion lcce on lcce.lista_chequeo_id=lce.lista_chequeo_id
-                 WHERE 
-                lce.usuario_id=:idUsuario 
+                 WHERE
+                lce.usuario_id=:idUsuario
                  AND lce.lista_chequeo_id=:idChequeo
-                 AND  (lce.estado=1 
-                 OR lce.estado=2) 
+                 AND  (lce.estado=1
+                 OR lce.estado=2)
                  GROUP BY lcce.frecuencia_ejecucion',[
                      'idUsuario' => $idUsuario,
                      'idChequeo' => $idChequeo,
@@ -2126,15 +2131,15 @@ class ListaChequeoMisListasController extends Controller
                      'idListaChequeoUno' => $idChequeo,
                      'idListaChequeoDos' => $idChequeo
                  ]);
-                
+
                  if(COUNT($resultado) == 0)
                     $puedeEjecutar = true;
                 else
                     $puedeEjecutar = ($resultado[0]->puede_ejecutar == "TRUE" ? true : false);
                 break;
-            
+
             default:
-                
+
                 break;
         }
 
@@ -2144,7 +2149,7 @@ class ListaChequeoMisListasController extends Controller
 
     public function CambiarEstadoListaChequeo(Request $request)
     {
-        
+
         $idListaChequeo = $request->get('idListaChequeo');
         $estadoActual = $request->get('estadoActual');
 
@@ -2153,13 +2158,13 @@ class ListaChequeoMisListasController extends Controller
             $estadoCambiado = 1;
         else if($estadoActual == 1)
             $estadoCambiado = 0;
-        
+
         $respuestaUpdate = $this->listaChequeos->where('id','=',$idListaChequeo)
         ->update(
         [
             'estado' => $estadoCambiado
         ]);
-        
+
         if($respuestaUpdate)
         {
             return $this->FinalizarRetorno(
@@ -2172,7 +2177,7 @@ class ListaChequeoMisListasController extends Controller
 
     public function CambiarFavorito(Request $request)
     {
-        
+
         $idListaChequeo = $request->get('idListaChequeo');
         $idFavoritoActual = $request->get('idFavoritoActual');
 
@@ -2192,13 +2197,13 @@ class ListaChequeoMisListasController extends Controller
             'favorita' => 0
         ]);
 
-        
+
         $respuestaUpdate = $this->listaChequeos->where('id','=',$idListaChequeo)
         ->update(
         [
             'favorita' => $estadoCambiado
         ]);
-        
+
         return $this->FinalizarRetorno(
             201,
             $this->MensajeRetorno('Tu favorito ',201),
@@ -2209,13 +2214,13 @@ class ListaChequeoMisListasController extends Controller
     public function FuncionTraerListasDeChequeoPorPaginacionAdministrador($paginacion=1,$filtros=[])
     {
         $resultadoLimit = $this->CalculoPaginacion($paginacion);
-    
+
         $desde = $resultadoLimit['desde'];
         $hasta = $resultadoLimit['hasta'];
         $cantidadRegistros = 9;
         $filtro_array = [];
 
-        foreach ($filtros as $key => $filtro) 
+        foreach ($filtros as $key => $filtro)
         {
 
             switch ($key) {
@@ -2245,10 +2250,10 @@ class ListaChequeoMisListasController extends Controller
                     break;
 
                 default:
-                    
+
                     break;
             }
-            
+
         }
 
         $listasDeChequeo = $this->listaChequeos
@@ -2285,10 +2290,10 @@ class ListaChequeoMisListasController extends Controller
                         WHEN lcce.frecuencia_ejecucion = 2 THEN CONCAT(IF(lcce.cant_ejecucion IS NULL,"Infinitas",lcce.cant_ejecucion)," por Mes")
                         WHEN lcce.frecuencia_ejecucion = 3 THEN CONCAT(IF(lcce.cant_ejecucion IS NULL,"Infinitas",lcce.cant_ejecucion)," por Año")
                 END) AS FRECUENCIA')
-        ) 
+        )
         ->Join('usuario AS u','u.id','=','lista_chequeo.usuario_id')
         ->Join('lista_chequeo_configuracion_ejecucion AS lcce','lcce.lista_chequeo_id','=','lista_chequeo.id')
-        
+
         ->where('u.cuenta_principal_id','=', auth()->user()->cuenta_principal_id)
         ->orderBy('lista_chequeo.created_at','DESC');
         // ->where('lista_chequeo.usuario_id','=', auth()->user()->id);
@@ -2298,7 +2303,7 @@ class ListaChequeoMisListasController extends Controller
             $listasDeChequeo = $listasDeChequeo->where(function($query) use ($filtro_array)
             {
                 // $contador = 0;
-                foreach ($filtro_array as $keys => $oW) 
+                foreach ($filtro_array as $keys => $oW)
                 {
                     // if( $contador == 0)
                     //     $query->where($oW[0], '=', $oW[2]);
@@ -2313,14 +2318,14 @@ class ListaChequeoMisListasController extends Controller
 
                 return $query;
             });
-            
+
         }
 
         $listasDeChequeo = $listasDeChequeo->skip($desde)->take($hasta)->get();
         $arrayPorcentajes = [];
-        foreach ($listasDeChequeo as $keyss => $itemListaChequeo)  
+        foreach ($listasDeChequeo as $keyss => $itemListaChequeo)
         {
-            
+
             $listaEjecutadas = $this->listaEjecutada->where([
                 ['estado','=', 2],
                 ['lista_chequeo_id','=',$itemListaChequeo->ID_LISTA_CHEQUEO]
@@ -2329,7 +2334,7 @@ class ListaChequeoMisListasController extends Controller
             ->orderBy('id','DESC')
             ->get();
             $arrayPorcentajes = [];
-            foreach ($listaEjecutadas as $keys => $itemEjecutada) 
+            foreach ($listaEjecutadas as $keys => $itemEjecutada)
             {
                 $sumaListaChequeo = 0;
 
@@ -2346,7 +2351,7 @@ class ListaChequeoMisListasController extends Controller
 				GROUP BY lcer.categoria_id
 				ORDER BY cat.id',['idEjecutada' => $itemEjecutada->id]);
 
-                foreach ($retorno as $key => $sumaPorcentajes) 
+                foreach ($retorno as $key => $sumaPorcentajes)
                 {
                     $sumaListaChequeo = $sumaListaChequeo + floatval($sumaPorcentajes->porc_cat);
                 }
@@ -2355,7 +2360,7 @@ class ListaChequeoMisListasController extends Controller
             }
 
             $listasDeChequeo[$keyss]->ArrayBarra = $arrayPorcentajes;
-            
+
         }
 
         return  array('listasChequeo' => $listasDeChequeo,'arrayGrafica' => $arrayPorcentajes);
@@ -2364,13 +2369,13 @@ class ListaChequeoMisListasController extends Controller
     public function FuncionTraerListasDeChequeoPorPaginacionResponsableEmpresa($idEmpresa,$paginacion=1,$filtros=[])
     {
         $resultadoLimit = $this->CalculoPaginacion($paginacion);
-    
+
         $desde = $resultadoLimit['desde'];
         $hasta = $resultadoLimit['hasta'];
         $cantidadRegistros = 9;
         $filtro_array = [];
 
-        foreach ($filtros as $key => $filtro) 
+        foreach ($filtros as $key => $filtro)
         {
 
             switch ($key) {
@@ -2400,10 +2405,10 @@ class ListaChequeoMisListasController extends Controller
                     break;
 
                 default:
-                    
+
                     break;
             }
-            
+
         }
 
         $listasDeChequeo = $this->listaChequeos
@@ -2424,7 +2429,7 @@ class ListaChequeoMisListasController extends Controller
             'lista_chequeo.favorita AS ID_FAVORITO',
             'u.nombre_completo AS CREADO_POR',
             \DB::raw('(CASE
-                        WHEN lista_chequeo.publicacion_destino = 1 THEN (SELECT COUNT(*) FROM lista_chequeo_ejecutadas AS lces 
+                        WHEN lista_chequeo.publicacion_destino = 1 THEN (SELECT COUNT(*) FROM lista_chequeo_ejecutadas AS lces
                         INNER JOIN lista_chequeo AS lcs ON lcs.id=lces.lista_chequeo_id
                         INNER JOIN usuario AS us ON us.id=lces.usuario_id
                         INNER JOIN establecimiento AS es ON es.id=us.establecimiento_id
@@ -2435,7 +2440,7 @@ class ListaChequeoMisListasController extends Controller
                      END) AS CANTIDAD_TERMINADAS'),
 
             \DB::raw('(CASE
-                        WHEN lista_chequeo.publicacion_destino = 1 THEN (SELECT COUNT(*) FROM lista_chequeo_ejecutadas AS lces 
+                        WHEN lista_chequeo.publicacion_destino = 1 THEN (SELECT COUNT(*) FROM lista_chequeo_ejecutadas AS lces
                         INNER JOIN lista_chequeo AS lcs ON lcs.id=lces.lista_chequeo_id
                         INNER JOIN usuario AS us ON us.id=lces.usuario_id
                         INNER JOIN establecimiento AS es ON es.id=us.establecimiento_id
@@ -2450,7 +2455,7 @@ class ListaChequeoMisListasController extends Controller
                         WHEN lcce.frecuencia_ejecucion = 2 THEN CONCAT(IF(lcce.cant_ejecucion IS NULL,"Infinitas",lcce.cant_ejecucion)," por Mes")
                         WHEN lcce.frecuencia_ejecucion = 3 THEN CONCAT(IF(lcce.cant_ejecucion IS NULL,"Infinitas",lcce.cant_ejecucion)," por Año")
                 END) AS FRECUENCIA')
-        ) 
+        )
         ->Join('usuario AS u','u.id','=','lista_chequeo.usuario_id')
         ->Join('lista_chequeo_configuracion_ejecucion AS lcce','lcce.lista_chequeo_id','=','lista_chequeo.id')
         ->leftJoin('empresa AS em','em.usuario_id','=','u.id')
@@ -2462,7 +2467,7 @@ class ListaChequeoMisListasController extends Controller
             $listasDeChequeo = $listasDeChequeo->where(function($query) use ($filtro_array)
             {
                 // $contador = 0;
-                foreach ($filtro_array as $keys => $oW) 
+                foreach ($filtro_array as $keys => $oW)
                 {
                     // if( $contador == 0)
                     //     $query->where($oW[0], '=', $oW[2]);
@@ -2477,14 +2482,14 @@ class ListaChequeoMisListasController extends Controller
 
                 return $query;
             });
-            
+
         }
 
         $listasDeChequeo = $listasDeChequeo->skip($desde)->take($hasta)->get();
-        
-        foreach ($listasDeChequeo as $keyss => $itemListaChequeo)  
+
+        foreach ($listasDeChequeo as $keyss => $itemListaChequeo)
         {
-            
+
             $listaEjecutadas = $this->listaEjecutada
             ->select('lista_chequeo_ejecutadas.*')
             ->Join('lista_chequeo AS lc','lc.id','=','lista_chequeo_ejecutadas.lista_chequeo_id')
@@ -2500,11 +2505,11 @@ class ListaChequeoMisListasController extends Controller
             ->orderBy('lista_chequeo_ejecutadas.id','DESC')
             ->get();
             $arrayPorcentajes = [];
-            foreach ($listaEjecutadas as $key => $itemEjecutada) 
+            foreach ($listaEjecutadas as $key => $itemEjecutada)
             {
                 $sumaListaChequeo = 0;
 
-                $retorno = \DB::select('SELECT 
+                $retorno = \DB::select('SELECT
                 lc.nombre,
                 TRUNCATE(((cat.ponderado*(SUM((pre.ponderado*(IF(res.ponderado IS NULL,100,res.ponderado ))/100))))/100 ),2)  as porc_cat
                 FROM lista_chequeo_ejec_respuestas lcer
@@ -2516,7 +2521,7 @@ class ListaChequeoMisListasController extends Controller
                 WHERE lce.id=:idEjecutada
                 GROUP BY cat.id',['idEjecutada' => $itemEjecutada->id]);
 
-                foreach ($retorno as $key => $sumaPorcentajes) 
+                foreach ($retorno as $key => $sumaPorcentajes)
                 {
                     $sumaListaChequeo = $sumaListaChequeo + floatval($sumaPorcentajes->porc_cat);
                 }
@@ -2526,20 +2531,20 @@ class ListaChequeoMisListasController extends Controller
 
             $listasDeChequeo[$keyss]->ArrayBarra = $arrayPorcentajes;
         }
-        
+
         return  array('listasChequeo' => $listasDeChequeo,'arrayGrafica' => $arrayPorcentajes);
     }
 
     public function FuncionTraerListasDeChequeoPorPaginacionResponsablEstablecimiento($idEstablecimiento,$paginacion=1,$filtros=[])
     {
         $resultadoLimit = $this->CalculoPaginacion($paginacion);
-    
+
         $desde = $resultadoLimit['desde'];
         $hasta = $resultadoLimit['hasta'];
         $cantidadRegistros = 9;
         $filtro_array = [];
 
-        foreach ($filtros as $key => $filtro) 
+        foreach ($filtros as $key => $filtro)
         {
 
             switch ($key) {
@@ -2569,10 +2574,10 @@ class ListaChequeoMisListasController extends Controller
                     break;
 
                 default:
-                    
+
                     break;
             }
-            
+
         }
 
         $listasDeChequeo = $this->listaChequeos
@@ -2593,7 +2598,7 @@ class ListaChequeoMisListasController extends Controller
             'lista_chequeo.favorita AS ID_FAVORITO',
             'u.nombre_completo AS CREADO_POR',
             \DB::raw('(CASE
-                        WHEN lista_chequeo.publicacion_destino = 1 THEN (SELECT COUNT(*) FROM lista_chequeo_ejecutadas AS lces 
+                        WHEN lista_chequeo.publicacion_destino = 1 THEN (SELECT COUNT(*) FROM lista_chequeo_ejecutadas AS lces
                         INNER JOIN lista_chequeo AS lcs ON lcs.id=lces.lista_chequeo_id
                         INNER JOIN usuario AS us ON us.id=lces.usuario_id
                         INNER JOIN establecimiento AS ess ON ess.id=us.establecimiento_id
@@ -2603,7 +2608,7 @@ class ListaChequeoMisListasController extends Controller
                      END) AS CANTIDAD_TERMINADAS'),
 
             \DB::raw('(CASE
-                        WHEN lista_chequeo.publicacion_destino = 1 THEN (SELECT COUNT(*) FROM lista_chequeo_ejecutadas AS lces 
+                        WHEN lista_chequeo.publicacion_destino = 1 THEN (SELECT COUNT(*) FROM lista_chequeo_ejecutadas AS lces
                         INNER JOIN lista_chequeo AS lcs ON lcs.id=lces.lista_chequeo_id
                         INNER JOIN usuario AS us ON us.id=lces.usuario_id
                         INNER JOIN establecimiento AS ess ON ess.id=us.establecimiento_id
@@ -2617,7 +2622,7 @@ class ListaChequeoMisListasController extends Controller
                         WHEN lcce.frecuencia_ejecucion = 2 THEN CONCAT(IF(lcce.cant_ejecucion IS NULL,"Infinitas",lcce.cant_ejecucion)," por Mes")
                         WHEN lcce.frecuencia_ejecucion = 3 THEN CONCAT(IF(lcce.cant_ejecucion IS NULL,"Infinitas",lcce.cant_ejecucion)," por Año")
                 END) AS FRECUENCIA')
-        ) 
+        )
         ->Join('usuario AS u','u.id','=','lista_chequeo.usuario_id')
         ->Join('lista_chequeo_configuracion_ejecucion AS lcce','lcce.lista_chequeo_id','=','lista_chequeo.id')
         ->Join('establecimiento AS e','e.id','=','u.establecimiento_id')
@@ -2630,7 +2635,7 @@ class ListaChequeoMisListasController extends Controller
             $listasDeChequeo = $listasDeChequeo->where(function($query) use ($filtro_array)
             {
                 // $contador = 0;
-                foreach ($filtro_array as $keys => $oW) 
+                foreach ($filtro_array as $keys => $oW)
                 {
                     // if( $contador == 0)
                     //     $query->where($oW[0], '=', $oW[2]);
@@ -2645,14 +2650,14 @@ class ListaChequeoMisListasController extends Controller
 
                 return $query;
             });
-            
+
         }
 
         $listasDeChequeo = $listasDeChequeo->skip($desde)->take($hasta)->get();
-        
-        foreach ($listasDeChequeo as $keyss => $itemListaChequeo)  
+
+        foreach ($listasDeChequeo as $keyss => $itemListaChequeo)
         {
-            
+
             $listaEjecutadas = $this->listaEjecutada
             ->select('lista_chequeo_ejecutadas.*')
             ->Join('lista_chequeo AS lc','lc.id','=','lista_chequeo_ejecutadas.lista_chequeo_id')
@@ -2667,11 +2672,11 @@ class ListaChequeoMisListasController extends Controller
             ->orderBy('lista_chequeo_ejecutadas.id','DESC')
             ->get();
             $arrayPorcentajes = [];
-            foreach ($listaEjecutadas as $key => $itemEjecutada) 
+            foreach ($listaEjecutadas as $key => $itemEjecutada)
             {
                 $sumaListaChequeo = 0;
 
-                $retorno = \DB::select('SELECT 
+                $retorno = \DB::select('SELECT
                 lc.nombre,
                 TRUNCATE(((cat.ponderado*(SUM((pre.ponderado*(IF(res.ponderado IS NULL,100,res.ponderado ))/100))))/100 ),2)  as porc_cat
                 FROM lista_chequeo_ejec_respuestas lcer
@@ -2683,7 +2688,7 @@ class ListaChequeoMisListasController extends Controller
                 WHERE lce.id=:idEjecutada
                 GROUP BY cat.id',['idEjecutada' => $itemEjecutada->id]);
 
-                foreach ($retorno as $key => $sumaPorcentajes) 
+                foreach ($retorno as $key => $sumaPorcentajes)
                 {
                     $sumaListaChequeo = $sumaListaChequeo + floatval($sumaPorcentajes->porc_cat);
                 }
@@ -2693,20 +2698,20 @@ class ListaChequeoMisListasController extends Controller
 
             $listasDeChequeo[$keyss]->ArrayBarra = $arrayPorcentajes;
         }
-        
+
         return  array('listasChequeo' => $listasDeChequeo,'arrayGrafica' => $arrayPorcentajes);
     }
 
     public function FuncionTraerListasDeChequeoPorPaginacionColaborador($idUsuario,$paginacion=1,$filtros=[])
     {
         $resultadoLimit = $this->CalculoPaginacion($paginacion);
-    
+
         $desde = $resultadoLimit['desde'];
         $hasta = $resultadoLimit['hasta'];
         $cantidadRegistros = 9;
         $filtro_array = [];
 
-        foreach ($filtros as $key => $filtro) 
+        foreach ($filtros as $key => $filtro)
         {
 
             switch ($key) {
@@ -2736,10 +2741,10 @@ class ListaChequeoMisListasController extends Controller
                     break;
 
                 default:
-                    
+
                     break;
             }
-            
+
         }
 
         $listasDeChequeo = $this->listaChequeos
@@ -2760,7 +2765,7 @@ class ListaChequeoMisListasController extends Controller
             'lista_chequeo.favorita AS ID_FAVORITO',
             'u.nombre_completo AS CREADO_POR',
             \DB::raw('(CASE
-                        WHEN lista_chequeo.publicacion_destino = 1 THEN (SELECT COUNT(*) FROM lista_chequeo_ejecutadas AS lces 
+                        WHEN lista_chequeo.publicacion_destino = 1 THEN (SELECT COUNT(*) FROM lista_chequeo_ejecutadas AS lces
                         INNER JOIN lista_chequeo AS lcs ON lcs.id=lces.lista_chequeo_id
                         WHERE lces.estado = 2 AND lces.lista_chequeo_id=lista_chequeo.id AND lces.usuario_id='.$idUsuario.')
                         WHEN lista_chequeo.publicacion_destino = 2 THEN 0
@@ -2768,7 +2773,7 @@ class ListaChequeoMisListasController extends Controller
                      END) AS CANTIDAD_TERMINADAS'),
 
             \DB::raw('(CASE
-                        WHEN lista_chequeo.publicacion_destino = 1 THEN (SELECT COUNT(*) FROM lista_chequeo_ejecutadas AS lces 
+                        WHEN lista_chequeo.publicacion_destino = 1 THEN (SELECT COUNT(*) FROM lista_chequeo_ejecutadas AS lces
                         INNER JOIN lista_chequeo AS lcs ON lcs.id=lces.lista_chequeo_id
                         WHERE lces.estado = 1 AND lces.lista_chequeo_id=lista_chequeo.id AND lces.usuario_id='.$idUsuario.')
                         WHEN lista_chequeo.publicacion_destino = 2 THEN 0
@@ -2780,7 +2785,7 @@ class ListaChequeoMisListasController extends Controller
                         WHEN lcce.frecuencia_ejecucion = 2 THEN CONCAT(IF(lcce.cant_ejecucion IS NULL,"Infinitas",lcce.cant_ejecucion)," por Mes")
                         WHEN lcce.frecuencia_ejecucion = 3 THEN CONCAT(IF(lcce.cant_ejecucion IS NULL,"Infinitas",lcce.cant_ejecucion)," por Año")
                 END) AS FRECUENCIA')
-        ) 
+        )
         ->Join('usuario AS u','u.id','=','lista_chequeo.usuario_id')
         ->Join('lista_chequeo_configuracion_ejecucion AS lcce','lcce.lista_chequeo_id','=','lista_chequeo.id')
         ->where('u.cuenta_principal_id','=', auth()->user()->cuenta_principal_id)
@@ -2791,7 +2796,7 @@ class ListaChequeoMisListasController extends Controller
             $listasDeChequeo = $listasDeChequeo->where(function($query) use ($filtro_array)
             {
                 // $contador = 0;
-                foreach ($filtro_array as $keys => $oW) 
+                foreach ($filtro_array as $keys => $oW)
                 {
                     // if( $contador == 0)
                     //     $query->where($oW[0], '=', $oW[2]);
@@ -2806,14 +2811,14 @@ class ListaChequeoMisListasController extends Controller
 
                 return $query;
             });
-            
+
         }
 
         $listasDeChequeo = $listasDeChequeo->skip($desde)->take($hasta)->get();
-        
-        foreach ($listasDeChequeo as $keyss => $itemListaChequeo)  
+
+        foreach ($listasDeChequeo as $keyss => $itemListaChequeo)
         {
-            
+
             $listaEjecutadas = $this->listaEjecutada->where([
                 ['estado','=', 2],
                 ['lista_chequeo_id','=',$itemListaChequeo->ID_LISTA_CHEQUEO],
@@ -2823,11 +2828,11 @@ class ListaChequeoMisListasController extends Controller
             ->orderBy('id','DESC')
             ->get();
             $arrayPorcentajes = [];
-            foreach ($listaEjecutadas as $key => $itemEjecutada) 
+            foreach ($listaEjecutadas as $key => $itemEjecutada)
             {
                 $sumaListaChequeo = 0;
 
-                $retorno = \DB::select('SELECT 
+                $retorno = \DB::select('SELECT
                 lc.nombre,
                 TRUNCATE(((cat.ponderado*(SUM((pre.ponderado*(IF(res.ponderado IS NULL,100,res.ponderado ))/100))))/100 ),2)  as porc_cat
                 FROM lista_chequeo_ejec_respuestas lcer
@@ -2839,7 +2844,7 @@ class ListaChequeoMisListasController extends Controller
                 WHERE lce.id=:idEjecutada
                 GROUP BY cat.id',['idEjecutada' => $itemEjecutada->id]);
 
-                foreach ($retorno as $key => $sumaPorcentajes) 
+                foreach ($retorno as $key => $sumaPorcentajes)
                 {
                     $sumaListaChequeo = $sumaListaChequeo + floatval($sumaPorcentajes->porc_cat);
                 }
@@ -2849,10 +2854,10 @@ class ListaChequeoMisListasController extends Controller
 
             $listasDeChequeo[$keyss]->ArrayBarra = $arrayPorcentajes;
         }
-        
+
         return  array('listasChequeo' => $listasDeChequeo,'arrayGrafica' => $arrayPorcentajes);
     }
-    
+
     public function FuncionParaSaberSiEsResponsableEmpresa($idUsuario)
     {
         $esResponsableEmpresa = $this->empresa->where('usuario_id','=',$idUsuario)->first();
@@ -2870,7 +2875,7 @@ class ListaChequeoMisListasController extends Controller
     public function PrevisualizacionListaChequeo(Request $request)
     {
         $idListaChequeo = $request->get('idListaChequeo');
-        
+
         $listas = $this->ConsultaCategoriasPreguntasPorListaChequeoMisListas($idListaChequeo);
 
         return $this->FinalizarRetorno(
@@ -2892,12 +2897,12 @@ class ListaChequeoMisListasController extends Controller
         ->orderBy('categoria.orden_lista','ASC')
         ->get();
 
-        
+
         $arrayFinal = [];
-        foreach ($consultaListaChequeo as $key => $categoria) 
+        foreach ($consultaListaChequeo as $key => $categoria)
         {
             $objeto = new \stdClass();
-            
+
             $preguntas = $this->pregunta
             ->Join('tipo_respuesta AS tr','tr.id','pregunta.tipo_respuesta_id')
             ->Join('tipo_respuesta_categoria AS trc','trc.id','tr.tipo_respuesta_categoria')
@@ -2914,7 +2919,7 @@ class ListaChequeoMisListasController extends Controller
             $objeto->PONDERADO = number_format($categoria->ponderado,0);
             $objeto->ORDEN_LISTA = $categoria->orden_lista;
             $objeto->LISTA_CHEQUEO_ID = $categoria->lista_chequeo_id;
-            foreach ($preguntas as $key => $pregunta) 
+            foreach ($preguntas as $key => $pregunta)
             {
                 // TRAER OPCIONES GENERALES ESCOGIDAS POR USUARIO
                 $opcionesGenerales = $this->preguntaOpcionRespuesta
@@ -2924,8 +2929,8 @@ class ListaChequeoMisListasController extends Controller
                     ['pro.id','!=',4]
                 ])
                 ->get();
-                
-                $tiposRespuestas = \DB::select("SELECT 
+
+                $tiposRespuestas = \DB::select("SELECT
                 respuesta.*,
                 respuesta.tipo_respuesta_ponderado_pred_id TIPO_RESPUESTA
                 FROM respuesta
@@ -3000,7 +3005,7 @@ class ListaChequeoMisListasController extends Controller
         }
         else
             return false;
-        
+
     }
 
     public function FuncionValidarSiEstaAlDia()
@@ -3031,7 +3036,7 @@ class ListaChequeoMisListasController extends Controller
         }
         else
             return false;
-        
+
     }
 
     public function validarDuplicar($idListaChequeo){

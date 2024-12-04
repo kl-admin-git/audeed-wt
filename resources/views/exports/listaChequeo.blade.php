@@ -8,9 +8,9 @@
     dd($seccionTres);
 @endphp --}}
 <table>
-  
+
     <tr>
-        <td colspan="2" 
+        <td colspan="2"
         style="
         height:30px;
         text-align: center;
@@ -56,7 +56,7 @@
     <tr>
         <td colspan="2" style="
         height:30px;
-        text-align: center; 
+        text-align: center;
         font-weight: bold;
         background-color: #44505c;
         color:#ffffff;
@@ -73,8 +73,8 @@
     @endphp
     {{-- <tr>
         <td style="
-            
-        text-align: center; 
+
+        text-align: center;
     font-weight: bold;
     background-color: #44505c;
     color:#ffffff;
@@ -82,8 +82,8 @@
             Categorias
         </td>
         <td style="
-            
-        text-align: center; 
+
+        text-align: center;
     font-weight: bold;
     background-color: #44505c;
     color:#ffffff;
@@ -99,16 +99,16 @@
             <td>
                 {{$item->categoria}}
             </td>
-            
+
             <td>
                 {{$numeroFormateado}}  %
             </td>
         </tr>
     @endforeach
     <tr>
-        <td colspan="2" 
+        <td colspan="2"
         style="
-        text-align: center; 
+        text-align: center;
         font-weight: bold;
         "> Resultado final :  {{$seccionDos['ResultadoFinal']}} %</td>
     </tr>
@@ -126,13 +126,13 @@
             $categoriaPonderado = number_format($item['PONDERADO_CATEGORIA'],2,'.','');
         @endphp
         <tr>
-            <td colspan="2" style="font-weight: bold; text-align: center;">{{$item['NOMBRE_CATEGORIA']}} : {{$categoriaPonderado}} % </td>
-         
+            <td colspan="2" style="font-weight: bold; text-align: center;">{{$item['NOMBRE_CATEGORIA']}} {{($seccionUno->mostrar_porcentajes == 1 ? ' : '.$categoriaPonderado.' %' : '')}}</td>
+
         </tr>
         {{-- //preguntas --}}
         @foreach ($item['PREGUNTAS'] as $preguntas)
             <tr>
-                <td  colspan="2" style="text-align: center;">{{$preguntas->ORDEN_PREGUNTA }} ) {{$preguntas->NOMBRE_PREGUNTA}} : {{ number_format((float)$preguntas->porcentaje_pregunta,2) }} % </td>
+                <td  colspan="2" style="text-align: center;">{{$preguntas->ORDEN_PREGUNTA }} ) {{$preguntas->NOMBRE_PREGUNTA}} {{ (' : '.$seccionUno->mostrar_porcentajes == 1 ? number_format((float)$preguntas->porcentaje_pregunta,2).' %' : '')  }}</td>
             </tr>
             <tr>
                 @if ($preguntas->ES_RESPUESTA_ABIERTA == 1)
@@ -144,13 +144,13 @@
                         <td style=" text-align: center;">{{$tipoRespuesta['valor_personalizado']}}</td>
                     @endforeach
                 @endif
-                
+
                 @if ($preguntas->PERMITE_NO_APLICA == 1)
-               
+
                     <td style=" text-align: center;">N/A</td>
                 @endif
             </tr>
-                
+
             <tr>
                 @if ($preguntas->ES_RESPUESTA_ABIERTA != 1)
                     {{--  // tipos de respuesta --}}
@@ -162,10 +162,10 @@
                             }
                         @endphp
                         <td style=" text-align: center;">{{$marca}}</td>
-                        
+
                     @endforeach
                 @endif
-               
+
                 @if ($preguntas->PERMITE_NO_APLICA == 1)
                     @if ($preguntas->RESPUESTA_ID == 0)
                         <td style=" text-align: center;">X</td>
@@ -176,11 +176,11 @@
             {{-- seccion de fotos --}}
             @if (isset($preguntas->FOTOS))
                 <tr>
-                    <td style="  text-align: center; 
+                    <td style="  text-align: center;
                     font-weight: bold;">FOTOS</td>
                 </tr>
             @endif
-            
+
             @if (isset($preguntas->FOTOS))
                 <tr>
                     @foreach ($preguntas->FOTOS as $fotos)
@@ -189,26 +189,34 @@
                         @endphp
                         <td ><img  width="150" height="150"  src="{{$imagenes}}" alt="evidencia audiid"></td>
                     @endforeach
-                        
+
                 </tr>
             @endif
-          
-            
-            <tr>
-                <td colspan="2" style="height:50px;"><strong> Plan de accion :</strong> {{$preguntas->PLAN_ACCION}}</td>
-            </tr>
-            
-            <tr>
-                <td colspan="2" style="height:50px;"><strong>Observacion : </strong> {{$preguntas->COMENTARIO}}</td>  
-            </tr>
 
-            
+
+            @if($preguntas->PLAN_ACCION != "Sin plan de acción")
+                <tr>
+                    <td colspan="2" style="height:50px;"><strong> Plan de accion :</strong> {{$preguntas->PLAN_ACCION}}</td>
+                </tr>
+            @endif
+
+            @if($preguntas->COMENTARIO != "Sin observación")
+                <tr>
+                    <td colspan="2" style="height:50px;"><strong>Observacion : </strong> {{$preguntas->COMENTARIO}}</td>
+                </tr>
+            @endif
+
+
         @endforeach
         <tr>
             <td colspan="2"></td>
         </tr>
     @endforeach
-      
-    
-    
+
+        @if(ISSET($seccionUno->OBSERVACION_GENERAL))
+            <tr>
+                <td colspan="2" style="height:50px;"><strong>Observacion general: </strong> {{$seccionUno->OBSERVACION_GENERAL}}</td>
+            </tr>
+        @endif
+
 </table>

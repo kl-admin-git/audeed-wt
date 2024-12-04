@@ -21,14 +21,14 @@
 
                         <div class="contenedorBotonesTabs">
                             <button type="button" class="btn colorTabs" id="tour-creadas">
-                                <span class="textoCirculos">Creadas</span> 
+                                <span class="textoCirculos">Creadas</span>
                                 <span class="ciculoNumero">{{ $cantidad }}</span>
                             </button>
                             <a href="{{ route('List_MyList_Excecuted') }}" class="btn colorTabs" id="tour-ejecutadas">
-                                <span class="textoCirculos">Ejecutadas</span> 
+                                <span class="textoCirculos">Ejecutadas</span>
                                 <span class="ciculoNumero">{{ $cantidadEjecutadas }}</span>
                             </a>
-                            
+
                         </div>
                         @if (auth()->user()->perfil_id == 1) {{-- ADMINISTRADOR --}}
                             <div class="contenedorBotonesCrear">
@@ -36,12 +36,12 @@
                                 <button type="button" class="btn btn-primary waves-effect waves-light crearDesdeCero" id="tour-nuevo">Nuevo desde cero</button>
                             </div>
                         @endif
-                        
-                        
+
+
                     </div>
                     <div class="col-lg-12 m-t-10">
                         <div class="collapse" id="collapseExample">
-                            
+
                                 <div class="card card-body">
                                     <div class="row">
                                         <div class="col-lg-3">
@@ -57,7 +57,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -116,7 +116,7 @@
 
                             <form class="" id="formularioCrearMiLista" action="#">
                                 <div class="row">
-                                    
+
                                     <div class="col-lg-8">
                                         <div class="form-group">
                                             <label>Nombre: </label>
@@ -148,6 +148,15 @@
                                                         <input type="checkbox" class="custom-control-input" id="checkBoxAutomatico" checked>
                                                         <label class="custom-control-label font-13 labelCheck" for="checkBoxAutomatico">Ponderados automáticos (Desmarcar para asignarlos manualmente)</label>
                                                     </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="col-lg-12">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="checkBoxShowPercentage" checked>
+                                                    <label class="custom-control-label font-13 labelCheck" for="checkBoxShowPercentage">Mostrar porcentajes (Desmarcar para no mostrarlos)</label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -183,13 +192,13 @@
                 </button>
             </div>
             <div class="modal-body">
-                
+
                 <div class="col-lg-12">
                     <div class="card m-b-20">
                         <div class="card-body">
                             <form class="" id="formularioLink" action="#">
                                 <div class="row">
-                                    
+
                                     <div class="col-lg-12">
                                         <p for="">Comparte este link a los colaboradores para que la ejecuten. </p>
                                         <div class="input-group col-md-0">
@@ -219,7 +228,7 @@
                                             <button type="button" class="btn btn-primary col-lg-12 waves-effect waves-light confirmar" >CONFIRMAR</button>
                                         </div> --}}
 
-                                        
+
                                     </div>
                                 </div>
 
@@ -246,12 +255,12 @@
                 </button>
             </div>
             <div class="modal-body">
-             
+
                 <div class="col-lg-12">
                     <div class="card-body">
                         <div id="accordion" class="contenedorCategorias">
-                            
-                            
+
+
                         </div>
                     </div>
                 </div> <!-- end col -->

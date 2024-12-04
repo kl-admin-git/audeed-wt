@@ -15,7 +15,7 @@ class ListaChequeo extends Model
      */
     protected $fillable = [
         'id',
-        'nombre', 
+        'nombre',
         'publicacion_destino',
         'entidad_evaluada',
         'estado',
@@ -24,5 +24,6 @@ class ListaChequeo extends Model
         'favorita',
         'espacio_mb',
         'modelo_id',
+        'mostrar_porcentajes',
     ];
 }

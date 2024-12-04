@@ -298,7 +298,7 @@
                                             @endphp
                                             <table>
                                                 <tr>
-                                                    <td class="titulo-pdf">{{$item['NOMBRE_CATEGORIA']}} : {{$categoriaPonderado}} % </td>
+                                                    <td class="titulo-pdf">{{$item['NOMBRE_CATEGORIA']}} {{($seccionUno->mostrar_porcentajes == 1 ? ' : '.$categoriaPonderado.' %': '') }}</td>
                                                     {{-- <td></td> --}}
                                                 </tr>
                                             </table>
@@ -309,7 +309,7 @@
                                                 @endphp
                                                 <table>
                                                     <tr>
-                                                        <td class="question-pdf">{{$preguntas->ORDEN_PREGUNTA }}. {{$preguntas->NOMBRE_PREGUNTA}} : {{$preguntaPonderado}} % </td>
+                                                        <td class="question-pdf">{{$preguntas->ORDEN_PREGUNTA }}. {{$preguntas->NOMBRE_PREGUNTA}}{{($seccionUno->mostrar_porcentajes == 1 ? ' : '.$preguntaPonderado.' %' : '')}}</td>
                                                         {{-- <td></td> --}}
                                                     </tr>
                                                     <table>

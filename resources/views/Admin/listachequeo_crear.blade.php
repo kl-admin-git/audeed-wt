@@ -20,6 +20,11 @@
 
     $idTipoPonderado = $datosListaChequeo->tipo_ponderados;
 
+    $checked_percentage = '';
+    if($datosListaChequeo->mostrar_porcentajes != 0)
+        $checked_percentage = 'checked';
+    else
+        $checkecd_percentage = '';
 @endphp
 
 @section('breadcrumb')
@@ -86,6 +91,20 @@
                                                     <option value="1">Asociada al evaluador</option>
                                                     <option value="2"></option>
                                                 </select>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><span class="tituloTabla">PORCENTAJES</span></td>
+                                            <td>
+                                                <div class="form-group row">
+                                                    <div class="col-lg-12">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="checkBoxShowPercentage" {{$checked_percentage}}>
+                                                            <label class="custom-control-label font-13 labelCheck" for="checkBoxShowPercentage">Mostrar porcentajes (Desmarcar para no mostrarlos)</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
 

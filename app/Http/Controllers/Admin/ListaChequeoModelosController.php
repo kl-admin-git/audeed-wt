@@ -144,7 +144,8 @@ class ListaChequeoModelosController extends Controller
                 'estado' => 1,
                 'usuario_id' => auth()->user()->id,
                 'espacio_mb' => 0,
-                'modelo_id' => $idModelo
+                'modelo_id' => $idModelo,
+                'mostrar_porcentajes' => $listaChequeo->mostrar_porcentajes
             ];
         }
         $listaChequeosNew = new $this->listaChequeos;
