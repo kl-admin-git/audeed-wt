@@ -861,10 +861,14 @@ function CargarPopUpStepUno() {
 function CargarPopUpStepDos() {
     let stringCategorias = '';
     $.each(steps.stepsCarga.stepDos, function (indexInArray, items) {
-        stringCategorias += ComponenteIconos(Object.keys(items), items[Object.keys(items)]);
+        Object.entries(items).forEach((key, value) => {
+          let name_section = key[0];
+          let values_section = key[1];
+          stringCategorias += ComponenteIconos(name_section, values_section);
+        });
     });
 
-    $('.tipoRespuestaField').html(stringCategorias);
+    $('.tipoRespuestaField').html(`<div class="d-flex flex-wrap col-lg-12">${stringCategorias}</div>`);
 }
 
 function CargarPopUpStepCuatro() {
@@ -899,8 +903,8 @@ function ComponenteIconos(nombreCategoriaTipoRespuesta, tipoRespuestas) {
                             </div> `;
     });
 
-    string += `<div class="row">
-                    <div class="col-md-6">
+    string += `<div class="row col-lg-6">
+                    <div class="col-lg-12">
                         <label class="col-lg-12 text-center">${nombreCategoriaTipoRespuesta}</label>
                         <div class="form-group row d-flex justify-content-center">
                             ${stringRespuestas}
@@ -1072,9 +1076,10 @@ function OnInputNumberLimit(control)
 
 function OnClickAgregarRespuesta(control)
 {
-    if($('.cuerpoConfiguracionRespuesas').children().length >= 5)
+    let max_opc = 10
+    if($('.cuerpoConfiguracionRespuesas').children().length >= max_opc)
     {
-        toastr.warning("No puedes agregar más opciones de respuesta");
+        toastr.warning(`No puedes agregar más de ${max_opc} opciones de respuesta`);
         return;
     }
 

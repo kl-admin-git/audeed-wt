@@ -16,7 +16,7 @@
     <div class="acciones-descargar">
         <i class="mdi mdi-file-excel descarga-excel-pdf" tipo="excel"></i>
         <i class="mdi mdi-file-pdf descarga-excel-pdf" tipo="pdf"></i>
-        <form action="{{ url('/informes/descargar-excel-lista') }}" method="GET" style="display: none;"
+        <form action="{{ ENV('APP_URL').'/informes/descargar-excel-lista' }}" method="GET" style="display: none;"
             id="descargar-excel">
             @csrf
             <input type="hidden" name="listaId" id="listaId" />
@@ -244,7 +244,7 @@
                                                                             @endforeach
                                                                         @endif
 
-                                                                        
+
 
                                                                         @if ($pregunta->PERMITE_NO_APLICA == 1)
                                                                             {{--OPCIONES RESPUESTA NO APLICA--}}
@@ -326,7 +326,7 @@
                                                                         </div>
 
                                                                     @endif
-                                                                    
+
                                                                     @if($pregunta->HAY_PLAN_ACCION != 1)
                                                                     <div class="row m-t-10 col-md-4 m-r-10">
                                                                         <div class="row m-t-10 col-md-6 m-r-10">
@@ -503,7 +503,7 @@
 
                                             </div>
 
-                                           
+
                                             <div class="row m-t-10 col-md-6 m-r-10">
                                                 <div class="form-group col-lg-12">
                                                     <label class="col-lg-12 col-form-label">Plan de Acción</label>
@@ -511,8 +511,8 @@
                                                         class="col-lg-12 col-form-label font-light text-bg-white plan-accion">{{ $seccion->plan_accion }}</label>
                                                 </div>
                                             </div>
-                                           
-                                      
+
+
 
                                             {{-- <div class="row m-t-10 col-md-3 m-r-10">
                                                 <div class="form-group col-lg-12">
@@ -538,7 +538,7 @@
                     {{-- FIN QUINTA SECCION --}}
                 @endif
 
-                
+
                 <div class="col-lg-12">
                     <div class="card-header subtituloEncabezado">
                         <p class="m-0">
@@ -669,7 +669,7 @@
           </button>
         </div>
         <div class="modal-body form-plan-accion">
-        
+
 
         </div>
         <div class="modal-footer">

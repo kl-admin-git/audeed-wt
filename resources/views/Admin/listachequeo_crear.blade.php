@@ -41,7 +41,7 @@
             <div class="col-lg-12">
                 <div class="card m-b-20" style="overflow: auto">
                     <div class="card-body m-b-10">
-    
+
                         <div class="row m-b-10">
                             <div class="col-lg-12">
                                 <table class="table table-dark" id="tablaListaEncabezado">
@@ -49,14 +49,14 @@
                                         <tr>
                                             <th colspan="4">ENCABEZADO DE LISTA DE CHEQUEO</th>
                                         </tr>
-                                   
+
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td> <span class="tituloTabla">NOMBRE</span> </td>
                                             <td colspan="3"><span class="nombreLista">{{ $datosListaChequeo->nombre }}</span> <span class="badge badge-warning badge-custom clickEditar">Editar</span></td>
                                         </tr>
-            
+
                                         <tr>
                                             <td><span class="tituloTabla">FECHA</span></td>
                                             <td>
@@ -68,7 +68,7 @@
                                             <td><span class="tituloTabla">PUBLICADO PARA</span></td>
                                             <td><span for="">Mi organización</span></td>
                                         </tr>
-            
+
                                         <tr>
                                             <td><span class="tituloTabla">EVALUADO</span></td>
                                             <td>
@@ -88,13 +88,13 @@
                                                 </select>
                                             </td>
                                         </tr>
-                                    
+
                                     </tbody>
                                 </table>
-            
+
                             </div>
                         </div>
-            
+
                         <div class="row m-b-10">
                             <div class="col-lg-12">
                                <div class="contenedorBotones">
@@ -102,37 +102,37 @@
                                     {{-- <button class="btn btn-success agregarPregunta" accion="0">AGREGAR PREGUNTA</button> --}}
                                </div>
                             </div>
-            
+
                             <div class="col-lg-12 m-t-10 ContenedorCategoriaYPreguntas" >
-                               
+
                                 {{-- <div class="contenedorTodaLaCategoria">
-                                        
+
                                 </div> --}}
-    
+
                              </div>
-    
+
                              <div id="main_no_data" class="hidden">
                                 <div class="fof">
                                         <h1>No hay información para mostrar</h1>
                                 </div>
                             </div>
-    
+
                              <div class="col-lg-12 m-t-10">
                                 <div class="contenedorBotones">
                                      {{-- <button class="btn btn-dark agregarCategoria">AGREGAR CATEGORÍA</button> --}}
                                      {{-- <button class="btn btn-success agregarPregunta" accion="0">AGREGAR PREGUNTA</button> --}}
                                 </div>
                              </div>
-    
+
                              <div class="col-lg-12 m-t-10 m-b-10">
                                      <button class="col-lg-12 btn btn-primary Terminar">TERMINAR LISTA DE CHEQUEO</button>
                              </div>
-                                         
+
                         </div>
                     </div>
                 </div>
             </div>
-    
+
         </div>
     </div>
 </div>
@@ -154,7 +154,7 @@
 
                             <form class="" id="formularioEditarListaChequeo" action="#">
                                 <div class="row">
-                                    
+
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <label>Nombre: </label>
@@ -198,7 +198,7 @@
 
                             <form class="" id="formularioCrearCategoria" action="#">
                                 <div class="row">
-                                    
+
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <label>Nombre: <span class="requerido">*</span></label>
@@ -207,7 +207,7 @@
 
                                         <div class="col-lg-8" style="padding-left:0px;">
                                             <div class="form-group">
-                                                <label>Ponderado: <span class="requerido">*</span></label>                                            
+                                                <label>Ponderado: <span class="requerido">*</span></label>
                                                 <div class="input-group col-md-0">
                                                     <input type="text" {{ $disabled }} class="form-control ponderadoPopUp input-number-limit" required placeholder="Ingrese el ponderado"/>
                                                     <span class="input-group-append">
@@ -230,19 +230,19 @@
                                                     <button type="button" class="btn btn-primary waves-effect m-l-5 crearEtiqueta" >Crear</button>
                                                 </div>
                                             </div>
-                                            
+
                                         </div>
-                                            
+
 
                                         <div class="form-group">
                                             <label>Orden: </label>
                                             <select class="form-control select2 selectPopUp ordenCategorias">
                                                 <option value="final">Al final de las categorías</option>
-                                                
+
                                                 @foreach ($datosCategoria as $itemCategoria)
-                                                    <option value="{{ $itemCategoria->orden_lista }}">Después de la categoría "{{ $itemCategoria->nombre }}"</option>    
+                                                    <option value="{{ $itemCategoria->orden_lista }}">Después de la categoría "{{ $itemCategoria->nombre }}"</option>
                                                 @endforeach
-                                                
+
                                                 <option value="principio">Al inicio de las categorías</option>
                                             </select>
                                         </div>
@@ -281,11 +281,10 @@
                 <div class="col-lg-12">
                     <div class="card m-b-20">
                         <div class="card-body cuerpoStepByStepPopUpPM">
-                            
+
                             <form id="fomularioSteps" class="fomularioSteps">
                                 <h3>Pregunta</h3>
                                 <fieldset>
-                                  
                                     <div class="row">
                                         <div class="col-md-9">
                                             <div class="form-group row">
@@ -306,7 +305,7 @@
                                                 <label class="col-lg-5 col-form-label" style="text-align:end;">Categoría: </label>
                                                 <div class="col-lg-5">
                                                     <select class="form-control select2 selectStepPopUp categoríaPopUpStep">
-                                                        
+
                                                     </select>
                                                 </div>
                                             </div>
@@ -315,18 +314,17 @@
                                                 <label class="col-lg-5 col-form-label" style="text-align:end;">Ordén: </label>
                                                 <div class="col-lg-5">
                                                     <select class="form-control select2 selectStepPopUp ordenPopUpStep">
-                                                        
+
                                                     </select>
                                                 </div>
                                             </div>
-                                            
+
                                         </div>
                                     </div>
-                                    
                                 </fieldset>
                                 <h3>Tipo de respuesta</h3>
-                                <fieldset class="tipoRespuestaField">                   
-
+                                <fieldset class="tipoRespuestaField">
+                                    <!-- CARGADO POR JS -->
                                 </fieldset>
                                 <h3>Configuración de respuesta</h3>
                                 <fieldset>
@@ -334,7 +332,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group row">
                                                 <p class="col-lg-12 font-13 textoEncabezadoConfiguracionRespuesta">
-                                                    Puede cambiar el texto de cada respuesta (Si ó No) por el de 
+                                                    Puede cambiar el texto de cada respuesta (Si ó No) por el de
                                                     su preferencia (Ejemplo: Aplica ó No aplica), de lo contrario
                                                     puede continuar
                                                 </p>
@@ -345,7 +343,7 @@
                                         <div class="col-md-9">
 
                                             <div class="contenedorPersonalizacionTipoRespuesta">
-                                                
+
                                             </div>
 
                                             <div class="form-group row">
@@ -357,7 +355,7 @@
                                                         </div>
                                                 </div>
                                             </div>
-                                            
+
                                         </div>
                                     </div>
                                 </fieldset>
@@ -375,9 +373,9 @@
                                     <div class="row contenedorOpcRespuestaStepFinal">
                                         <div class="col-md-6">
                                             <div class="form-group row contenedorOpcionesRta">
-                                                                                                
+
                                             </div>
-                                        </div>    
+                                        </div>
                                     </div>
 
                                     <div class="form-group row contenidoPlanDeAccion collapse">
@@ -395,7 +393,7 @@
                                             <div class="form-group row">
                                                 <div class="col-lg-4">
                                                     <select class="form-control select2 selectStepPopUp contestarPopUpStep" id="SelectPopUpContestar">
-                                                        
+
                                                     </select>
                                                 </div>
                                                 <div class="col-lg-6">
@@ -415,7 +413,7 @@
                                             </p>
 
                                             <div class="form-group">
-                                               
+
                                                     <table class="table">
                                                         <thead>
                                                             <tr>
@@ -425,7 +423,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody class="tbody-detalle-pm">
-                                                            
+
                                                             <tr code-puntaje="1">
                                                                 <td>
                                                                     ¿Qué será realizado?
@@ -441,7 +439,7 @@
                                                                       </div>
                                                                 </td>
                                                             </tr>
-                                                        
+
                                                             <tr code-puntaje="2">
                                                                 <td>
                                                                     ¿Por qué será hecho?
@@ -457,7 +455,7 @@
                                                                     </div>
                                                                 </td>
                                                             </tr>
-                                                        
+
                                                             <tr code-puntaje="3">
                                                                 <td>
                                                                     ¿Dónde será hecho?
@@ -473,7 +471,7 @@
                                                                     </div>
                                                                 </td>
                                                             </tr>
-                                                        
+
                                                             <tr code-puntaje="4">
                                                                 <td>
                                                                     ¿Cuándo será hecho?
@@ -489,7 +487,7 @@
                                                                     </div>
                                                                 </td>
                                                             </tr>
-                                                        
+
                                                             <tr code-puntaje="5">
                                                                 <td>
                                                                     ¿Quién lo hará?
@@ -505,7 +503,7 @@
                                                                     </div>
                                                                 </td>
                                                             </tr>
-                                                        
+
                                                             <tr code-puntaje="6">
                                                                 <td>
                                                                     ¿Cómo será hecho?
@@ -521,7 +519,7 @@
                                                                     </div>
                                                                 </td>
                                                             </tr>
-                                                        
+
                                                             <tr code-puntaje="7">
                                                                 <td>
                                                                     ¿Cuánto costará?
@@ -537,7 +535,7 @@
                                                                     </div>
                                                                 </td>
                                                             </tr>
-                                                        
+
                                                             <tr code-puntaje="8">
                                                                 <td>
                                                                     Responsable
@@ -553,10 +551,10 @@
                                                                     </div>
                                                                 </td>
                                                             </tr>
-                                                        
+
                                                             <tr code-puntaje="9">
                                                                 <td>
-                                                                    Observaciones 
+                                                                    Observaciones
                                                                 </td>
                                                                 <td>
                                                                     <div class="form-check">
@@ -569,15 +567,15 @@
                                                                     </div>
                                                                 </td>
                                                             </tr>
-                                                        
+
                                                         </tbody>
                                                     </table>
-                                            
+
                                             </div>
 
                                         </div>
                                     </div>
-                                    
+
                                 </fieldset>
                             </form>
 
@@ -605,7 +603,7 @@
                         <div class="card-body">
                             <form class="" id="formularioLink" action="#">
                                 <div class="row">
-                                    
+
                                     <div class="col-lg-12">
                                         <p for="">Comparte este link a los colaboradores para que la ejecuten. </p>
                                         <div class="input-group col-md-0">
@@ -640,7 +638,7 @@
                                             <button type="button" class="btn btn-primary col-lg-12 waves-effect waves-light confirmar" >CONFIRMAR</button>
                                         </div>
 
-                                        
+
                                     </div>
                                 </div>
 
@@ -664,28 +662,28 @@
                 <h5 class="modal-title mt-0">Creación de etiqueta</h5>
                 <button type="button" class="close cancelarPopUpCreacionEtiqueta" aria-hidden="true">×</button>
             </div>
-            
+
                 <div class="modal-body">
                     <div class="row">
                             <div class="form-group col-sm-5">
                                 <label>Nombre: <span class="requerido">*</span></label>
                                 <input type="text" class="form-control" id="nombreEtiqueta" required placeholder="Ingrese el nombre de la etiqueta"/>
                             </div>
-            
+
                             <div class="form-group col-sm-7">
                                 <label>Descripción:</label>
                                 <textarea  class="form-control" rows="3" id="descripcion" placeholder="Ingrese la descripción de la etiqueta"></textarea>
                             </div>
-    
+
                             <div class="form-group col-sm-12" style="text-align: end;">
                                 <button type="button" class="btn btn-primary waves-effect m-l-5 crearAccionEtiqueta" >Agregar</button>
                                 <button type="button" class="btn btn-secondary waves-effect m-l-5 cancelarPopUpCreacionEtiqueta">Cancelar</button>
                             </div>
-                        
+
                     </div>
-                    
+
                 </div>
-            
+
 
             <div class="modal-footer">
                 <div class="col-lg-12 conenedorTablaEtiquetas">
@@ -698,11 +696,11 @@
                         </tr>
                         </thead>
                         <tbody class="text-center">
-                       
+
                         </tbody>
                     </table>
                 </div>
-                
+
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
