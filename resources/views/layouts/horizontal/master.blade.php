@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-        <title>Audiid</title>
+        <title>Audeed WEST</title>
         <meta content="Admin Dashboard" name="description" />
         <meta content="Themesbrand" name="author" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -23,8 +23,8 @@
                 @yield('content')
             </div>
         </div>
-        @include('layouts.horizontal.footer')   
+        @include('layouts.horizontal.footer')
     </div>
-    @include('layouts.horizontal.footer-script')  
+    @include('layouts.horizontal.footer-script')
 </body>
 </html>

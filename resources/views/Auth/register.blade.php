@@ -8,7 +8,7 @@
 <link href="{{ assets_version('/vertical/assets/plugins/animate/animate.min.css') }}" rel="stylesheet" type="text/css">
 @endsection
 @php
-    
+
     if(\Request::has('correo')){
         $correo = \Request::get('correo');
     }else{
@@ -94,8 +94,8 @@
                                 <div class="col-12 text-right">
                                     <button class="btn btn-primary w-md waves-effect waves-light registrarme">{{ trans('registermessages.registerbutton') }}</button>
                                 </div>
-                            </div>    
-                            
+                            </div>
+
                             <div class="form-group m-t-10 mb-0 row">
                                 <div class="col-12 m-t-20">
                                     <p class="font-14 text-muted mb-0">{{ trans('registermessages.terms') }} <a href="#">{{ trans('registermessages.termsuse') }}</a></p>
@@ -109,11 +109,11 @@
 
             <div class="m-t-40 text-center">
                 <p class="text-white">{{ trans('registermessages.already') }} <a href="{{route('Login_Ruta')}}" class="font-500 font-14 text-white font-secondary"> {{ trans('registermessages.login') }} </a> </p>
-                <p class="text-white">© {{date('Y')}} Audiid <i class="mdi mdi-heart" style="color:#26ae9c"></i></p>
+                <p class="text-white">© {{date('Y')}} Audeed WEST<i class="mdi mdi-heart" style="color:#26ae9c"></i></p>
             </div>
 
 
-        
+
         </div>
 
 <!--  MODAL MENSAJE  -->
@@ -128,7 +128,7 @@
                 <p class="m-b-30">
                     Estás a un paso de finalizar el proceso de registro, ingresa contraseña, sector y número de contacto para terminar.
                 </p>
-                
+
             </div>
 
             <div class="modal-footer">
@@ -165,10 +165,8 @@
                 imageUrl: '/vertical/assets/images/logo_new_2023.png',
                 confirmButtonText:'<i class="fa fa-thumbs-up"></i> Continuar',
                 confirmButtonClass: "btn-success",
-            }) 
+            })
         }
     });
 </script>
 @endsection
-
-

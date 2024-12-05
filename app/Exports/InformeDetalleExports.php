@@ -48,7 +48,7 @@ class InformeDetalleExports implements  FromView,ShouldAutoSize
         }
 
         $data = \DB::table('lista_chequeo_ejecutadas as lce')->select([
-                'lc.id as ID_AUDITORIA',
+                'lce.id as ID_AUDITORIA',
                 'lc.nombre as AUDITORIA',
                 \DB::raw("DATE_FORMAT(lce.created_at, '%d %M %Y %h:%m:%s %p') as FECHA_INICIO"),
                 \DB::raw("DATE_FORMAT(lce.finished_at, '%d %M %Y %h:%m:%s %p') as FECHA_FINAL"),
@@ -157,8 +157,8 @@ class InformeDetalleExports implements  FromView,ShouldAutoSize
                 FROM lista_chequeo_ejec_respuestas lcer
                 INNER JOIN pregunta pr ON lcer.pregunta_id = pr.id
                 INNER JOIN respuesta re ON lcer.respuesta_id = re.id
-                INNER JOIN lista_chequeo_ejecutadas lce ON lcer.lista_chequeo_ejec_id = lce.id
-                WHERE lce.lista_chequeo_id = $id_check_list;"));
+                INNER JOIN lista_chequeo_ejecutadas lces ON lcer.lista_chequeo_ejec_id = lces.id
+                WHERE lces.id = $id_check_list;"));
 
             $quantity = 1;
             foreach($sub_data as $key_sub_data => $value_sub_data)

@@ -56,13 +56,13 @@
 
                                                     <tr style="text-align:center;font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                                         <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-                                                            <p><b>Audiid West</b></p>
+                                                            <p><b>Audeed WEST</b></p>
                                                         </td>
                                                     </tr>
 
                                                     <tr style=" text-align:center; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                                         <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0;" valign="top">
-                                                            <p>© {{ date("Y",strtotime("-1 year")) }} - {{date('Y') }} Audiid <i class="mdi mdi-heart" style="color:#26ae9c"></i></p>
+                                                            <p>© {{ date("Y",strtotime("-1 year")) }} - {{date('Y') }} Audeed WEST <i class="mdi mdi-heart" style="color:#26ae9c"></i></p>
                                                         </td>
                                                     </tr>
                                                 </table>

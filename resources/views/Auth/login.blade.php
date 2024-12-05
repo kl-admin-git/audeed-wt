@@ -59,7 +59,7 @@
 
             <div class="m-t-40 text-center">
                 {{-- <p class="text-white">{{ trans('loginmessages.noaccount') }} <a href="{{route('Register_Ruta')}}" class="font-500 font-14 text-white font-secondary"> {{ trans('loginmessages.register') }} </a> </p> --}}
-                <p class="text-white">© {{date('Y')}} West Audiid <i class="mdi mdi-heart" style="color:#26ae9c"></i></p>
+                <p class="text-white">© {{date('Y')}} Audeed WEST <i class="mdi mdi-heart" style="color:#26ae9c"></i></p>
             </div>
 
         </div>

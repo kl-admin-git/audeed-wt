@@ -56,15 +56,15 @@ class SuscripcionesController extends Controller
     public function SeleccionarPlan(Request $request)
     {
         $idSuscripcion = $request->get('idSuscripcion');
-        switch ($idSuscripcion) 
+        switch ($idSuscripcion)
         {
             case '1': //GRATIS
                 $arrayActualizar = [
                     'plan_id' => $idSuscripcion
                 ];
-                
+
                 $actualizarCuenta = $this->cuentaPrincipal->where('id','=', auth()->user()->cuenta_principal_id)->update($arrayActualizar);
-                
+
                 return $this->FinalizarRetorno(
                     206,
                     $this->MensajeRetorno('',206, "Suscripción existosa")
@@ -88,8 +88,8 @@ class SuscripcionesController extends Controller
                     $informacionUsuarioAudeed = $this->FuncionParaSaberSiExisteONoEnAudeed(auth()->user()->cuenta_principal_id);
 
                     //CONSULTA DE PLAN ESCOGIDO (ID PARA PAYU)
-                    $informacionPlan = $this->plan->where('id','=',$idSuscripcion)->first();    
-                    
+                    $informacionPlan = $this->plan->where('id','=',$idSuscripcion)->first();
+
                     $craecionSuscripcion = $this->FuncionCrearSuscripcionEntreClienteYPlan(
                         $informacionUsuarioAudeed->id_customer,
                         $informacionUsuarioAudeed->token,
@@ -98,20 +98,20 @@ class SuscripcionesController extends Controller
 
                     dd($craecionSuscripcion);
 
-                } 
-                
+                }
+
                 break;
 
             case '3': //AVANZADO
-                
+
                 break;
 
             case '4': //EXPERTO
-                
+
                 break;
-            
+
             default:
-                
+
                 break;
         }
     }
@@ -126,7 +126,7 @@ class SuscripcionesController extends Controller
             $configuracionPlanes = array(
                 'accountId' => '512321',
                 'planCode' => 'plan_audeed_masivo_001',
-                'description' => 'PLAN MENSUAL AUDIID',
+                'description' => 'PLAN MENSUAL AUDEED',
                 'interval' => 'MONTH', // DAY, WEEK, MONTH y YEAR
                 'intervalCount' => '1',
                 'maxPaymentsAllowed' => '0',
@@ -172,14 +172,14 @@ class SuscripcionesController extends Controller
         $tokenTarjetaCredito = '944a28f4-3b01-4f85-98da-84cb1c3630ea';
 
         $respuesta = $this->FuncionEliminarTarjeta($idUsuarioPayu,$tokenTarjetaCredito);
-        
+
         dd($respuesta); //TRUE- FALSE
     }
 
     public function AgregarTarjetaCredito(Request $request)
     {
         $objetoRecibido = json_decode($request->get('objetoEnviar'));
-        
+
         //SABER SI EXISTE EN LA BD PARA REVISAR SI EXISTE EN PAYU
         $tieneUsuarioEnAudeed = $this->FuncionParaSaberSiExisteONoEnAudeed(auth()->user()->cuenta_principal_id);
 
@@ -208,12 +208,12 @@ class SuscripcionesController extends Controller
                 if(!ISSET($idToken->type)) // SI LA RESPUESTA ES EL TOKEN
                 {
                     $tipoTarjeta = 0;
-                    switch ($objetoRecibido->tipoTarjeta) 
+                    switch ($objetoRecibido->tipoTarjeta)
                     {
                         case 'visa':
                             $tipoTarjeta = 1;
                             break;
-                        
+
                         case 'mastercard':
                             $tipoTarjeta = 2;
                             break;
@@ -242,10 +242,10 @@ class SuscripcionesController extends Controller
                         'token' => $idToken,
                         'id_customer' => $idCustomerPayu
                     ];
-            
+
                     $cuentaPrincipalTarjeta = new $this->cuentaPrincipalTarjeta;
                     $cuentaPrincipalTarjeta->fill($arrayInsertar);
-                    
+
                     if($cuentaPrincipalTarjeta->save())
                     {
                         $respuestaUpdate = $this->cuentaPrincipal->where('id','=',auth()->user()->cuenta_principal_id)
@@ -253,7 +253,7 @@ class SuscripcionesController extends Controller
                         [
                             'cuenta_principal_tarjeta_id' => $cuentaPrincipalTarjeta->id
                         ]);
-                        
+
                         return $this->FinalizarRetorno(
                             206,
                             $this->MensajeRetorno('',206, "Tarjeta agregada correctamente")
@@ -291,12 +291,12 @@ class SuscripcionesController extends Controller
             {
 
                 $tipoTarjeta = 0;
-                switch ($objetoRecibido->tipoTarjeta) 
+                switch ($objetoRecibido->tipoTarjeta)
                 {
                     case 'visa':
                         $tipoTarjeta = 1;
                         break;
-                    
+
                     case 'mastercard':
                         $tipoTarjeta = 2;
                         break;
@@ -324,14 +324,14 @@ class SuscripcionesController extends Controller
                     'numero' => $numeroTarjetaCifrada,
                     'token' => $idToken
                 ];
-        
+
                 $respuestaUpdate = $this->cuentaPrincipalTarjeta->where('id_customer','=',$tieneUsuarioEnAudeed->id_customer)->update($arrayActualizar);
 
                 $eliminado = $this->FuncionEliminarTarjeta(
                     $tieneUsuarioEnAudeed->id_customer,
                     $tieneUsuarioEnAudeed->token
                 );
-    
+
                 if($eliminado) // SI SE ELIMINO DE PAYU CORRECTAMENTE LA TARJETA DE CRÉDITO
                 {
                     return $this->FinalizarRetorno(
@@ -366,10 +366,10 @@ class SuscripcionesController extends Controller
         ->Join('cuenta_principal_tarjeta AS cpt','cuenta_principal.cuenta_principal_tarjeta_id','=','cpt.id')
         ->where('cuenta_principal.id','=',$idCuentaPrincipal)
         ->first();
-        
+
         return $idCustomer;
     }
-    
+
     public function FuncionParaSaberSiExisteONoEnUsuarioEnPayu($idUsuarioPayu)
     {
         $curl = curl_init();
@@ -441,7 +441,7 @@ class SuscripcionesController extends Controller
                 "phone"=> $telefono
             ]
         );
-        
+
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -472,7 +472,7 @@ class SuscripcionesController extends Controller
             return $respuesta;
         else // ES PÖR QUE SI EXISTE EN LA BD DE PAYU EL USUARIO
             return $respuesta->token;
-        
+
     }
 
     public function FuncionEliminarTarjeta(
@@ -480,9 +480,9 @@ class SuscripcionesController extends Controller
             $tokenCreditCard
         )
     {
-        
+
         $curl = curl_init();
-        
+
         curl_setopt_array($curl, array(
         CURLOPT_URL => ($this->url."customers/".$idUsuarioPayu."/creditCards/".$tokenCreditCard),
         CURLOPT_RETURNTRANSFER => true,
@@ -505,7 +505,7 @@ class SuscripcionesController extends Controller
 
         curl_close($curl);
         $respuesta = json_decode($response);
-        
+
         if(ISSET($respuesta->type)) // ES POR QUE ALGO PASO CON LA ELIMINACIÓN DE LA TARJETA
             return false;
         else // ES POR QUE SE LOGRÓ ELIMINAR CORRECTAMENTE LA TARJETA
@@ -554,7 +554,7 @@ class SuscripcionesController extends Controller
         {
             return $respuesta->id;
         }
-            
+
     }
 
     public function FuncionCrearSuscripcionEntreClienteYPlan(
@@ -658,7 +658,7 @@ class SuscripcionesController extends Controller
                 return false;
             }
         }
-        
+
         return true;
     }
 

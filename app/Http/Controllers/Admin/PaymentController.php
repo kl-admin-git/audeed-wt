@@ -81,8 +81,8 @@ class PaymentController extends Controller
       $TX_ADMINISTRATIVE_FEE = $request->get('TX_ADMINISTRATIVE_FEE');// ".00"
       $TX_TAX_ADMINISTRATIVE_FEE_RETURN_BASE = $request->get('TX_TAX_ADMINISTRATIVE_FEE_RETURN_BASE');// ".00"
       $processingDate = $request->get('processingDate');// "2020-07-23"
-      
-      
+
+
       if (!$this->ventasPayu->where('reference_code','=', $referenceCode)->exists())
       {
 
@@ -130,7 +130,7 @@ class PaymentController extends Controller
 
         $ventasPayu = new $this->ventasPayu;
         $ventasPayu->fill($arrayInsertar);
-        
+
         $ventasPayu->save();
 
         switch ($lapTransactionState) {
@@ -143,7 +143,7 @@ class PaymentController extends Controller
                 $tipoPago = 0; //PAGO UNICO
                 $tarjeta = NULL;
                 $arrayInsertar = [
-                    'plan_id' => $idPlan, 
+                    'plan_id' => $idPlan,
                     'fecha_inicio' => $fechaInicio,
                     'fecha_fin' => $fechaFin,
                     'tipo_pago' => $tipoPago,
@@ -153,13 +153,13 @@ class PaymentController extends Controller
 
                 $planPagos = new $this->planPagos;
                 $planPagos->fill($arrayInsertar);
-                
+
                 if($planPagos->save())
                 {
                     $arrayActualizar = [
                         'plan_id' => $idPlan
                     ];
-                    
+
                     $actualizarCuenta = $this->cuentaPrincipal->where('id','=', auth()->user()->cuenta_principal_id)->update($arrayActualizar);
                 }
 
@@ -176,7 +176,7 @@ class PaymentController extends Controller
 
             case 'PENDING':
                 break;
-            
+
             default:
                 # code...
                 break;
@@ -184,14 +184,14 @@ class PaymentController extends Controller
 
       }
       $mensaje = '';
-        
+
       switch ($lapTransactionState) {
             case 'APPROVED':
                 $mensaje = 'Gracias por realizar la compra de la suscripción, te recordarmos que para una mejor usabilidad del producto cada mes debes realizar este procedimiento, cada mes te lo notificaremos por medio de un correo electrónico';
                 break;
 
             case 'DECLINED':
-                $mensaje = 'Tu suscripción ha sido rechazada, por favor consulta con tu banco y vuelve a intentarlo nuevamente, recuerda que si tienes problemas con respecto a Audiid, puedes comnunicarte con nuestro servicio de soporte';
+                $mensaje = 'Tu suscripción ha sido rechazada, por favor consulta con tu banco y vuelve a intentarlo nuevamente, recuerda que si tienes problemas con respecto a Audeed, puedes comnunicarte con nuestro servicio de soporte';
                 break;
 
             case 'ERROR':
@@ -205,7 +205,7 @@ class PaymentController extends Controller
             case 'PENDING':
                 $mensaje = 'Tu suscripción se encuentra pendiente, aún no se ha realizado el pago, te estaremos notificando por medio de un correo electrónico el estado de tu suscripción';
                 break;
-            
+
             default:
                 # code...
                 break;
@@ -250,8 +250,8 @@ class PaymentController extends Controller
         $TX_ADMINISTRATIVE_FEE = $request->get('TX_ADMINISTRATIVE_FEE');// ".00"
         $TX_TAX_ADMINISTRATIVE_FEE_RETURN_BASE = $request->get('TX_TAX_ADMINISTRATIVE_FEE_RETURN_BASE');// ".00"
         $processingDate = $request->get('processingDate');// "2020-07-23"
-        
-        
+
+
         if ($this->ventasPayu->where('reference_code','=', $referenceCode)->exists())
         {
           $arrayUpdate = [
@@ -295,9 +295,9 @@ class PaymentController extends Controller
               'request_number' => !ISSET($request_number) ? NULL : $request_number,
               'id_cuenta_principal' => auth()->user()->cuenta_principal_id
           ];
-  
+
           $respuestaUpdate = $this->ventasPayu->where('reference_code','=',$referenceCode)->update($arrayUpdate);
-  
+
           switch ($lapTransactionState) {
               case 'APPROVED':
                   $fechaInicio = Carbon::parse($processingDate);
@@ -308,23 +308,23 @@ class PaymentController extends Controller
                   $tipoPago = 0; //PAGO UNICO
                   $tarjeta = NULL;
                   $arrayInsertar = [
-                      'plan_id' => $idPlan, 
+                      'plan_id' => $idPlan,
                       'fecha_inicio' => $fechaInicio,
                       'fecha_fin' => $fechaFin,
                       'tipo_pago' => $tipoPago,
                       'cuenta_principal_tarjeta_id' => $tarjeta,
                       'cuenta_principal_id' => auth()->user()->cuenta_principal_id
                   ];
-  
+
                   $planPagos = new $this->planPagos;
                   $planPagos->fill($arrayInsertar);
-                  
+
                   if($planPagos->save())
                   {
                       $arrayActualizar = [
                           'plan_id' => $idPlan
                       ];
-                      
+
                       $actualizarCuenta = $this->cuentaPrincipal->where('id','=', auth()->user()->cuenta_principal_id)->update($arrayActualizar);
                   }
                   // CORREO CON DATOS DE INGRESO
@@ -333,14 +333,14 @@ class PaymentController extends Controller
                   $mensaje = 'Te informamos que el proceso de suscripción fue exitoso, tú banco aprobó correctamente la transacción, puedes comenzar a disfrutar tu suscripción con Audeed.';
                   \Mail::to($arrayCorreos)->send(new MailConfirmacionPagoPayu($usuario,$mensaje));
                   break;
-  
+
               case 'DECLINED':
                     // $arrayCorreos = ['dev@klaxen.com.co','tic@klaxen.com.co','direcciondigital@audeed.co','gerencia@klaxen.com.co','gerencia@klaxen.com','desarrolloweb@klaxen.com.co',$buyerEmail];
                     $arrayCorreos = ['dev@klaxen.com.co'];
                     $mensaje = 'Te informamos que el proceso de suscripción no fue exitoso, tú banco rechazó la transacción, por lo que no podremos continuar con tu suscripción. Comunicate con tú banco y vuelve a intentar el procedimiento.';
                     \Mail::to($arrayCorreos)->send(new MailConfirmacionPagoPayu($usuario,$mensaje));
                   break;
-  
+
               case 'ERROR':
               case 'EXPIRED':
                     // $arrayCorreos = ['dev@klaxen.com.co','tic@klaxen.com.co','direcciondigital@audeed.co','gerencia@klaxen.com.co','gerencia@klaxen.com','desarrolloweb@klaxen.com.co',$buyerEmail];
@@ -348,15 +348,15 @@ class PaymentController extends Controller
                     $mensaje = 'Te informamos que el proceso de suscripción no fue exitoso, hubo inconvenientes con la transacción o la información de tu tarjeta (Expiración), por lo que no podremos continuar con tu suscripción. Comunicate con tú banco y vuelve a intentar el procedimiento.';
                     \Mail::to($arrayCorreos)->send(new MailConfirmacionPagoPayu($usuario,$mensaje));
                   break;
-  
+
               case 'PENDING':
                   break;
-              
+
               default:
                   # code...
                   break;
           }
-  
+
         }
     }
 }

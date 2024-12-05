@@ -7,7 +7,7 @@
 @endsection
 
 @php
-    try 
+    try
     {
         $idCuentaPrincipal = decrypt(Request::segment(2));
         $idListaChequeo = decrypt(Request::segment(3));
@@ -16,11 +16,11 @@
         // $idListaChequeo = Request::segment(3);
         // dd($idCuentaPrincipal);
 
-    } catch (DecryptException $e) 
+    } catch (DecryptException $e)
     {
-        
+
     }
-    
+
 @endphp
 
 @section('content')
@@ -79,8 +79,8 @@
 
                             <div class="form-group">
                                 <label>Establecimiento: <span class="requerido">*</span></label>
-                                <select class="form-control select2 establecimientoControl">    
-                                    <option value="0">Seleccione el establecimiento</option>                                
+                                <select class="form-control select2 establecimientoControl">
+                                    <option value="0">Seleccione el establecimiento</option>
                                     {{-- @foreach ($sectores as $itemSector)
                                         <option value="{{ $itemSector->id }}">{{ $itemSector->nombre }}</option>
                                     @endforeach --}}
@@ -102,15 +102,15 @@
                                 <div class="col-12 text-right">
                                     <button class="btn btn-primary w-md waves-effect waves-light registrarme">{{ trans('registermessages.registerbutton') }}</button>
                                 </div>
-                            </div> 
-                            
+                            </div>
+
                             <div class="form-group m-t-10 mb-0 row">
                                 <div class="col-12 m-t-20">
                                     <p class="font-14 text-muted mb-0">{{ trans('registermessages.terms') }} <a href="#">{{ trans('registermessages.termsuse') }}</a></p>
                                 </div>
                             </div>
 
-                            
+
                         </form>
                     </div>
 
@@ -119,10 +119,10 @@
 
             <div class="m-t-40 text-center">
                 <p class="text-white">{{ trans('registermessages.already') }} <a href="{{route('Login_Ruta')}}" class="font-500 font-14 text-white font-secondary"> {{ trans('registermessages.login') }} </a> </p>
-                <p class="text-white">© {{date('Y')}} Audiid <i class="mdi mdi-heart" style="color:#26ae9c"></i></p>
+                <p class="text-white">© {{date('Y')}} Audeed WEST<i class="mdi mdi-heart" style="color:#26ae9c"></i></p>
             </div>
 
-        
+
         </div>
 
 @endsection
@@ -140,4 +140,3 @@
 <script type="text/javascript" src="{{ assets_version('/vertical/assets/js/registrar_nuevo_usuario/main.js') }}"></script>
 
 @endsection
-

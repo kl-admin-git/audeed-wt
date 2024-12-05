@@ -187,7 +187,7 @@
                         @php
                             $imagenes = $fotos['FOTO'];
                         @endphp
-                        <td ><img  width="150" height="150"  src="{{$imagenes}}" alt="evidencia audiid"></td>
+                        <td ><img  width="150" height="150"  src="{{$imagenes}}" alt="evidencia audeed"></td>
                     @endforeach
 
                 </tr>

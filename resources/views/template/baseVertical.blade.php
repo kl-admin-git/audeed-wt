@@ -60,9 +60,9 @@
     $planes = \DB::table('plan_parametros AS ppa')
     ->select('ppa.id','ppa.nombre','ppa.valor','ppa.plan_id','p.nombre AS NOMBRE_PLAN','p.valor AS VALOR_PLAN','p.icono')
     ->Join('plan AS p','p.id','=','ppa.plan_id')
-    ->get();    
+    ->get();
 
-    foreach ($planes as $key => $itemPlan) 
+    foreach ($planes as $key => $itemPlan)
     {
         $planesArray[$itemPlan->plan_id]['NOMBRE_PLAN'] = $itemPlan->NOMBRE_PLAN;
         $planesArray[$itemPlan->plan_id]['VALOR_PLAN'] = $itemPlan->VALOR_PLAN;
@@ -91,7 +91,7 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-        <title>Audiid</title>
+        <title>Audeed WEST</title>
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta content="Admin Dashboard" name="description" />
         <meta content="Themesbrand" name="author" />
@@ -110,13 +110,13 @@
         <link href="{{ assets_version('/vertical/assets/plugins/bootstrap-touchspin/css/jquery.bootstrap-touchspin.min.css') }}" rel="stylesheet" />
         <link href="{{ assets_version('/vertical/assets/plugins/sweet-alert2/sweetalert2.min.css') }}" rel="stylesheet" />
         <link href="{{ assets_version('/vertical/assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet">
-        
+
         <link href="{{    assets_version('/vertical/assets/js/tour/shepherd.css') }}" rel="stylesheet">
         <link href="{{    assets_version('/vertical/assets/js/tour/tour.css') }}" rel="stylesheet">
         <script type="text/javascript">
             let perfilExacto = {!! json_encode($perfilExacto) !!};
             let estaSuscrito = {!! json_encode($suscrito) !!};
-            
+
             let ApiKey = {!! json_encode($ApiKey) !!};
             let merchantId = {!! json_encode($merchantId) !!};
             let referenceCode = {!! json_encode($referenceCode) !!};
@@ -188,7 +188,7 @@
                     <div class="row text-center contenedoresPlanes">
 
                         @foreach ($planesArray as $itemPlan)
-                           
+
                             <div class="col-lg-3" idTarjeta="{{ $itemPlan['ID_PLAN'] }}">
                                 @if ($itemPlan['ID_PLAN'] == 2)
                                     <div class="card plan-card mt-4 background-popular sombra">
@@ -204,33 +204,33 @@
                                             @if ($itemPlan['ID_PLAN'] == 4)
                                                 <h5 class="text-uppercase " style="margin:0px">CONTÁCTANOS</h5>
                                             @else
-                                                <span class="" style="font-weight: bold;font-size: 20px;">$ </span> 
+                                                <span class="" style="font-weight: bold;font-size: 20px;">$ </span>
                                                 <h2 class="text-uppercase valorPlan" valor="{{ $itemPlan['VALOR_PLAN'] }} " style="margin:0px">{{ number_format($itemPlan['VALOR_PLAN'],0) }} COP</h2>
                                             @endif
                                         </div>
-                                        
+
                                         <div class="plan-features pb-3 mt-3 text-muted padding-t-b-30">
                                             @foreach ($itemPlan['CARACTERISTICAS'] as $caracteristica)
                                                 <p>{{ ($caracteristica['valor'] == 0 ? '' : $caracteristica['valor']).' '.$caracteristica['nombre']}} </p>
                                             @endforeach
-                                            @if ($itemPlan['ID_PLAN'] == 1) 
-                                                <button idSuscripcionQuemada="{{ $itemPlan['ID_PLAN'] }}" class="m-t-10 suscribirme btn btn-audeed">Suscribirme</button>    
+                                            @if ($itemPlan['ID_PLAN'] == 1)
+                                                <button idSuscripcionQuemada="{{ $itemPlan['ID_PLAN'] }}" class="m-t-10 suscribirme btn btn-audeed">Suscribirme</button>
                                             @else
-                                                @if ($itemPlan['ID_PLAN'] == 4) 
+                                                @if ($itemPlan['ID_PLAN'] == 4)
                                                     <button idSuscripcionQuemada="{{ $itemPlan['ID_PLAN'] }}" class="m-t-10 suscribirmePagoUnico btn btn-audeed">Contáctanos</button>
                                                 @else
                                                     <button idSuscripcionQuemada="{{ $itemPlan['ID_PLAN'] }}" class="m-t-10 suscribirmePagoUnico btn btn-audeed">Suscribirme</button>
                                                 @endif
                                             @endif
-                                            
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
-                           
+
+
                         @endforeach
-                       
+
                     </div>
                 </div> <!-- end col -->
 
@@ -362,7 +362,7 @@
                                 <input id="numeroTarjeta" require type="text" pattern="[0-9]*" inputmode="numeric">
                                 <svg id="ccicon" class="ccicon" width="750" height="471" viewBox="0 0 750 471" version="1.1" xmlns="http://www.w3.org/2000/svg"
                                     xmlns:xlink="http://www.w3.org/1999/xlink">
-                    
+
                                 </svg>
                             </div>
                             <div class="field-container">
@@ -375,7 +375,7 @@
                             </div>
 
                         </div>
-                    
+
                     </form>
 
                     <label for="" class="col-lg-12">Información personal  </label>
@@ -418,7 +418,7 @@
                                 <option value="0">Selecciona el ciudad</option>
                             </select>
                         </div>
-                        
+
                     </div>
                     <div class="form-group col-lg-12 justify-content-end row">
                             <button type="button" class="btn btn-primary waves-effect waves-light agregarTarjetaMainPage m-r-10" accion="0">Agregar tarjeta</button>
@@ -434,12 +434,12 @@
 
 
 <!--  MODAL VIDEO TOUR -->
-<div 
-    class="modal fade bs-example-modal-md"  
-    id="modal-tour-video" 
-    tabindex="-1" role="dialog" 
-    aria-labelledby="myLargeModalLabel" 
-    aria-hidden="true" 
+<div
+    class="modal fade bs-example-modal-md"
+    id="modal-tour-video"
+    tabindex="-1" role="dialog"
+    aria-labelledby="myLargeModalLabel"
+    aria-hidden="true"
     data-backdrop="static" d
     ata-keyboard="false"
 >
@@ -449,15 +449,15 @@
                 <div class="col-lg-12">
                     {{-- <button type="button" class="close iconoCerrarPopUpPlanes hidden" data-dismiss="modal" aria-hidden="true">×</button> --}}
                     <div class="row contenedorVideoTour add-tour">
-                        
+
                     </div>
                     <hr class="separacion-color">
-                  
+
                     <div class="row contenedorBotones">
                         <button type="button"  class="btn btn-secondary waves-effect omitir-tour">Omitir</button>
                         <button type="button"  class="btn btn-primary waves-effect waves-light siguiente-tour" >Siguiente</button>
                     </div>
-                   
+
                 </div> <!-- end col -->
 
             </div>
@@ -535,18 +535,18 @@
     {{-- <script src="https://cdn.jsdelivr.net/npm/shepherd.js@5.0.1/dist/js/shepherd.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/shepherd.js@7.0.2/dist/js/shepherd.min.js"></script>
     <script text="text/javascript">
-        
+
         let usuarioId = @json(auth()->user()->id);
     </script>
     {{-- <script src="{{ assets_version('/vertical/assets/js/tour/tour.js') }}"></script> --}}
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-172320884-1"></script>
-    
+
     <script type="text/javascript">
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        
+
         gtag('config', 'UA-172320884-1');
     </script>
 </body>

@@ -20,7 +20,7 @@
                                 <div class="contenedorBuscador contenedorBuscador--espacio">
                                     <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="buscar-tour">Buscar  <i class="fa" aria-hidden="true"></i></button>
                                     <i class="mdi mdi-file-excel"></i>
-                                    <form action="{{url('/informes/descargar-excel-detalle')}}" method="GET" style="display: none;" id="descargar-excel">
+                                    <form action="{{ ENV('APP_URL').'/informes/descargar-excel-detalle'}}" method="GET" style="display: none;" id="descargar-excel">
                                         @csrf
                                         <input type="hidden"  name="filtros_busqueda" id="filtros_busqueda"/>
                                     </form>
