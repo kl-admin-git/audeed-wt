@@ -212,39 +212,34 @@
                                                                 </div>
 
                                                                 <div class="row col-lg-12">
-                                                                    <div
-                                                                        class="row m-t-10 col-md-6 m-r-10 justify-content-center">
-
+                                                                    <div class="row m-t-10 col-md-12 m-r-10 justify-content-center">
                                                                         @if ($pregunta->ES_RESPUESTA_ABIERTA == 1)
                                                                             {{-- RESPUESTA ABIERTA --}}
                                                                             <p>{{ $pregunta->RESPUESTA_ABIERTA }}</p>
                                                                             {{-- RESPUESTA ABIERTA - FIN--}}
                                                                         @else
                                                                             @foreach ($pregunta->TIPOS_RESPUESTA as $opcionTipoRespuesta)
-
-                                                                            {{-- OPCIONES RESPUESTA--}}
-                                                                            <div class="col-md-6 col-lg-6 col-xl-2 m-b-30">
-                                                                                <p class="mt-0 text-center">
-                                                                                    {{ $opcionTipoRespuesta['valor_personalizado'] }}
-                                                                                </p>
-                                                                                <div class="card-text text-center">
-                                                                                    <span
-                                                                                        class="contenedorRespuesta ">
-                                                                                        @if ($pregunta->RESPUESTA_ID == $opcionTipoRespuesta['id'])
-                                                                                            <i
-                                                                                                class="ion-checkmark font-20 text-center"></i>
-                                                                                        @else
-                                                                                            <i class="ion-checkmark font-20 text-center"
-                                                                                                style="opacity:0;"></i>
-                                                                                        @endif
-                                                                                    </span>
+                                                                                {{-- OPCIONES RESPUESTA--}}
+                                                                                <div class="col-md-6 col-lg-6 col-xl-2 m-b-30">
+                                                                                    <p class="mt-0 text-center">
+                                                                                        {{ $opcionTipoRespuesta['valor_personalizado'] }}
+                                                                                    </p>
+                                                                                    <div class="card-text text-center">
+                                                                                        <span
+                                                                                            class="contenedorRespuesta ">
+                                                                                            @if ($pregunta->RESPUESTA_ID == $opcionTipoRespuesta['id'])
+                                                                                                <i
+                                                                                                    class="ion-checkmark font-20 text-center"></i>
+                                                                                            @else
+                                                                                                <i class="ion-checkmark font-20 text-center"
+                                                                                                    style="opacity:0;"></i>
+                                                                                            @endif
+                                                                                        </span>
+                                                                                    </div>
                                                                                 </div>
-                                                                            </div>
-                                                                            {{--OPCIONES RESPUESTA--}}
+                                                                                {{--OPCIONES RESPUESTA--}}
                                                                             @endforeach
                                                                         @endif
-
-
 
                                                                         @if ($pregunta->PERMITE_NO_APLICA == 1)
                                                                             {{--OPCIONES RESPUESTA NO APLICA--}}
