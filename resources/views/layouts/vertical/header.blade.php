@@ -17,43 +17,43 @@
                 @if ($perfilExacto == 1)
                     <a href="{{route('index_cumplimiento_lista')}}" class="waves-effect"><i class="mdi mdi-view-dashboard"></i><span>{{ trans('menumessages.menufp') }}</span></a>
                 @else
-                    <a href="{{route('Dasboard_Ruta')}}" class="waves-effect"><i class="mdi mdi-view-dashboard"></i><span>{{ trans('menumessages.menufp') }}</span></a>    
+                    <a href="{{route('Dasboard_Ruta')}}" class="waves-effect"><i class="mdi mdi-view-dashboard"></i><span>{{ trans('menumessages.menufp') }}</span></a>
                 @endif
-                
+
             </li>
             <li class="has_sub">
                 <a href="javascript:void(0);" class="waves-effect" id="menu-1"><i class="mdi mdi-factory"></i> <span>{{ trans('menumessages.menuf') }}<span class="pull-right"><i class="mdi mdi-chevron-right"></i></span></span> </a>
                 <ul class="list-unstyled">
                     {{-- ADMIN O REPONSABLE EMPRESA --}}
-                    @if ($perfilExacto == 1 || $perfilExacto == 2) 
-                        <li><a href="{{ route('Admin_Company') }}">{{ trans('menumessages.submenuff') }}</a></li>    
+                    @if ($perfilExacto == 1 || $perfilExacto == 2)
+                        <li><a href="{{ route('Admin_Company') }}">{{ trans('menumessages.submenuff') }}</a></li>
                     @endif
                     {{-- ADMIN O REPONSABLE EMPRESA O RESPONSABLE ESTABLECIMIENTO --}}
-                    @if ($perfilExacto == 1 || $perfilExacto == 2 || $perfilExacto == 3) 
-                        <li><a href="{{ route('admin_zonas') }}">Zonas</a></li>       
+                    @if ($perfilExacto == 1 || $perfilExacto == 2 || $perfilExacto == 3)
+                        <li><a href="{{ route('admin_zonas') }}">Zonas</a></li>
                     @endif
 
                     {{-- ADMIN O REPONSABLE EMPRESA O RESPONSABLE ESTABLECIMIENTO --}}
-                    @if ($perfilExacto == 1 || $perfilExacto == 2 || $perfilExacto == 3) 
-                        <li><a href="{{ route('Admin_Establishment') }}">{{ trans('menumessages.submenufs') }}</a></li>       
+                    @if ($perfilExacto == 1 || $perfilExacto == 2 || $perfilExacto == 3)
+                        <li><a href="{{ route('Admin_Establishment') }}">{{ trans('menumessages.submenufs') }}</a></li>
                     @endif
-                    
+
                     <li><a href="{{ route('Admin_Users') }}">{{ trans('menumessages.submenuft') }}</a></li>
 
                     @if ($perfilExacto == 1)
-                        <li><a href="{{ route('Admin_Charges') }}">Cargos</a></li>    
+                        <li><a href="{{ route('Admin_Charges') }}">Cargos</a></li>
                     @endif
 
                     {{-- ADMIN O REPONSABLE EMPRESA O RESPONSABLE ESTABLECIMIENTO --}}
-                    @if ($perfilExacto == 1 || $perfilExacto == 2 || $perfilExacto == 3) 
-                        <li><a href="{{ route('admin_areas') }}">Áreas</a></li>       
+                    @if ($perfilExacto == 1 || $perfilExacto == 2 || $perfilExacto == 3)
+                        <li><a href="{{ route('admin_areas') }}">Áreas</a></li>
                     @endif
 
                     {{-- ADMIN O REPONSABLE EMPRESA O RESPONSABLE ESTABLECIMIENTO --}}
-                    @if ($perfilExacto == 1 || $perfilExacto == 2 || $perfilExacto == 3) 
-                        <li><a href="{{ route('admin_equipos') }}">Equipos</a></li>       
+                    @if ($perfilExacto == 1 || $perfilExacto == 2 || $perfilExacto == 3)
+                        <li><a href="{{ route('admin_equipos') }}">Equipos</a></li>
                     @endif
-                    
+
                     {{-- <li><a href="{{ route('Admin_Profiles') }}">{{ trans('menumessages.submenuffi') }}</a></li> --}}
                 </ul>
             </li>
@@ -81,11 +81,12 @@
 
             <li class="has_sub">
                 <a href="javascript:void(0);" class="waves-effect" id="menu-3"><i class="mdi mdi-format-list-numbers"></i> <span>Reportes<span class="pull-right"><i class="mdi mdi-chevron-right"></i></span></span> </a>
-                <ul class="list-unstyled">                    
+                <ul class="list-unstyled">
                     <li><a href="{{ route('Reports_Excecuted') }}">Ejecutadas</a></li>
                     <li><a href="{{ route('plan_accion_hallazgos') }}">Hallazgos plan acción</a></li>
                     @if ($perfilExacto == 1)
                     <li><a href="{{ route('Dasboard_Ruta') }}">Cumplimiento</a></li>
+                    <li><a href="{{ route('Report_Detail') }}">Detalle</a></li>
                     @endif
                     {{-- <li><a href="{{ route('dotacion_practicas') }}">Dotación y prácticas</a></li>
                     <li><a href="{{ route('verificacion_balanzas') }}">Verificación de balanzas</a></li>
@@ -110,8 +111,8 @@
                 </ul>
             </li> --}}
 
-            
-            {{-- 
+
+            {{--
             <li>
                 <a href="widgets" class="waves-effect"><i class="mdi mdi-cube-outline"></i><span> Widgets </span></a>
             </li>

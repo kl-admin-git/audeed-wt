@@ -190,7 +190,7 @@ Route::post('/listachequeo/mislistas/traerEtiquetas', ['as' => 'Traer_Etiquetas'
 Route::post('/listachequeo/mislistas/eliminarEtiqueta', ['as' => 'Eliminar_Etiqueta', 'uses' => 'Admin\ListaChequeoMisListasController@EliminarEtiqueta']);
 Route::get('/listachequeo/mislistas/validarDuplicar/{id}', 'Admin\ListaChequeoMisListasController@validarDuplicar');
 
-//EJECUCIÓN LISTA DE CHEQUEO 
+//EJECUCIÓN LISTA DE CHEQUEO
 Route::get('/listachequeo/ejecucion/{idListaEjecucion}/{idChequeoEjecutada}', ['as' => 'Excecute_List_Chequeo', 'uses' => 'Admin\ListaChequeoEjecucionController@Index']);
 Route::get('/listachequeo/ejecucion/{idListaAEjecutar}', ['as' => 'Excecute_Link_Url', 'uses' => 'Admin\ListaChequeoEjecucionController@EjecutarPorLinkUrl']);
 Route::post('/listachequeo/ejecucion/enlistarListaChequeo', ['as' => 'List_Chequeo_Exc', 'uses' => 'Admin\ListaChequeoEjecucionController@EnlistarListaChequeo']);
@@ -268,6 +268,11 @@ Route::post('/payment/confirmacionURL', ['as' => 'Payment_Confirmation', 'uses' 
 Route::get('/informes/ejecutadas', ['as' => 'Reports_Excecuted', 'uses' => 'Admin\InformesController@Index']);
 Route::post('/informes/traerInformeEjecutadas', ['as' => 'Reports_Get_Excecuted', 'uses' => 'Admin\InformesController@TraerInformacionInformeEjecutadas']);
 Route::GET('/informes/descargar-excel', ['as' => 'descargar_excel', 'uses' => 'Admin\InformesController@descargaExcel']);
+
+//INFORMES DETALLE
+Route::get('/informes/detalle', ['as' => 'Report_Detail', 'uses' => 'Admin\InformesController@IndexDetail']);
+Route::post('/informes/get_report_detail', ['as' => 'Report_Get_Detail', 'uses' => 'Admin\InformesController@GetReportDetail']);
+Route::GET('/informes/descargar-excel-detalle', ['as' => 'descargar_excel_detalle', 'uses' => 'Admin\InformesController@DescargaExcelDetalle']);
 
 //INFORMES - DOTACIÓN Y PRÁCTICAS HIGIENICAS
 Route::get('/informes/dotacion_practicas', ['as' => 'dotacion_practicas', 'uses' => 'Admin\InformesController@IndexDotacionPracticasHigienicas']);

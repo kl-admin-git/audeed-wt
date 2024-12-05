@@ -14,6 +14,7 @@ use App\Exports\EvaluacionExports;
 use App\Exports\DotacionPracticasExports;
 use App\Exports\VerificacionBalanzasExports;
 use App\Exports\TemperaturaFriosExports;
+use App\Exports\InformeDetalleExports;
 use Carbon\Carbon;
 
 class InformesController extends Controller
@@ -32,7 +33,7 @@ class InformesController extends Controller
         $this->establecimiento = $establecimiento;
         $this->ejecutadasRespuestas = $ejecutadasRespuestas;
         $this->listaChequeo = $listaChequeo;
-        
+
         \DB::statement("SET lc_time_names = 'es_ES'");
         $this->middleware('auth');
         $this->middleware('isActive');
@@ -45,7 +46,7 @@ class InformesController extends Controller
         $evaluadores = $this->FuncionParaTraerEvaluadoresInformes();
         $estados = $this->FuncionParaTraerEstadosInformes();
         $entidadEvaluada = $this->FuncionParaTraerEntidadEvaluadaInformes();
-        
+
         return view('Admin.informes_ejecutadas',compact('listaChequeo','evaluados','evaluadores','estados','entidadEvaluada'));
     }
 
@@ -84,7 +85,7 @@ class InformesController extends Controller
                     $listraChequeoFiltro = $listraChequeoFiltro->where('lista_chequeo_ejecutadas.usuario_id','=',auth()->user()->id);
 
                 break;
-            
+
             default:
 
                 break;
@@ -136,7 +137,7 @@ class InformesController extends Controller
                     $evaluados = $evaluados->where('lista_chequeo_ejecutadas.usuario_id','=',auth()->user()->id);
 
                 break;
-            
+
             default:
 
                 break;
@@ -180,7 +181,7 @@ class InformesController extends Controller
                     $evaluadores = $evaluadores->where('lista_chequeo_ejecutadas.usuario_id','=',auth()->user()->id);
 
                 break;
-            
+
             default:
 
                 break;
@@ -230,7 +231,7 @@ class InformesController extends Controller
                     $evaluadores = $evaluadores->where('lista_chequeo_ejecutadas.usuario_id','=',auth()->user()->id);
 
                 break;
-            
+
             default:
 
                 break;
@@ -281,7 +282,7 @@ class InformesController extends Controller
                     $entidadEvaluada = $entidadEvaluada->where('lista_chequeo_ejecutadas.usuario_id','=',auth()->user()->id);
 
                 break;
-            
+
             default:
 
                 break;
@@ -295,8 +296,8 @@ class InformesController extends Controller
         $paginacion = $request->get('paginacion');
         $filtros = json_decode($request->get('arrayFiltros'));
 
-        $informeEjecutadas = $this->FuncionTraerInformesEjecutadas($paginacion,$filtros);      
-        
+        $informeEjecutadas = $this->FuncionTraerInformesEjecutadas($paginacion,$filtros);
+
         return $this->FinalizarRetorno(
             202,
             $this->MensajeRetorno('Datos',202),
@@ -307,17 +308,17 @@ class InformesController extends Controller
     public function FuncionTraerInformesEjecutadas($paginacion=1,$filtros=[])
     {
         $resultadoLimit = $this->CalculoPaginacion($paginacion);
-    
+
         $desde = $resultadoLimit['desde'];
         $hasta = $resultadoLimit['hasta'];
         $cantidadRegistros = 9;
         $filtro_array = [];
 
-        foreach ($filtros as $key => $filtro) 
+        foreach ($filtros as $key => $filtro)
         {
 
             switch ($key) {
-                
+
                 case 'filtro_lista_chequeo':
                     if($filtro != '')
                         array_push($filtro_array,['lc.id', '=', $filtro]);
@@ -349,10 +350,10 @@ class InformesController extends Controller
                     break;
 
                 default:
-                    
+
                     break;
             }
-            
+
         }
 
         $traerInformeEjecutadas = $this->listaEjecutada
@@ -364,7 +365,7 @@ class InformesController extends Controller
             'lista_chequeo_ejecutadas.longitud',
             \DB::raw('IF((CASE
                         WHEN lc.entidad_evaluada=1 THEN (SELECT semp.nombre FROM empresa semp WHERE semp.id=lista_chequeo_ejecutadas.evaluado_id)
-                        WHEN lc.entidad_evaluada=2 THEN (SELECT semp.nombre FROM establecimiento sest 
+                        WHEN lc.entidad_evaluada=2 THEN (SELECT semp.nombre FROM establecimiento sest
                                                         INNER JOIN empresa semp ON semp.id = sest.empresa_id WHERE sest.id=lista_chequeo_ejecutadas.evaluado_id)
                         WHEN lc.entidad_evaluada=3 THEN (SELECT semp.nombre FROM usuario susu
                                                         INNER JOIN establecimiento sesta ON sesta.id = susu.establecimiento_id
@@ -375,7 +376,7 @@ class InformesController extends Controller
                         ELSE "Error"
                     END) IS NULL ,"Sin asignar", (CASE
                     WHEN lc.entidad_evaluada=1 THEN (SELECT semp.nombre FROM empresa semp WHERE semp.id=lista_chequeo_ejecutadas.evaluado_id)
-                    WHEN lc.entidad_evaluada=2 THEN (SELECT semp.nombre FROM establecimiento sest 
+                    WHEN lc.entidad_evaluada=2 THEN (SELECT semp.nombre FROM establecimiento sest
                                                     INNER JOIN empresa semp ON semp.id = sest.empresa_id WHERE sest.id=lista_chequeo_ejecutadas.evaluado_id)
                     WHEN lc.entidad_evaluada=3 THEN (SELECT semp.nombre FROM usuario susu
                                                     INNER JOIN establecimiento sesta ON sesta.id = susu.establecimiento_id
@@ -387,7 +388,7 @@ class InformesController extends Controller
                 END)) as empresa'),
             \DB::raw('IF(lista_chequeo_ejecutadas.direccion IS NULL, "", lista_chequeo_ejecutadas.direccion) AS DIRECCION'),
             'lista_chequeo_ejecutadas.estado AS ID_ESTADO',
-            \DB::raw('(CASE 
+            \DB::raw('(CASE
                 WHEN lista_chequeo_ejecutadas.estado=0 THEN "Cancelada"
                 WHEN lista_chequeo_ejecutadas.estado=1 THEN "Proceso"
                 WHEN lista_chequeo_ejecutadas.estado=2 THEN "Terminada"
@@ -446,25 +447,25 @@ class InformesController extends Controller
                     $traerInformeEjecutadas = $traerInformeEjecutadas->where('lista_chequeo_ejecutadas.usuario_id','=',auth()->user()->id);
 
                 break;
-            
+
             default:
 
                 break;
         };
-        
+
         if(COUNT($filtro_array) != 0)
         {
             $traerInformeEjecutadas = $traerInformeEjecutadas->where(function($query) use ($filtro_array)
             {
                 // $contador = 0;
-                foreach ($filtro_array as $keys => $oW) 
+                foreach ($filtro_array as $keys => $oW)
                 {
                     $query->where($oW[0], '=', $oW[2]);
                 }
 
                 return $query;
             });
-            
+
         }
         $rango = $traerInformeEjecutadas->paginate($cantidadRegistros)->lastPage();
         $traerInformeEjecutadas = $traerInformeEjecutadas->skip($desde)->take($hasta)->get();
@@ -496,7 +497,7 @@ class InformesController extends Controller
 
             //         $suma = 0;
             //         $todas_no_aplican = 0;
-            //         foreach ($categorias as $keysss => $item) 
+            //         foreach ($categorias as $keysss => $item)
             //         {
             //             $suma += floatval($item->porc_cat);
             //             $todas_no_aplican = $item->todas_no_aplican;
@@ -508,7 +509,7 @@ class InformesController extends Controller
             //             $traerInformeEjecutadas[$keyss]->resultado_final = "";
 
             // }
-            
+
         #endregion CODIOG FUNCIONAL PARA RESULTADOS FINALES CON AUDEED GLOBAL VERSIÓN 1
 
         return array(
@@ -549,34 +550,34 @@ class InformesController extends Controller
         ->get();
 
 
-        $empresas = \DB::select(\DB::raw("SELECT 
+        $empresas = \DB::select(\DB::raw("SELECT
         (CASE
             WHEN lc.entidad_evaluada=1 THEN (SELECT semp.id FROM empresa semp WHERE semp.id=lce.evaluado_id)
-            
-            
-            WHEN lc.entidad_evaluada=2 THEN (SELECT semp.id FROM establecimiento sest 
+
+
+            WHEN lc.entidad_evaluada=2 THEN (SELECT semp.id FROM establecimiento sest
                                             INNER JOIN empresa semp ON semp.id = sest.empresa_id WHERE sest.id=lce.evaluado_id)
-                                            
+
             WHEN lc.entidad_evaluada=3 THEN (SELECT semp.id FROM usuario susu
                                             INNER JOIN establecimiento sesta ON sesta.id = susu.establecimiento_id
                                             INNER JOIN empresa semp ON semp.id = sesta.empresa_id
                                             WHERE susu.id=lce.evaluado_id)
-                                            
+
             WHEN lc.entidad_evaluada=4 THEN 'provisional'
             ELSE 'Error'
         END) AS id,
         (CASE
             WHEN lc.entidad_evaluada=1 THEN (SELECT semp.nombre FROM empresa semp WHERE semp.id=lce.evaluado_id)
-            
-            
-            WHEN lc.entidad_evaluada=2 THEN (SELECT semp.nombre FROM establecimiento sest 
+
+
+            WHEN lc.entidad_evaluada=2 THEN (SELECT semp.nombre FROM establecimiento sest
                                             INNER JOIN empresa semp ON semp.id = sest.empresa_id WHERE sest.id=lce.evaluado_id)
-                                            
+
             WHEN lc.entidad_evaluada=3 THEN (SELECT semp.nombre FROM usuario susu
                                             INNER JOIN establecimiento sesta ON sesta.id = susu.establecimiento_id
                                             INNER JOIN empresa semp ON semp.id = sesta.empresa_id
                                             WHERE susu.id=lce.evaluado_id)
-                                            
+
             WHEN lc.entidad_evaluada=4 THEN 'provisional'
             ELSE 'Error'
         END) AS nombre
@@ -588,16 +589,16 @@ class InformesController extends Controller
         WHERE lce.estado = 2 AND usu.cuenta_principal_id = :idCuentaPrincipal
         GROUP BY (CASE
             WHEN lc.entidad_evaluada=1 THEN (SELECT semp.nombre FROM empresa semp WHERE semp.id=lce.evaluado_id)
-            
-            
-            WHEN lc.entidad_evaluada=2 THEN (SELECT semp.nombre FROM establecimiento sest 
+
+
+            WHEN lc.entidad_evaluada=2 THEN (SELECT semp.nombre FROM establecimiento sest
                                             INNER JOIN empresa semp ON semp.id = sest.empresa_id WHERE sest.id=lce.evaluado_id)
-                                            
+
             WHEN lc.entidad_evaluada=3 THEN (SELECT semp.nombre FROM usuario susu
                                             INNER JOIN establecimiento sesta ON sesta.id = susu.establecimiento_id
                                             INNER JOIN empresa semp ON semp.id = sesta.empresa_id
                                             WHERE susu.id=lce.evaluado_id)
-                                            
+
             WHEN lc.entidad_evaluada=4 THEN 'provisional'
             ELSE 'Error'
         END);"),['idCuentaPrincipal' => auth()->user()->cuenta_principal_id]);
@@ -610,12 +611,12 @@ class InformesController extends Controller
         $objetoRecibido = $request->get('objetoEnviar');
         $idListaChequeoSearch = $objetoRecibido['idListaChequeo'];
         $idEmpresa = $objetoRecibido['idEmpresa'];
-        
-        
+
+
         $desde = '';
         $hasta = '';
 
-        switch ($objetoRecibido['serachRealizada']) 
+        switch ($objetoRecibido['serachRealizada'])
         {
             case 1: // ESTE MES
                 $desde = '';
@@ -634,20 +635,20 @@ class InformesController extends Controller
                 $desde = $desde->format('Y-m-d').' 00:00:00';
                 $hasta = $hasta->format('Y-m-d').' 23:59:59';
                 break;
-            
+
             default:
                 break;
         }
 
         $arrayPrimeraSeccionGrafica = $this->DatosPrimeraSeccionGrafica($idEmpresa,$idListaChequeoSearch,$desde,$hasta);
         $arrayPrimeraSeccionPromedioGeneral = $this->DatosPimeraSeccionPromedioGeneral($arrayPrimeraSeccionGrafica);
-        
+
         $arraySegundaSeccionGrafica = $this->DatosSegundaSeccionGraficaCategorias($idEmpresa,$idListaChequeoSearch,$desde,$hasta);
 
         $arrayterceraSeccionTabla = $this->DatosTercerSeccionTabla($idEmpresa,$idListaChequeoSearch,$desde,$hasta);
 
         $arrayCuartaSeccionTabla = $this->DatosCuartaSeccionTabla($idEmpresa,$idListaChequeoSearch,$desde,$hasta);
-        
+
         return response()->json(['datos'=> array(
             'PrimeraSeccionGrafica' => $arrayPrimeraSeccionGrafica,
             'PrimeraSeccionPromedioGeneral' => $arrayPrimeraSeccionPromedioGeneral,
@@ -664,7 +665,7 @@ class InformesController extends Controller
         // lcer.categoria_id,
         // cat.nombre as categoria,
         // FORMAT((SUM((pre.ponderado*(IF(res.ponderado IS NULL,100,res.ponderado)) / 100)))*cat.ponderado/100, 0) AS porc_cat,
-        // (SELECT COUNT(*) FROM lista_chequeo_ejecutadas lces 
+        // (SELECT COUNT(*) FROM lista_chequeo_ejecutadas lces
         //             INNER JOIN usuario usus ON usus.id=lces.usuario_id
         //             INNER JOIN establecimiento estas ON estas.id=usus.establecimiento_id
         //             INNER JOIN empresa empes on empes.id=estas.empresa_id
@@ -713,7 +714,7 @@ class InformesController extends Controller
         else
         {
             $desde = $desde . ' 00:00:00';
-            $hasta = $hasta . ' 23:59:59';   
+            $hasta = $hasta . ' 23:59:59';
         }
 
         $queryComplemento = '';
@@ -721,20 +722,20 @@ class InformesController extends Controller
         switch ($idEmpresa) {
             case 0: // TODAS LAS EMPRESAS
                 break;
-                
+
             default:
                 $queryComplemento = ' AND (CASE
                                                 WHEN lc.entidad_evaluada=1 THEN (SELECT semp.id FROM empresa semp WHERE semp.id=lce.evaluado_id)
-                                                
-                                                
-                                                WHEN lc.entidad_evaluada=2 THEN (SELECT semp.id FROM establecimiento sest 
+
+
+                                                WHEN lc.entidad_evaluada=2 THEN (SELECT semp.id FROM establecimiento sest
                                                                                 INNER JOIN empresa semp ON semp.id = sest.empresa_id WHERE sest.id=lce.evaluado_id)
-                                                                                
+
                                                 WHEN lc.entidad_evaluada=3 THEN (SELECT semp.id FROM usuario susu
                                                                                 INNER JOIN establecimiento sesta ON sesta.id = susu.establecimiento_id
                                                                                 INNER JOIN empresa semp ON semp.id = sesta.empresa_id
                                                                                 WHERE susu.id=lce.evaluado_id)
-                                                                                
+
                                                 WHEN lc.entidad_evaluada=4 THEN (SELECT ars.id FROM areas ars WHERE ars.id=lce.evaluado_id)
                                                 WHEN lc.entidad_evaluada=5 THEN (SELECT eqs.id FROM equipos eqs WHERE eqs.id=lce.evaluado_id)
                                                 ELSE "Error"
@@ -743,7 +744,7 @@ class InformesController extends Controller
                 break;
         }
 
-        $laravelSQL = \DB::select(\DB::raw("SELECT 
+        $laravelSQL = \DB::select(\DB::raw("SELECT
         lce.id as id_lista_chequeo,
         empe.id as id_empresa,
         empe.nombre as empresa,
@@ -751,52 +752,52 @@ class InformesController extends Controller
         cat.nombre as categoria,
         (CASE
             WHEN lc.entidad_evaluada=1 THEN (SELECT semp.nombre FROM empresa semp WHERE semp.id=lce.evaluado_id)
-            
-            
-            WHEN lc.entidad_evaluada=2 THEN (SELECT semp.nombre FROM establecimiento sest 
+
+
+            WHEN lc.entidad_evaluada=2 THEN (SELECT semp.nombre FROM establecimiento sest
                                             INNER JOIN empresa semp ON semp.id = sest.empresa_id WHERE sest.id=lce.evaluado_id)
-                                            
+
             WHEN lc.entidad_evaluada=3 THEN (SELECT semp.nombre FROM usuario susu
                                             INNER JOIN establecimiento sesta ON sesta.id = susu.establecimiento_id
                                             INNER JOIN empresa semp ON semp.id = sesta.empresa_id
                                             WHERE susu.id=lce.evaluado_id)
-                                            
+
             WHEN lc.entidad_evaluada=4 THEN 'provisional'
             ELSE 'Error'
         END) AS EMPRESA_EVALUADA,
         TRUNCATE(SUM(IF ((TRUNCATE(((pre.ponderado*res.ponderado)/100),2)) IS NULL , pre.ponderado, (TRUNCATE(((pre.ponderado*res.ponderado)/100),2)))) /
                     (SELECT COUNT(*)
 						FROM lista_chequeo_ejecutadas slce
-						INNER JOIN lista_chequeo slc ON slc.id=slce.lista_chequeo_id 
-						WHERE 
-						slce.estado=2 AND 
-						slce.lista_chequeo_id=lc.id AND 
+						INNER JOIN lista_chequeo slc ON slc.id=slce.lista_chequeo_id
+						WHERE
+						slce.estado=2 AND
+						slce.lista_chequeo_id=lc.id AND
 						(CASE
 									WHEN slc.entidad_evaluada=1 THEN (SELECT semp.id FROM empresa semp WHERE semp.id=slce.evaluado_id)
-									
-									
-									WHEN slc.entidad_evaluada=2 THEN (SELECT semp.id FROM establecimiento sest 
+
+
+									WHEN slc.entidad_evaluada=2 THEN (SELECT semp.id FROM establecimiento sest
 																	INNER JOIN empresa semp ON semp.id = sest.empresa_id WHERE sest.id=slce.evaluado_id)
-																	
+
 									WHEN slc.entidad_evaluada=3 THEN (SELECT semp.id FROM usuario susu
 																	INNER JOIN establecimiento sesta ON sesta.id = susu.establecimiento_id
 																	INNER JOIN empresa semp ON semp.id = sesta.empresa_id
 																	WHERE susu.id=slce.evaluado_id)
-																	
+
 									WHEN slc.entidad_evaluada=4 THEN 'provisional'
 									ELSE 'Error'
 								END)=(CASE
 									WHEN lc.entidad_evaluada=1 THEN (SELECT semp.id FROM empresa semp WHERE semp.id=lce.evaluado_id)
-									
-									
-									WHEN lc.entidad_evaluada=2 THEN (SELECT semp.id FROM establecimiento sest 
+
+
+									WHEN lc.entidad_evaluada=2 THEN (SELECT semp.id FROM establecimiento sest
 																	INNER JOIN empresa semp ON semp.id = sest.empresa_id WHERE sest.id=lce.evaluado_id)
-																	
+
 									WHEN lc.entidad_evaluada=3 THEN (SELECT semp.id FROM usuario susu
 																	INNER JOIN establecimiento sesta ON sesta.id = susu.establecimiento_id
 																	INNER JOIN empresa semp ON semp.id = sesta.empresa_id
 																	WHERE susu.id=lce.evaluado_id)
-																	
+
 									WHEN lc.entidad_evaluada=4 THEN 'provisional'
 									ELSE 'Error'
 								END)),2) AS TotalPorEmpresa
@@ -811,15 +812,15 @@ class InformesController extends Controller
         INNER JOIN empresa empe ON empe.id = esta.empresa_id
         WHERE lce.estado = 2 AND lce.lista_chequeo_id = :idListaChequeo AND lce.fecha_realizacion BETWEEN :desde AND :hasta $queryComplemento
         GROUP BY EMPRESA_EVALUADA;"),$valoresQueryUno);
-        
+
 
         $arrayOrdenado = [];
 
         // ORGANIZAR PARA EL FRONT AGREGARLO A LA GRAFICA
-        foreach ($laravelSQL as $key => $itemCalculoFinal) 
+        foreach ($laravelSQL as $key => $itemCalculoFinal)
             $arrayOrdenado[$itemCalculoFinal->EMPRESA_EVALUADA]['TotalPorEmpresa'] = $itemCalculoFinal->TotalPorEmpresa;
 
-            
+
         return $arrayOrdenado;
     }
 
@@ -827,7 +828,7 @@ class InformesController extends Controller
     {
         $cantidadRegistros = COUNT($arrayResultados);
         $sumaResultadosPorEmpresa = 0;
-        foreach ($arrayResultados as $key => $item) 
+        foreach ($arrayResultados as $key => $item)
         {
             $sumaResultadosPorEmpresa += number_format($item['TotalPorEmpresa'],2);
         }
@@ -853,7 +854,7 @@ class InformesController extends Controller
         else
         {
             $desde = $desde . ' 00:00:00';
-            $hasta = $hasta . ' 23:59:59';   
+            $hasta = $hasta . ' 23:59:59';
         }
 
         $querySubConsulta = '';
@@ -862,21 +863,21 @@ class InformesController extends Controller
         switch ($idEmpresa) {
             case 0: // TODAS LAS EMPRESAS
                 break;
-                
+
             default:
-                $querySubConsulta = ' AND 
+                $querySubConsulta = ' AND
                                         (CASE
                                                     WHEN slc.entidad_evaluada=1 THEN (SELECT semp.id FROM empresa semp WHERE semp.id=slce.evaluado_id)
-                                                    
-                                                    
-                                                    WHEN slc.entidad_evaluada=2 THEN (SELECT semp.id FROM establecimiento sest 
+
+
+                                                    WHEN slc.entidad_evaluada=2 THEN (SELECT semp.id FROM establecimiento sest
                                                                                     INNER JOIN empresa semp ON semp.id = sest.empresa_id WHERE sest.id=slce.evaluado_id)
-                                                                                    
+
                                                     WHEN slc.entidad_evaluada=3 THEN (SELECT semp.id FROM usuario susu
                                                                                     INNER JOIN establecimiento sesta ON sesta.id = susu.establecimiento_id
                                                                                     INNER JOIN empresa semp ON semp.id = sesta.empresa_id
                                                                                     WHERE susu.id=slce.evaluado_id)
-                                                                                    
+
                                                     WHEN lc.entidad_evaluada=4 THEN (SELECT ars.id FROM areas ars WHERE ars.id=slce.evaluado_id)
                                                     WHEN lc.entidad_evaluada=5 THEN (SELECT eqs.id FROM equipos eqs WHERE eqs.id=slce.evaluado_id)
                                                     ELSE "Error"
@@ -884,19 +885,19 @@ class InformesController extends Controller
 
                 $valoresQueryUno['idEmpresaSubConsulta'] = $idEmpresa;
 
-                $queryPrincipal = ' AND 
+                $queryPrincipal = ' AND
                                         (CASE
                                             WHEN lc.entidad_evaluada=1 THEN (SELECT semp.id FROM empresa semp WHERE semp.id=lce.evaluado_id)
-                                            
-                                            
-                                            WHEN lc.entidad_evaluada=2 THEN (SELECT semp.id FROM establecimiento sest 
+
+
+                                            WHEN lc.entidad_evaluada=2 THEN (SELECT semp.id FROM establecimiento sest
                                                                             INNER JOIN empresa semp ON semp.id = sest.empresa_id WHERE sest.id=lce.evaluado_id)
-                                                                            
+
                                             WHEN lc.entidad_evaluada=3 THEN (SELECT semp.id FROM usuario susu
                                                                             INNER JOIN establecimiento sesta ON sesta.id = susu.establecimiento_id
                                                                             INNER JOIN empresa semp ON semp.id = sesta.empresa_id
                                                                             WHERE susu.id=lce.evaluado_id)
-                                                                            
+
                                             WHEN lc.entidad_evaluada=4 THEN (SELECT ars.id FROM areas ars WHERE ars.id=lce.evaluado_id)
                                             WHEN lc.entidad_evaluada=5 THEN (SELECT eqs.id FROM equipos eqs WHERE eqs.id=lce.evaluado_id)
                                             ELSE "Error"
@@ -906,7 +907,7 @@ class InformesController extends Controller
                 break;
         }
 
-        $laravelSQL = \DB::select(\DB::raw("SELECT 
+        $laravelSQL = \DB::select(\DB::raw("SELECT
         lce.id as id_lista_chequeo,
         empe.id as id_empresa,
         empe.nombre as empresa,
@@ -914,25 +915,25 @@ class InformesController extends Controller
         cat.nombre as categoria,
         (CASE
             WHEN lc.entidad_evaluada=1 THEN (SELECT semp.nombre FROM empresa semp WHERE semp.id=lce.evaluado_id)
-            
-            
-            WHEN lc.entidad_evaluada=2 THEN (SELECT semp.nombre FROM establecimiento sest 
+
+
+            WHEN lc.entidad_evaluada=2 THEN (SELECT semp.nombre FROM establecimiento sest
                                             INNER JOIN empresa semp ON semp.id = sest.empresa_id WHERE sest.id=lce.evaluado_id)
-                                            
+
             WHEN lc.entidad_evaluada=3 THEN (SELECT semp.nombre FROM usuario susu
                                             INNER JOIN establecimiento sesta ON sesta.id = susu.establecimiento_id
                                             INNER JOIN empresa semp ON semp.id = sesta.empresa_id
                                             WHERE susu.id=lce.evaluado_id)
-                                            
+
             WHEN lc.entidad_evaluada=4 THEN 'provisional'
             ELSE 'Error'
         END) AS EMPRESA_EVALUADA,
          TRUNCATE(SUM(IF ((TRUNCATE(((pre.ponderado*res.ponderado)/100),2)) IS NULL , pre.ponderado, (TRUNCATE(((pre.ponderado*res.ponderado)/100),2)))) /
                     (SELECT COUNT(*)
 						FROM lista_chequeo_ejecutadas slce
-						INNER JOIN lista_chequeo slc ON slc.id=slce.lista_chequeo_id 
-						WHERE 
-						slce.estado=2 AND 
+						INNER JOIN lista_chequeo slc ON slc.id=slce.lista_chequeo_id
+						WHERE
+						slce.estado=2 AND
 						slce.lista_chequeo_id=lc.id $querySubConsulta),2) AS promedio_total_por_categoria
         FROM lista_chequeo_ejec_respuestas lcer
         INNER JOIN lista_chequeo_ejecutadas lce ON lce.id = lcer.lista_chequeo_ejec_id
@@ -945,14 +946,14 @@ class InformesController extends Controller
         INNER JOIN empresa empe ON empe.id = esta.empresa_id
         WHERE lce.lista_chequeo_id = :idListaChequeo AND lce.fecha_realizacion BETWEEN :desde AND :hasta $queryPrincipal
         GROUP BY cat.id;"),$valoresQueryUno);
-        
+
         // $laravelSQL = $this->ejecutadasRespuestas
         // ->select(
         //     'lce.id as id_lista_chequeo',
         //     'lista_chequeo_ejec_respuestas.categoria_id',
         //     'cat.nombre as categoria',
-        //     \DB::raw('(TRUNCATE(SUM(IF ((TRUNCATE(((pre.ponderado*res.ponderado)/100),2)) IS NULL,pre.ponderado, (TRUNCATE(((pre.ponderado*res.ponderado)/100),2)))) / 
-        //     (SELECT COUNT(*) FROM lista_chequeo_ejecutadas slce 
+        //     \DB::raw('(TRUNCATE(SUM(IF ((TRUNCATE(((pre.ponderado*res.ponderado)/100),2)) IS NULL,pre.ponderado, (TRUNCATE(((pre.ponderado*res.ponderado)/100),2)))) /
+        //     (SELECT COUNT(*) FROM lista_chequeo_ejecutadas slce
         //      INNER JOIN usuario sus ON  sus.id=slce.usuario_id
         //      INNER JOIN establecimiento ses ON ses.id=sus.establecimiento_id
         //      INNER JOIN empresa sem ON sem.id=ses.empresa_id
@@ -969,11 +970,11 @@ class InformesController extends Controller
         // ->whereBetween('lce.fecha_realizacion', [$desde, $hasta])
         // ->where([['lce.lista_chequeo_id','=',$idListaChequeo],['lce.estado','=','2'],['usu.cuenta_principal_id','=',auth()->user()->cuenta_principal_id]])
         // ->groupBy('cat.id');
-        
+
         // switch ($idEmpresa) {
         //     case 0: // TODAS LAS EMPRESAS
         //         break;
-                
+
         //     default:
         //         $laravelSQL = $laravelSQL->where('empe.id','=',$idEmpresa);
         //         break;
@@ -982,7 +983,7 @@ class InformesController extends Controller
         // $laravelSQL = $laravelSQL->get();
 
         // ORGANIZAR LA RESPUESTA
-        // foreach ($laravelSQL as $key => $item) 
+        // foreach ($laravelSQL as $key => $item)
         // {
         //     $laravelSQL[$key]['promedio_total_por_categoria'] = number_format((floatval($item->porc_cat) / intval(($item->CANTIDAD == 0 ? 1 : $item->CANTIDAD))),2);
         //     // $laravelSQL[$key]['promedio_total_por_categoria'] = floatval($item->porc_cat);
@@ -1010,29 +1011,29 @@ class InformesController extends Controller
         else
         {
             $desde = $desde . ' 00:00:00';
-            $hasta = $hasta . ' 23:59:59';   
+            $hasta = $hasta . ' 23:59:59';
         }
-               
+
 
         $queryComplemento = '';
         $valoresQuery = ['idListaChequeo' => $idListaChequeoSearch,'idCuentaPrincipal' => auth()->user()->cuenta_principal_id,"desde" => $desde, "hasta" => $hasta];
         switch ($idEmpresa) {
             case 0: // TODAS LAS EMPRESAS
                 break;
-                
+
             default: // UNA EMPRESA EN ESPECIAL
             $queryComplemento = ' AND (CASE
                                         WHEN lc.entidad_evaluada=1 THEN (SELECT semp.id FROM empresa semp WHERE semp.id=lce.evaluado_id)
-                                        
-                                        
-                                        WHEN lc.entidad_evaluada=2 THEN (SELECT semp.id FROM establecimiento sest 
+
+
+                                        WHEN lc.entidad_evaluada=2 THEN (SELECT semp.id FROM establecimiento sest
                                                                         INNER JOIN empresa semp ON semp.id = sest.empresa_id WHERE sest.id=lce.evaluado_id)
-                                                                        
+
                                         WHEN lc.entidad_evaluada=3 THEN (SELECT semp.id FROM usuario susu
                                                                         INNER JOIN establecimiento sesta ON sesta.id = susu.establecimiento_id
                                                                         INNER JOIN empresa semp ON semp.id = sesta.empresa_id
                                                                         WHERE susu.id=lce.evaluado_id)
-                                                                        
+
                                         WHEN lc.entidad_evaluada=4 THEN (SELECT ars.id FROM areas ars WHERE ars.id=lce.evaluado_id)
                                         WHEN lc.entidad_evaluada=5 THEN (SELECT eqs.id FROM equipos eqs WHERE eqs.id=lce.evaluado_id)
                                         ELSE "Error"
@@ -1040,7 +1041,7 @@ class InformesController extends Controller
                 $valoresQuery['idEmpresa'] = $idEmpresa;
                 break;
         }
-        $laravelSQL = \DB::select(\DB::raw("SELECT 
+        $laravelSQL = \DB::select(\DB::raw("SELECT
         lc.entidad_evaluada,
         pr.nombre AS PREGUNTA,
         lcer.pregunta_id,
@@ -1049,16 +1050,16 @@ class InformesController extends Controller
         re.ponderado,
         (CASE
             WHEN lc.entidad_evaluada=1 THEN (SELECT semp.nombre FROM empresa semp WHERE semp.id=lce.evaluado_id)
-            
-            
-            WHEN lc.entidad_evaluada=2 THEN (SELECT semp.nombre FROM establecimiento sest 
+
+
+            WHEN lc.entidad_evaluada=2 THEN (SELECT semp.nombre FROM establecimiento sest
                                             INNER JOIN empresa semp ON semp.id = sest.empresa_id WHERE sest.id=lce.evaluado_id)
-                                            
+
             WHEN lc.entidad_evaluada=3 THEN (SELECT semp.nombre FROM usuario susu
                                             INNER JOIN establecimiento sesta ON sesta.id = susu.establecimiento_id
                                             INNER JOIN empresa semp ON semp.id = sesta.empresa_id
                                             WHERE susu.id=lce.evaluado_id)
-                                            
+
             WHEN lc.entidad_evaluada=4 THEN 'provisional'
             WHEN lc.entidad_evaluada=5 THEN (SELECT eqs.nombre FROM equipos eqs WHERE eqs.id=lce.evaluado_id)
             ELSE 'Error'
@@ -1072,16 +1073,16 @@ class InformesController extends Controller
         INNER JOIN pregunta pr ON pr.id= lcer.pregunta_id
         WHERE usu.cuenta_principal_id=:idCuentaPrincipal AND re.ponderado = 0 AND lce.fecha_realizacion BETWEEN :desde AND :hasta AND lc.id=:idListaChequeo $queryComplemento
         GROUP BY lcer.pregunta_id,ENTIDAD"),$valoresQuery);
-        
-        
+
+
         $arrayLimpio = [];
-        foreach ($laravelSQL as $key => $item) 
+        foreach ($laravelSQL as $key => $item)
         {
             if($item->EMPRESA_PREGUNTA > 1)
             {
                     $arrayLimpio[$item->PREGUNTA][$item->ENTIDAD]['Muestra'] = ($item->ENTIDAD." (".$item->EMPRESA_PREGUNTA.")");
                     // $arrayLimpio[$item->PREGUNTA][$item->ENTIDAD]['Suma'] += floatval($item->EMPRESA_PREGUNTA);
-                    
+
                 // $arrayLimpio[$item->PREGUNTA]["ENTIDAD"]['cantidad'] = $item->EMPRESA_PREGUNTA;
             }
         }
@@ -1094,16 +1095,16 @@ class InformesController extends Controller
             $empresas = \DB::select(\DB::raw("SELECT  empe.id,
             (CASE
                 WHEN lc.entidad_evaluada=1 THEN (SELECT semp.nombre FROM empresa semp WHERE semp.id=lces.evaluado_id)
-                
-                
-                WHEN lc.entidad_evaluada=2 THEN (SELECT semp.nombre FROM establecimiento sest 
+
+
+                WHEN lc.entidad_evaluada=2 THEN (SELECT semp.nombre FROM establecimiento sest
                                                 INNER JOIN empresa semp ON semp.id = sest.empresa_id WHERE sest.id=lces.evaluado_id)
-                                                
+
                 WHEN lc.entidad_evaluada=3 THEN (SELECT semp.nombre FROM usuario susu
                                                 INNER JOIN establecimiento sesta ON sesta.id = susu.establecimiento_id
                                                 INNER JOIN empresa semp ON semp.id = sesta.empresa_id
                                                 WHERE susu.id=lces.evaluado_id)
-                                                
+
                 WHEN lc.entidad_evaluada=4 THEN 'provisional'
                 ELSE 'Error'
             END) AS nombre
@@ -1118,20 +1119,20 @@ class InformesController extends Controller
             INNER JOIN tipo_respuesta_ponderado_pred trpds ON trpds.id = rs.tipo_respuesta_ponderado_pred_id
             WHERE ps.id = :idPregunta AND trpds.ponderado=0 GROUP BY (CASE
                 WHEN lc.entidad_evaluada=1 THEN (SELECT semp.id FROM empresa semp WHERE semp.id=lces.evaluado_id)
-                
-                
-                WHEN lc.entidad_evaluada=2 THEN (SELECT semp.id FROM establecimiento sest 
+
+
+                WHEN lc.entidad_evaluada=2 THEN (SELECT semp.id FROM establecimiento sest
                                                 INNER JOIN empresa semp ON semp.id = sest.empresa_id WHERE sest.id=lces.evaluado_id)
-                                                
+
                 WHEN lc.entidad_evaluada=3 THEN (SELECT semp.id FROM usuario susu
                                                 INNER JOIN establecimiento sesta ON sesta.id = susu.establecimiento_id
                                                 INNER JOIN empresa semp ON semp.id = sesta.empresa_id
                                                 WHERE susu.id=lces.evaluado_id)
-                                                
+
                 WHEN lc.entidad_evaluada=4 THEN 'provisional'
                 ELSE 'Error'
             END);"),['idPregunta' => $idPregunta]);
-            
+
             return $empresas;
     }
 
@@ -1153,7 +1154,7 @@ class InformesController extends Controller
         else
         {
             $desde = $desde . ' 00:00:00';
-            $hasta = $hasta . ' 23:59:59';   
+            $hasta = $hasta . ' 23:59:59';
         }
 
         $querySubConsulta = '';
@@ -1162,21 +1163,21 @@ class InformesController extends Controller
         switch ($idEmpresa) {
             case 0: // TODAS LAS EMPRESAS
                 break;
-                
+
             default:
-            $querySubConsulta = ' AND 
+            $querySubConsulta = ' AND
             (CASE
                         WHEN slc.entidad_evaluada=1 THEN (SELECT semp.id FROM empresa semp WHERE semp.id=slce.evaluado_id)
-                        
-                        
-                        WHEN slc.entidad_evaluada=2 THEN (SELECT semp.id FROM establecimiento sest 
+
+
+                        WHEN slc.entidad_evaluada=2 THEN (SELECT semp.id FROM establecimiento sest
                                                         INNER JOIN empresa semp ON semp.id = sest.empresa_id WHERE sest.id=slce.evaluado_id)
-                                                        
+
                         WHEN slc.entidad_evaluada=3 THEN (SELECT semp.id FROM usuario susu
                                                         INNER JOIN establecimiento sesta ON sesta.id = susu.establecimiento_id
                                                         INNER JOIN empresa semp ON semp.id = sesta.empresa_id
                                                         WHERE susu.id=slce.evaluado_id)
-                                                        
+
                         WHEN lc.entidad_evaluada=4 THEN (SELECT ars.id FROM areas ars WHERE ars.id=slce.evaluado_id)
                         WHEN lc.entidad_evaluada=5 THEN (SELECT eqs.id FROM equipos eqs WHERE eqs.id=slce.evaluado_id)
                         ELSE "Error"
@@ -1184,19 +1185,19 @@ class InformesController extends Controller
 
                     $valoresQueryUno['idEmpresaSubConsulta'] = $idEmpresa;
 
-                    $queryPrincipal = ' AND 
+                    $queryPrincipal = ' AND
                                 (CASE
                                     WHEN lc.entidad_evaluada=1 THEN (SELECT semp.id FROM empresa semp WHERE semp.id=lce.evaluado_id)
-                                    
-                                    
-                                    WHEN lc.entidad_evaluada=2 THEN (SELECT semp.id FROM establecimiento sest 
+
+
+                                    WHEN lc.entidad_evaluada=2 THEN (SELECT semp.id FROM establecimiento sest
                                                                     INNER JOIN empresa semp ON semp.id = sest.empresa_id WHERE sest.id=lce.evaluado_id)
-                                                                    
+
                                     WHEN lc.entidad_evaluada=3 THEN (SELECT semp.id FROM usuario susu
                                                                     INNER JOIN establecimiento sesta ON sesta.id = susu.establecimiento_id
                                                                     INNER JOIN empresa semp ON semp.id = sesta.empresa_id
                                                                     WHERE susu.id=lce.evaluado_id)
-                                                                    
+
                                     WHEN lc.entidad_evaluada=4 THEN (SELECT ars.id FROM areas ars WHERE ars.id=lce.evaluado_id)
                                     WHEN lc.entidad_evaluada=5 THEN (SELECT eqs.id FROM equipos eqs WHERE eqs.id=lce.evaluado_id)
                                     ELSE "Error"
@@ -1207,14 +1208,14 @@ class InformesController extends Controller
         }
 
         //PUNTAJE SACADO DE LAS RESPUESTAS DE LISTA DE CHEQUEO POR ETIQUETA
-        $laravelSQL = \DB::select(\DB::raw("SELECT 
+        $laravelSQL = \DB::select(\DB::raw("SELECT
         ce.nombre AS ETIQUETA,
-        TRUNCATE(SUM(IF ((TRUNCATE(((pre.ponderado*res.ponderado)/100),2)) IS NULL , pre.ponderado, (TRUNCATE(((pre.ponderado*res.ponderado)/100),2)))) / 
+        TRUNCATE(SUM(IF ((TRUNCATE(((pre.ponderado*res.ponderado)/100),2)) IS NULL , pre.ponderado, (TRUNCATE(((pre.ponderado*res.ponderado)/100),2)))) /
         (SELECT COUNT(*)
 						FROM lista_chequeo_ejecutadas slce
-						INNER JOIN lista_chequeo slc ON slc.id=slce.lista_chequeo_id 
-						WHERE 
-						slce.estado=2 AND 
+						INNER JOIN lista_chequeo slc ON slc.id=slce.lista_chequeo_id
+						WHERE
+						slce.estado=2 AND
 						slce.lista_chequeo_id=lc.id $querySubConsulta),2)
         as PONDERADO_PREGUNTA
         FROM lista_chequeo_ejec_respuestas lcer
@@ -1233,18 +1234,18 @@ class InformesController extends Controller
 
 
         //PUNTAJE ORIGINAL QUE DEBERÍA DE SACAR POR ETIQUETA
-        $laravelSQLDos = \DB::select(\DB::raw("SELECT 
+        $laravelSQLDos = \DB::select(\DB::raw("SELECT
         ce.nombre AS ETIQUETA,
         SUM(cat.ponderado) TOTAL_ETIQUETA
         FROM categoria cat
         INNER JOIN categoria_etiquetas ce ON cat.id_etiqueta=ce.id
         WHERE cat.lista_chequeo_id=:idListaChequeo
         GROUP BY cat.id_etiqueta;"),['idListaChequeo' => $idListaChequeo]);
-        
+
         $arrayOrdenado = [];
 
         // FINALIZAR CALCULO PARA MOSTRAR ETIQUETAS Y SU RESPECTIVO RESULTADO PARA PONDERADO PREGUNTAS
-        foreach ($laravelSQL as $key => $itemCalculoFinal) 
+        foreach ($laravelSQL as $key => $itemCalculoFinal)
         {
             // $arrayOrdenado[$key]['TotalPorEtiqueta'] = number_format((floatval($itemCalculoFinal['suma_etiquetas']) / intval(($itemCalculoFinal['cantidadEjecutadas'] == 0 ? COUNT($laravelSQL) : $itemCalculoFinal['cantidadEjecutadas']))),2);
             $arrayOrdenado[$itemCalculoFinal->ETIQUETA]['TotalPorEtiqueta'] = $itemCalculoFinal->PONDERADO_PREGUNTA;
@@ -1253,16 +1254,16 @@ class InformesController extends Controller
         $arrayOrdenadoCategorias = [];
 
         // FINALIZAR CALCULO PARA MOSTRAR RESULTADO PARA PONDERADO CATEGORIAS
-        foreach ($laravelSQLDos as $key => $itemCalculoFinalCategorias) 
+        foreach ($laravelSQLDos as $key => $itemCalculoFinalCategorias)
         {
             // $arrayOrdenadoCategorias[$key]['TotalPorCategoriaEtiqueta'] = number_format((floatval($itemCalculoFinalCategorias['suma_etiquetas']) / intval(($itemCalculoFinalCategorias['cantidadEjecutadas'] == 0 ? COUNT($laravelSQLCategorias) : $itemCalculoFinalCategorias['cantidadEjecutadas']))),2);
             $arrayOrdenadoCategorias[$itemCalculoFinalCategorias->ETIQUETA]['TotalPorCategoriaEtiqueta'] = $itemCalculoFinalCategorias->TOTAL_ETIQUETA;
         }
 
-        foreach ($arrayOrdenado as $key => $itemPreguntas) 
+        foreach ($arrayOrdenado as $key => $itemPreguntas)
         {
-            
-            foreach ($arrayOrdenadoCategorias as $keys => $itemCategoria) 
+
+            foreach ($arrayOrdenadoCategorias as $keys => $itemCategoria)
             {
                 if($key == $keys)
                     $arrayOrdenado[$key]['categoriaResultado'] = $itemCategoria['TotalPorCategoriaEtiqueta'];
@@ -1274,7 +1275,7 @@ class InformesController extends Controller
     }
 
     #endregion FIN - CUARTA SECCIÓN
-    
+
     private function ponderado($array){
         $sumCategorias = 0;
         $cantidad = 0;
@@ -1286,9 +1287,9 @@ class InformesController extends Controller
             }
             $empresas[$key]['ponderado'] = number_format($sumCategorias / count($item), 1);
             $sumCategorias = 0;
-            
+
         }
-    
+
         return $empresas;
     }
 
@@ -1303,11 +1304,11 @@ class InformesController extends Controller
 
     public function GetDataInit(Request $request)
     {
-        $token = $request->get('_token'); 
-        $pagination = $request->get('paginacion'); 
-        $arrayFiltros = json_decode($request->get('arrayFiltros')); 
+        $token = $request->get('_token');
+        $pagination = $request->get('paginacion');
+        $arrayFiltros = json_decode($request->get('arrayFiltros'));
         $idCheckList = 189;
-        
+
         $clearArray = $this->FunctionGetDataPrincipal($arrayFiltros, $idCheckList);
 
         return response()->json([
@@ -1355,7 +1356,7 @@ class InformesController extends Controller
                 ORDER BY pr.id ASC;"));
 
         $orderArray = [];
-        foreach ($dataEmployees as $key => $employee) 
+        foreach ($dataEmployees as $key => $employee)
         {
             $orderArray[$employee->LISTA_EJECT]['PREGUNTA'] = $employee->PREGUNTA;
             $orderArray[$employee->LISTA_EJECT]['FECHA_REALIZACION'] = $employee->FECHA_REALIZACION;
@@ -1368,7 +1369,7 @@ class InformesController extends Controller
         }
 
         $clearArray = [];
-        foreach ($orderArray as $keys => $order) 
+        foreach ($orderArray as $keys => $order)
         {
             array_push($clearArray, $order);
         }
@@ -1395,8 +1396,8 @@ class InformesController extends Controller
 
     public function DownloadExcel(Request $request)
     {
-        $pagination = $request->get('paginacion'); 
-        $arrayFiltros = json_decode($request->get('arrayFiltros')); 
+        $pagination = $request->get('paginacion');
+        $arrayFiltros = json_decode($request->get('arrayFiltros'));
         $idCheckList = 189;
 
         $clearArray = $this->FunctionGetDataPrincipal($arrayFiltros, $idCheckList);
@@ -1413,9 +1414,9 @@ class InformesController extends Controller
 
     public function GetDataInitVerificacion(Request $request)
     {
-        $token = $request->get('_token'); 
-        $pagination = $request->get('paginacion'); 
-        $arrayFiltros = json_decode($request->get('arrayFiltros')); 
+        $token = $request->get('_token');
+        $pagination = $request->get('paginacion');
+        $arrayFiltros = json_decode($request->get('arrayFiltros'));
         $idCheckList = 190;
 
         $clearArray = $this->FunctionGetDataVerificacionBalanzas($arrayFiltros, $idCheckList);
@@ -1466,7 +1467,7 @@ class InformesController extends Controller
                 ORDER BY pr.id ASC;"));
 
         $orderArray = [];
-        foreach ($data as $key => $balanza) 
+        foreach ($data as $key => $balanza)
         {
             $orderArray[$balanza->LISTA_EJECT]['PREGUNTA'] = $balanza->PREGUNTA;
             $orderArray[$balanza->LISTA_EJECT]['DESCRIPCION_EQUIPO'] = $balanza->DESCRIPCION_EQUIPO;
@@ -1480,7 +1481,7 @@ class InformesController extends Controller
         }
 
         $clearArray = [];
-        foreach ($orderArray as $keys => $order) 
+        foreach ($orderArray as $keys => $order)
         {
             array_push($clearArray, $order);
         }
@@ -1490,8 +1491,8 @@ class InformesController extends Controller
 
     public function DownloadExcelVerificacion(Request $request)
     {
-        $pagination = $request->get('paginacion'); 
-        $arrayFiltros = json_decode($request->get('arrayFiltros')); 
+        $pagination = $request->get('paginacion');
+        $arrayFiltros = json_decode($request->get('arrayFiltros'));
         $idCheckList = 190;
 
         $clearArray = $this->FunctionGetDataVerificacionBalanzas($arrayFiltros, $idCheckList);
@@ -1524,9 +1525,9 @@ class InformesController extends Controller
 
     public function GetDataInitTemperatura(Request $request)
     {
-        $token = $request->get('_token'); 
-        $pagination = $request->get('paginacion'); 
-        $arrayFiltros = json_decode($request->get('arrayFiltros')); 
+        $token = $request->get('_token');
+        $pagination = $request->get('paginacion');
+        $arrayFiltros = json_decode($request->get('arrayFiltros'));
         $idCheckList = 188;
 
         $clearArray = $this->FunctionGetDataTemperaturaFrios($arrayFiltros, $idCheckList);
@@ -1566,7 +1567,7 @@ class InformesController extends Controller
             pr.nombre AS PREGUNTA,
             DATE_FORMAT(lce.fecha_realizacion, '%d %M de %Y') AS FECHA_REALIZACION,
             DAYNAME(lce.fecha_realizacion) AS DIA,
-            IF(lcer.respuesta_abierta IS NULL,'N/A',lcer.respuesta_abierta) AS RTA, 
+            IF(lcer.respuesta_abierta IS NULL,'N/A',lcer.respuesta_abierta) AS RTA,
             IF(re.tipo_respuesta_ponderado_pred_id = 5, lcer.respuesta_abierta, re.valor_personalizado) AS RESPUESTA,
             lcer.id AS RESPUESTA_ID,
             IF(lceo.comentario IS NULL, '', lceo.comentario) AS OBSERVACION,
@@ -1583,11 +1584,11 @@ class InformesController extends Controller
             $where
             ORDER BY pr.id ASC;"));
 
-        
+
         $semana = Carbon::parse($dateTime['fechaInicio'])->format('d M Y').' al '. Carbon::parse($dateTime['fechaFin'])->format('d M Y');
         $diligenciado = "";
         $orderArray = [];
-        foreach ($data as $key => $employee) 
+        foreach ($data as $key => $employee)
         {
             $diligenciado = $employee->DILIGENCIADO;
             $orderArray[$employee->CATEGORIA][($employee->ID_PREGUNTA .'-'.$employee->PREGUNTA)][$employee->DIA][] = array('respuesta' => $employee->RTA, 'id_respuesta' => $employee->RESPUESTA_ID, 'obs' => $employee->OBSERVACION);
@@ -1604,12 +1605,12 @@ class InformesController extends Controller
     {
         $diaInicio="Monday";
         $diaFin="Sunday";
-    
+
         $strFecha = strtotime($fecha);
-    
+
         $fechaInicio = date('Y-m-d',strtotime('last '.$diaInicio,$strFecha));
         $fechaFin = date('Y-m-d',strtotime('next '.$diaFin,$strFecha));
-    
+
         if(date("l",$strFecha)==$diaInicio)
             $fechaInicio= date("Y-m-d",$strFecha);
 
@@ -1630,7 +1631,7 @@ class InformesController extends Controller
         ->select('comentario')
         ->where('lista_chequeo_ejec_respuestas_id', '=', $idRta)
         ->first();
-        
+
         return response()->json([
             'success' => 1,
             'responseCode' => 202,
@@ -1641,12 +1642,293 @@ class InformesController extends Controller
 
     public function DownloadExcelTemperatura(Request $request)
     {
-        $pagination = $request->get('paginacion'); 
-        $arrayFiltros = json_decode($request->get('arrayFiltros')); 
+        $pagination = $request->get('paginacion');
+        $arrayFiltros = json_decode($request->get('arrayFiltros'));
         $idCheckList = 188;
 
         $clearArray = $this->FunctionGetDataTemperaturaFrios($arrayFiltros, $idCheckList);
 
         return \Excel::download(new TemperaturaFriosExports($clearArray), 'temperatura_frios.xlsx');
+    }
+
+    //------------------------------------- INFORME DETALLE DE LA LISTA DE CHEQUEO -----------------------------------------//
+
+    public function IndexDetail()
+    {
+        $listaChequeo = $this->FuncionParaTraerListasChequeoInformes();
+        $evaluados = $this->FuncionParaTraerEvaluadoInformes();
+        $evaluadores = $this->FuncionParaTraerEvaluadoresInformes();
+        $estados = $this->FuncionParaTraerEstadosInformes();
+        $entidadEvaluada = $this->FuncionParaTraerEntidadEvaluadaInformes();
+        // $data = $this->DataDetailByIdCheckList();
+
+        return view('Admin.informes_detalle',compact('listaChequeo','evaluados','evaluadores','estados','entidadEvaluada'));
+    }
+
+    public function GetReportDetail(Request $request)
+    {
+        $paginacion = $request->get('paginacion');
+        $filtros = json_decode($request->get('arrayFiltros'));
+
+        $report_detail = $this->FuncionGetReportDetail($paginacion,$filtros);
+
+        return $this->FinalizarRetorno(
+            202,
+            $this->MensajeRetorno('Datos',202),
+            $report_detail
+        );
+    }
+
+    public function FuncionGetReportDetail($paginacion=1,$filtros=[])
+    {
+        $resultadoLimit = $this->CalculoPaginacion($paginacion);
+
+        $desde = $resultadoLimit['desde'];
+        $hasta = $resultadoLimit['hasta'];
+        $cantidadRegistros = 9;
+        $filtro_array = [];
+
+        foreach ($filtros as $key => $filtro)
+        {
+            switch ($key)
+            {
+                case 'filtro_lista_chequeo':
+                    if($filtro != '')
+                        array_push($filtro_array,['lc.id', '=', $filtro]);
+                    break;
+
+                case 'filtro_inicio':
+                    if($filtro != '')
+                        array_push($filtro_array,['lce.created_at', '=', Carbon::createFromFormat('d/m/Y', $filtro)->format('Y-m-d'), Carbon::createFromFormat('d/m/Y', $filtros->filtro_fin)->format('Y-m-d')]);
+                    break;
+
+                case 'filtro_estado':
+                    if($filtro != '')
+                        array_push($filtro_array,['lce.estado', '=', $filtro]);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        $data = \DB::table('lista_chequeo_ejecutadas as lce')->select([
+                'lc.id as ID_AUDITORIA',
+                'lc.nombre as AUDITORIA',
+                \DB::raw("DATE_FORMAT(lce.created_at, '%d %M %Y %h:%m:%s %p') as FECHA_INICIO"),
+                \DB::raw("DATE_FORMAT(lce.finished_at, '%d %M %Y %h:%m:%s %p') as FECHA_FINAL"),
+                \DB::raw("TIMESTAMPDIFF(MINUTE, lce.created_at, lce.finished_at) as TIEMPO_TOTAL"),
+                \DB::raw("IF(lce.direccion IS NULL, '', lce.direccion) as DIRECCION"),
+                'lce.latitud',
+                'lce.longitud',
+                \DB::raw("(CASE
+                            WHEN lce.estado = 0 THEN 'Cancelada'
+                            WHEN lce.estado = 1 THEN 'Proceso'
+                            WHEN lce.estado = 2 THEN 'Terminada'
+                          END) as ESTADO"),
+                \DB::raw("(CASE
+                            WHEN lc.entidad_evaluada = 1 THEN 'Empresa'
+                            WHEN lc.entidad_evaluada = 2 THEN 'Establecimiento'
+                            WHEN lc.entidad_evaluada = 3 THEN 'Usuario'
+                            WHEN lc.entidad_evaluada = 4 THEN 'Areas'
+                            WHEN lc.entidad_evaluada = 5 THEN 'Equipos'
+                            ELSE 'Error'
+                          END) as ENTIDAD_EVALUADA"),
+                \DB::raw("(CASE
+                            WHEN lc.entidad_evaluada = 1 THEN (SELECT semp.nombre FROM empresa semp WHERE semp.id = lce.evaluado_id)
+                            WHEN lc.entidad_evaluada = 2 THEN (SELECT sest.nombre FROM establecimiento sest WHERE sest.id = lce.evaluado_id)
+                            WHEN lc.entidad_evaluada = 3 THEN (SELECT susu.nombre_completo FROM usuario susu WHERE susu.id = lce.evaluado_id)
+                            WHEN lc.entidad_evaluada = 4 THEN (SELECT ars.nombre FROM areas ars WHERE ars.id = lce.evaluado_id)
+                            WHEN lc.entidad_evaluada = 5 THEN (SELECT eqs.nombre FROM equipos eqs WHERE eqs.id = lce.evaluado_id)
+                            ELSE 'Error'
+                          END) as EVALUADO"),
+                'usu.nombre_completo as EVALUADOR',
+                \DB::raw("(SELECT SUM(IF(
+                              (TRUNCATE(((pre.ponderado * res.ponderado) / 100), 2)) IS NULL,
+                              pre.ponderado,
+                              (TRUNCATE(((pre.ponderado * res.ponderado) / 100), 2))
+                            )) as res_final
+                          FROM lista_chequeo_ejec_respuestas lcer
+                          INNER JOIN lista_chequeo_ejecutadas lces ON lces.id = lcer.lista_chequeo_ejec_id
+                          LEFT JOIN respuesta res ON res.id = lcer.respuesta_id
+                          INNER JOIN pregunta pre ON pre.id = lcer.pregunta_id
+                          INNER JOIN categoria cat ON cat.id = pre.categoria_id
+                          WHERE lcer.lista_chequeo_ejec_id = lce.id
+                          ORDER BY cat.id) as RESULTADO_FINAL")
+            ])
+            ->join('lista_chequeo as lc', 'lce.lista_chequeo_id', '=', 'lc.id')
+            ->join('usuario as us', 'lc.usuario_id', '=', 'us.id')
+            ->join('usuario as usu', 'lce.usuario_id', '=', 'usu.id')
+            ->where('lce.estado', 2);
+
+            switch (auth()->user()->perfil_id)
+            {
+                case 1: // ADMINISTRADOR
+                    $data = $data->where('us.cuenta_principal_id','=',auth()->user()->cuenta_principal_id);
+                    break;
+
+                case 2: // COLABORADOR
+                    //VERIFICAR SI ES RESPONSABLE DE EMPRESA
+                    $esResponsableEmpresa = $this->FuncionParaSaberSiEsResponsableEmpresa(auth()->user()->id);
+
+                    if(!is_null($esResponsableEmpresa))
+                        $data = $data->where('emp.id','=',$esResponsableEmpresa->id);
+
+                    //VERIFICAR SI ES RESPONSABLE DE ESTABLECIMIENTO
+                    $esResponsableEstablecimiento = $this->FuncionParaSaberSiEsResponsableEstablecimiento(auth()->user()->id);
+
+                    if(!is_null($esResponsableEstablecimiento))
+                        $data = $data->where('est.id','=',$esResponsableEstablecimiento->id);
+
+                    if(is_null($esResponsableEmpresa) && is_null($esResponsableEstablecimiento))
+                        $data = $data->where('lista_chequeo_ejecutadas.usuario_id','=',auth()->user()->id);
+
+                    break;
+
+                default:
+
+                    break;
+            };
+
+            if(COUNT($filtro_array) != 0)
+            {
+                $data = $data->where(function($query) use ($filtro_array)
+                {
+                    // $contador = 0;
+                    foreach ($filtro_array as $keys => $oW)
+                    {
+                        if($oW[3] == NULL)
+                            $query->where($oW[0], '=', $oW[2]);
+                        else
+                            $query->whereBetween($oW[0], [$oW[2],$oW[3]]);
+                    }
+
+                    return $query;
+                });
+            }
+            else
+            {
+                $data = $data->where([['lc.favorita','=', 1],['lce.estado', '=', 2]]);
+            }
+
+            $rango = $data->paginate($cantidadRegistros)->lastPage();
+            $data = $data->skip($desde)->take($hasta)->get();
+
+            //AGREGAR ENCABEZADOS NUEVOS DE CADA PREGUNTA
+            foreach($data as $key_data => $value_data)
+            {
+                $id_check_list = $value_data->ID_AUDITORIA;
+                $sub_data = \DB::select(
+                    \DB::raw("SELECT
+                    pr.nombre AS PREGUNTA,
+                    IF(lcer.respuesta_abierta IS NULL, re.valor_personalizado, lcer.respuesta_abierta) AS RESPUESTA_COLOCADA
+                    FROM lista_chequeo_ejec_respuestas lcer
+                    INNER JOIN pregunta pr ON lcer.pregunta_id = pr.id
+                    INNER JOIN respuesta re ON lcer.respuesta_id = re.id
+                    INNER JOIN lista_chequeo_ejecutadas lce ON lcer.lista_chequeo_ejec_id = lce.id
+                    WHERE lce.lista_chequeo_id = $id_check_list;"));
+
+                $quantity = 1;
+                foreach($sub_data as $key_sub_data => $value_sub_data)
+                {
+                    $property_question = "PREGUNTA_$quantity";
+                    $property_answer = "RESPUESTA_$quantity";
+                    $data[$key_data]->$property_question = $value_sub_data->PREGUNTA;
+                    $data[$key_data]->$property_answer = $value_sub_data->RESPUESTA_COLOCADA;
+
+                    $quantity++;
+                }
+            }
+
+        return array(
+            'cantidadTotal' => $rango,
+            'data' => $data
+        );
+    }
+
+    function DataDetailByIdCheckList()
+    {
+        $principal_account = auth()->user()->cuenta_principal_id;
+        $data = \DB::select(
+            \DB::raw("SELECT
+            lc.id AS ID_AUDITORIA,
+            lc.nombre AS AUDITORIA,
+            DATE_FORMAT(lce.created_at, '%d %M %Y %h:%m:%s %p') AS FECHA_INICIO,
+            DATE_FORMAT(lce.finished_at, '%d %M %Y %h:%m:%s %p') AS FECHA_FINAL,
+            TIMESTAMPDIFF(MINUTE, lce.created_at, lce.finished_at)AS TIEMPO_TOTAL,
+            IF(lce.direccion IS NULL, '', lce.direccion) AS DIRECCION,
+            -- lce.estado AS ID_ESTADO,
+            (CASE
+                WHEN lce.estado=0 THEN 'Cancelada'
+                WHEN lce.estado=1 THEN 'Proceso'
+                WHEN lce.estado=2 THEN 'Terminada'
+            END) AS ESTADO,
+            (CASE
+              WHEN lc.entidad_evaluada=1 THEN 'Empresa'
+              WHEN lc.entidad_evaluada=2 THEN 'Establecimiento'
+              WHEN lc.entidad_evaluada=3 THEN 'Usuario'
+              WHEN lc.entidad_evaluada=4 THEN 'Areas'
+              WHEN lc.entidad_evaluada=5 THEN 'Equipos'
+              ELSE 'Error'
+            END) as entidad_evaluada,
+            (CASE
+            WHEN lc.entidad_evaluada=1 THEN (SELECT semp.nombre FROM empresa semp WHERE semp.id=lce.evaluado_id)
+              WHEN lc.entidad_evaluada=2 THEN (SELECT sest.nombre FROM establecimiento sest WHERE sest.id=lce.evaluado_id)
+              WHEN lc.entidad_evaluada=3 THEN (SELECT susu.nombre_completo FROM usuario susu WHERE susu.id=lce.evaluado_id)
+              WHEN lc.entidad_evaluada=4 THEN (SELECT ars.nombre FROM areas ars WHERE ars.id=lce.evaluado_id)
+              WHEN lc.entidad_evaluada=5 THEN (SELECT eqs.nombre FROM equipos eqs WHERE eqs.id=lce.evaluado_id)
+              ELSE 'Error'
+            END) as evaluado,
+            usu.nombre_completo AS evaluador,
+            (SELECT SUM(IF ((TRUNCATE(((pre.ponderado*res.ponderado)/100),2)) IS NULL , pre.ponderado, (TRUNCATE(((pre.ponderado*res.ponderado)/100),2)))) AS res_final
+            FROM lista_chequeo_ejec_respuestas lcer
+            INNER JOIN lista_chequeo_ejecutadas lces ON lces.id=lcer.lista_chequeo_ejec_id
+            LEFT JOIN respuesta res ON res.id=lcer.respuesta_id
+            INNER JOIN pregunta pre ON pre.id=lcer.pregunta_id
+            INNER JOIN categoria cat ON cat.id=pre.categoria_id
+            WHERE  lcer.lista_chequeo_ejec_id=lce.id
+            ORDER BY cat.id) as RESULTADO_FINAL
+            FROM lista_chequeo_ejecutadas lce
+            INNER JOIN lista_chequeo lc ON lce.lista_chequeo_id = lc.id
+            INNER JOIN usuario us ON lc.usuario_id = us.id
+            INNER JOIN usuario usu ON lce.usuario_id = usu.id
+            WHERE lc.favorita = 1
+            AND lce.estado = 2
+            AND us.cuenta_principal_id = $principal_account;"));
+
+            //AGREGAR ENCABEZADOS NUEVOS DE CADA PREGUNTA
+            foreach($data as $key_data => $value_data)
+            {
+                $id_check_list = $value_data->ID_AUDITORIA;
+                $sub_data = \DB::select(
+                    \DB::raw("SELECT
+                    pr.nombre AS PREGUNTA,
+                    IF(lcer.respuesta_abierta IS NULL, re.valor_personalizado, lcer.respuesta_abierta) AS RESPUESTA_COLOCADA
+                    FROM lista_chequeo_ejec_respuestas lcer
+                    INNER JOIN pregunta pr ON lcer.pregunta_id = pr.id
+                    INNER JOIN respuesta re ON lcer.respuesta_id = re.id
+                    INNER JOIN lista_chequeo_ejecutadas lce ON lcer.lista_chequeo_ejec_id = lce.id
+                    WHERE lce.lista_chequeo_id = $id_check_list;"));
+
+                $quantity = 1;
+                foreach($sub_data as $key_sub_data => $value_sub_data)
+                {
+                    $property_question = "PREGUNTA_$quantity";
+                    $property_answer = "RESPUESTA_$quantity";
+                    $data[$key_data]->$property_question = $value_sub_data->PREGUNTA;
+                    $data[$key_data]->$property_answer = $value_sub_data->RESPUESTA_COLOCADA;
+
+                    $quantity++;
+                }
+            }
+
+        return $data;
+    }
+
+    public function DescargaExcelDetalle(Request $request)
+    {
+        setlocale(LC_ALL, 'es_ES.utf8');
+        $filtros = json_decode($request->get('filtros_busqueda'));
+        return \Excel::download(new InformeDetalleExports($filtros), 'informe_detalle.xlsx');
     }
 }
