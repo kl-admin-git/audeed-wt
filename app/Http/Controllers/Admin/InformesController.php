@@ -1715,8 +1715,8 @@ class InformesController extends Controller
         $data = \DB::table('lista_chequeo_ejecutadas as lce')->select([
                 'lce.id as ID_AUDITORIA',
                 'lc.nombre as AUDITORIA',
-                \DB::raw("DATE_FORMAT(DATE_SUB(lce.created_at, INTERVAL 5 HOUR), '%d %M %Y %h:%m:%s %p') as FECHA_INICIO"),
-                \DB::raw("DATE_FORMAT(DATE_SUB(lce.finished_at, INTERVAL 5 HOUR), '%d %M %Y %h:%m:%s %p') as FECHA_FINAL"),
+                \DB::raw("DATE_FORMAT(DATE_SUB(lce.created_at, INTERVAL 5 HOUR), '%d %M %Y %H:%i:%s %p') as FECHA_INICIO"),
+                \DB::raw("DATE_FORMAT(DATE_SUB(lce.finished_at, INTERVAL 5 HOUR), '%d %M %Y %H:%i:%s %p') as FECHA_FINAL"),
                 \DB::raw("TIMESTAMPDIFF(MINUTE, lce.created_at, lce.finished_at) as TIEMPO_TOTAL"),
                 \DB::raw("IF(lce.direccion IS NULL, '', lce.direccion) as DIRECCION"),
                 'lce.latitud',
